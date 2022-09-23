@@ -1,5 +1,5 @@
-import { dbconnection } from "./database";
-import { categories } from "./models/categories/detailed";
+import { dbconnection } from "../database";
+import { categories } from "../models/categories/detailed";
 
 const products = categories;
 

@@ -19,6 +19,7 @@
     "@types/puppeteer": "^5.4.6",
     "dotenv": "^16.0.2",
     "firebase": "^9.10.0",
+    "moment": "^2.29.4",
     "mongodb": "^4.10.0",
     "node-html-parser": "^6.1.0",
     "node-telegram-bot-api": "^0.59.0",

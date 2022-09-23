@@ -1,4 +1,4 @@
-import { Browser, Page } from "puppeteer-core";
+import { Page } from "puppeteer-core";
 import { parse } from "node-html-parser";
 import { navigate } from "./browser";
 import { config } from "./config";
