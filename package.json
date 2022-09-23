@@ -1,0 +1,36 @@
+{
+  "name": "shopping-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "compilerOptions": {
+    "module": "CommonJS"
+  },
+  "scripts": {
+    "start": "nodemon ./src/index.ts",
+    "start-search": "nodemon ./src/getBestPrices.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^6.5.2",
+    "@types/puppeteer": "^5.4.6",
+    "dotenv": "^16.0.2",
+    "firebase": "^9.10.0",
+    "mongodb": "^4.10.0",
+    "node-html-parser": "^6.1.0",
+    "node-telegram-bot-api": "^0.59.0",
+    "nodemon": "^2.0.20",
+    "puppeteer": "^18.0.5",
+    "puppeteer-core": "^18.0.5",
+    "uuid-v4": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.3"
+  }
+}
