@@ -1,17 +1,18 @@
+import { Db } from "mongodb";
 import { dbconnection } from "../database";
 import { categories } from "../models/categories/detailed";
 
 const products = categories;
 
 export default async function main(){
-    await dbconnection().then(db=>{
+    await dbconnection().then(([db,connection])=>{
         try{
-            db.collection('products').deleteMany(x=>x?.name);
+            (db as any as Db).collection('products').deleteMany(x=>x?.name);
         }
         catch(ex){
 
         }
-        db.collection('products').insertMany(
+        (db as any as Db).collection('products').insertMany(
             products
         )
     })

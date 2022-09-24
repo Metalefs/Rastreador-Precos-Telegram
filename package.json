@@ -10,6 +10,7 @@
     "start": "nodemon ./src/index.ts",
     "start-search": "nodemon ./src/getBestPrices.ts",
     "serve-files": "node ./src/serve-files.js",
+    "seed-categories": "ts-node ./src/seed/registerCategories.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

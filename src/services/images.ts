@@ -21,19 +21,19 @@ export async function upload(filepath) {
     return Promise.resolve("https://firebasestorage.googleapis.com/v0/b/" + bucket.name + "/o/" + encodeURIComponent(file.name) + "?alt=media&token=" + uuid);
 });;
 }
-export async function download(fileName, destFileName) {
-  async function downloadFile() {
-    const options = {
-      destination: destFileName,
-    };
+// export async function download(fileName, destFileName) {
+//   async function downloadFile() {
+//     const options = {
+//       destination: destFileName,
+//     };
 
-    // Downloads the file
-    await bucket.file(fileName).download(options);
+//     // Downloads the file
+//     await bucket.file(fileName).download(options);
 
-    console.log(
-      `gs://${bucketName}/${fileName} downloaded to ${destFileName}.`
-    );
-  }
+//     console.log(
+//       `gs://${bucketName}/${fileName} downloaded to ${destFileName}.`
+//     );
+//   }
 
-  return downloadFile().catch(console.error);
-}
+//   return downloadFile().catch(console.error);
+// }

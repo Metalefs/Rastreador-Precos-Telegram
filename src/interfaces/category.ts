@@ -1,6 +1,6 @@
 import { Product } from "./product";
 
 export interface Category {
-    name: string;
+    category: string;
     products: Product[]
 }

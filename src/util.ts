@@ -29,11 +29,18 @@ export function createProductTable(products) {
 
     return productTableHTML.replace('{{table}}', HTML)
 }
-export function createWishlistTable(products) {
+export function createWishlistTable(products:Array<any>) {
     const productTableHTML = fs.readFileSync("./src/static/wishlistTable.html", {
         encoding: "utf8",
         flag: "r",
       });
+
+    let showCategory = false;
+
+    
+    if(products.some(x=> x.hasOwnProperty('category'))){
+      showCategory = true
+    }
 
     let HTML = `
     <table class='table table-sm table-striped table-dark'>
@@ -42,6 +49,7 @@ export function createWishlistTable(products) {
           <th>Id</th>
           <th>Name</th>
           <th>Date</th>
+          ${showCategory ? '<th>Category</th>': ''}
         </tr>
       </thead>
       <tbody>`;
@@ -52,6 +60,7 @@ export function createWishlistTable(products) {
           <td>${product.id}</td>
           <td>${product.name}</td>
           <td>${product.date || ''}</td>
+          ${showCategory ? `<td>${product.category ?? ''}</td>`: ''}
         </tr>`;
       }
     }

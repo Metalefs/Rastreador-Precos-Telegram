@@ -6,6 +6,7 @@ import { init } from "./bot";
 import { dbconnection } from "./database";
 import { PriceFinder } from "./getBestPrices";
 import { BotService } from "./services/bot.service";
+import { CategoriesService } from "./services/categories";
 import { ProductsService } from "./services/products";
 
 const token = process.env.TELEGRAM_TOKEN;
@@ -15,8 +16,9 @@ async function main() {
 
     dbconnection().then(([db,connection]) => {
         const productService = new ProductsService(db as unknown as Db);
+        const categoryService = new CategoriesService(db as unknown as Db);
         const priceFinder = new PriceFinder(db as unknown as Db);
-        const botService = new BotService(bot, productService, priceFinder);
+        const botService = new BotService(bot, productService, categoryService, priceFinder);
         init(bot, botService);
 
 

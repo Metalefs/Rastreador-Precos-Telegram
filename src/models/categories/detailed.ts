@@ -4,7 +4,7 @@ import { baseproducts } from "../products";
 export const categories: Array<Category> =
     [
         {
-            name: 'quarto',
+            category: 'quarto',
             products: [
                 {
                     name: '',
@@ -14,7 +14,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'biblioteca',
+            category: 'biblioteca',
             products: [
                 {
                     name: '',
@@ -24,7 +24,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'leitura',
+            category: 'leitura',
             products: [
                 {
                     name: '',
@@ -34,7 +34,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'decoração',
+            category: 'decoração',
             products: [
                 {
                     name: '',
@@ -44,7 +44,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'livros',
+            category: 'livros',
             products: [
                 {
                     name: '',
@@ -54,7 +54,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'mangas',
+            category: 'mangas',
             products: [
                 {
                     name: '',
@@ -64,7 +64,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'luminarias',
+            category: 'luminarias',
             products: [
                 {
                     name: '',
@@ -74,7 +74,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'personagens',
+            category: 'personagens',
             products: [
                 {
                     name: '',
@@ -84,7 +84,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'casa',
+            category: 'casa',
             products: [
                 {
                     name: '',
@@ -94,7 +94,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'cozinha',
+            category: 'cozinha',
             products: [
                 {
                     name: '',
@@ -104,7 +104,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'armário',
+            category: 'armário',
             products: [
                 {
                     name: '',
@@ -114,7 +114,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'fogão',
+            category: 'fogão',
             products: [
                 {
                     name: '',
@@ -124,7 +124,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'lavadora',
+            category: 'lavadora',
             products: [
                 {
                     name: '',
@@ -134,7 +134,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'airfryer',
+            category: 'airfryer',
             products: [
                 {
                     name: '',
@@ -144,7 +144,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'café',
+            category: 'café',
             products: [
                 {
                     name: '',
@@ -154,13 +154,13 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'sala',
+            category: 'sala',
             products: [
                 baseproducts.XboxSeriesX.product
             ]
         },
         {
-            name: 'poster',
+            category: 'poster',
             products: [
                 {
                     name: '',
@@ -170,13 +170,13 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'video-game',
+            category: 'video-game',
             products: [
                 baseproducts.XboxSeriesX.product
             ]
         },
         {
-            name: 'tapete',
+            category: 'tapete',
             products: [
                 {
                     name: '',
@@ -186,7 +186,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'copa',
+            category: 'copa',
             products: [
                 {
                     name: '',
@@ -196,7 +196,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'toalha de mesa',
+            category: 'toalha de mesa',
             products: [
                 {
                     name: '',
@@ -206,7 +206,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'gaming',
+            category: 'gaming',
             products: [
                 {
                     name: '',
@@ -216,7 +216,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'estante',
+            category: 'estante',
             products: [
                 {
                     name: '',
@@ -226,7 +226,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'teclado',
+            category: 'teclado',
             products: [
                 {
                     name: '',
@@ -236,7 +236,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'mouse',
+            category: 'mouse',
             products: [
                 {
                     name: '',
@@ -246,7 +246,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'cadeira gamer',
+            category: 'cadeira gamer',
             products: [
                 {
                     name: '',
@@ -256,7 +256,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'mousepad',
+            category: 'mousepad',
             products: [
                 {
                     name: '',
@@ -266,7 +266,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'audio',
+            category: 'audio',
             products: [
                 {
                     name: '',
@@ -276,7 +276,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'auto-falante',
+            category: 'auto-falante',
             products: [
                 {
                     name: '',
@@ -286,7 +286,7 @@ export const categories: Array<Category> =
             ]
         },
         {
-            name: 'soundbar',
+            category: 'soundbar',
             products: [
                 {
                     name: '',
