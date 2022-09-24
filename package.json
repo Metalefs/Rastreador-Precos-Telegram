@@ -28,6 +28,7 @@
     "nodemon": "^2.0.20",
     "puppeteer": "^18.0.5",
     "puppeteer-core": "^18.0.5",
+    "randomstring": "^1.2.2",
     "uuid-v4": "^0.1.0"
   },
   "devDependencies": {

@@ -5,9 +5,17 @@ import { BotService } from "./services/bot.service";
 
 
 export const init = (bot, botService:BotService) => {
-    bot.onText(/\/wishlist (.+)/, botService.addWishlist);
+    bot.onText(/\/start/, botService.start);
 
-    bot.onText(/\/runWishlist/, botService.searchWishlist);
+    bot.onText(/\/addWishlist (.+)/, botService.addWishlist);
+    
+    bot.onText(/\/wishlist/, botService.showWishlist);
+
+    bot.onText(/\/searchWishlist/, botService.searchWishlist);
+    
+    bot.onText(/\/removeWishlist (.+)/, botService.removeWishlist);
+
+    bot.onText(/\/emptyWishlist/, botService.emptyWishlist);
 
     bot.onText(/\/products/, botService.listProducts);
 }

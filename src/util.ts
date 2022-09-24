@@ -39,6 +39,7 @@ export function createWishlistTable(products) {
     <table class='table table-sm table-striped table-dark'>
       <thead>
         <tr>
+          <th>Id</th>
           <th>Name</th>
           <th>Date</th>
         </tr>
@@ -48,6 +49,7 @@ export function createWishlistTable(products) {
       if (product.name != "") {
         HTML += `
         <tr>
+          <td>${product.id}</td>
           <td>${product.name}</td>
           <td>${product.date || ''}</td>
         </tr>`;
