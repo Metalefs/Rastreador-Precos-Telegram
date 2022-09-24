@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const expenses = {
+const _expenses = {
   rent: 1140,
   investments: 1500,
   groceries: 675,
@@ -9,7 +9,7 @@ const expenses = {
   taxes: 1200,
 };
 
-function main(amount = 0) {
+export function getBudget(amount = 0, expenses = _expenses) {
   let availableAmount = (process.env.AVAILABLE_VALUE as any) || amount; 
   Object.values(expenses).forEach(expense => {
     availableAmount -= expense;
@@ -17,9 +17,9 @@ function main(amount = 0) {
   return availableAmount;
 }
 
-function getAsPercentage(amount = (process.env.AVAILABLE_VALUE as any) ||0, expense=expenses){
+export function getBudgetAsPercentage(amount = (process.env.AVAILABLE_VALUE as any) ||0, expense = _expenses){
   function parsePencentage(_expense:any){
-    return ((_expense / amount) * 100)
+    return ((_expense / amount) * 100).toFixed(2) + "%"
   }
   const value = {
     rent: parsePencentage(expense.rent),
@@ -28,9 +28,8 @@ function getAsPercentage(amount = (process.env.AVAILABLE_VALUE as any) ||0, expe
     bills: parsePencentage(expense.bills),
     subscriptions: parsePencentage(expense.subscriptions),
     taxes: parsePencentage(expense.taxes),
-    budget: parsePencentage(main(amount)),
+    budget: parsePencentage(getBudget(amount)),
   }
   console.log(value);
   return value;
 }
-getAsPercentage();

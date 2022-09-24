@@ -5,7 +5,7 @@ import { takeScreenshotFromHtml } from "../browser";
 import { createProductTable, createWishlistTable } from "../util";
 import randomstring from 'randomstring';
 
-const fileServerUrl = 'https://8503-2804-296c-2103-e07-2184-f0dd-96de-966e.sa.ngrok.io';
+const fileServerUrl = 'https://7c4d-2804-296c-2103-e07-2184-f0dd-96de-966e.sa.ngrok.io';
 
 export  const uploadProductScreenshot = async (products) => {
   let image = await takeScreenshotFromHtml(createProductTable(products));

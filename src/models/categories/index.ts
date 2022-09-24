@@ -30,5 +30,6 @@ export const categories =
         'mousepad',
         'audio',
         'auto-falante',
-        'soundbar'
+        'soundbar',
+        'outros'
     ]
