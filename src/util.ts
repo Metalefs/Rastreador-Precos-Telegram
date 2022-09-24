@@ -1,6 +1,4 @@
 import * as fs from "fs";
-import { takeScreenshotFromHtml } from "./browser";
-import { categories } from "./models/categories/detailed";
 
 export function createProductTable(products) {
     const productTableHTML = fs.readFileSync("./src/static/productTable.html", {
@@ -22,7 +20,7 @@ export function createProductTable(products) {
         HTML += `
         <tr>
           <td>${product.name}</td>
-          <td>${product.max_price}</td>
+          <td>${product.max_price || ''}</td>
         </tr>`;
       }
     }
@@ -31,15 +29,32 @@ export function createProductTable(products) {
 
     return productTableHTML.replace('{{table}}', HTML)
 }
+export function createWishlistTable(products) {
+    const productTableHTML = fs.readFileSync("./src/static/wishlistTable.html", {
+        encoding: "utf8",
+        flag: "r",
+      });
 
-(async function test(){
- 
-  const products = categories.map(cat=>cat.products).flat().filter(prod=>prod.name != '');
+    let HTML = `
+    <table class='table table-sm table-striped table-dark'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>`;
+    for (let product of products) {
+      if (product.name != "") {
+        HTML += `
+        <tr>
+          <td>${product.name}</td>
+          <td>${product.date || ''}</td>
+        </tr>`;
+      }
+    }
+    HTML += `</tbody>
+    </table>`;
 
-  console.log(products);
-
-  let image = await takeScreenshotFromHtml(createProductTable(products));
-
-  fs.writeFileSync("./src/static/image.png", image);
+    return productTableHTML.replace('{{table}}', HTML)
 }
-)()

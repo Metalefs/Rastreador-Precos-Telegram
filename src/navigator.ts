@@ -57,4 +57,4 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
     .filter((el) => el != undefined);
 }
 
-scoutGoogleShopping("Corsair Vengeance 2x4gb 3000mhz").then(res => console.log(JSON.stringify(res, null, 4)));
+//scoutGoogleShopping("Corsair Vengeance 2x4gb 3000mhz").then(res => console.log(JSON.stringify(res, null, 4)));

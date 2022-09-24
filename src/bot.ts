@@ -5,7 +5,9 @@ import { BotService } from "./services/bot.service";
 
 
 export const init = (bot, botService:BotService) => {
-    bot.onText(/\/find-product/, botService.addProduct);
+    bot.onText(/\/wishlist (.+)/, botService.addWishlist);
+
+    bot.onText(/\/runWishlist/, botService.searchWishlist);
 
     bot.onText(/\/products/, botService.listProducts);
 }

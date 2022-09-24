@@ -9,6 +9,7 @@
   "scripts": {
     "start": "nodemon ./src/index.ts",
     "start-search": "nodemon ./src/getBestPrices.ts",
+    "serve-files": "node ./src/serve-files.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +19,7 @@
     "@google-cloud/storage": "^6.5.2",
     "@types/puppeteer": "^5.4.6",
     "dotenv": "^16.0.2",
+    "express": "^4.18.1",
     "firebase": "^9.10.0",
     "moment": "^2.29.4",
     "mongodb": "^4.10.0",
