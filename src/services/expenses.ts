@@ -1,16 +1,8 @@
 import { Db } from "mongodb";
+import { BaseService } from "./base.service";
 
-export class ExpensesService {
-  constructor(private dbconnection:Db) {
+export class ExpensesService extends BaseService {
+  constructor(protected dbconnection: Db) {
+    super(dbconnection, "expenses");
   }
-
-  add = async (expenses) => {
-    await this.dbconnection.collection('expenses').insertOne(expenses);
-  }
-
-  list = async () => {
-    const expenses =  this.dbconnection.collection('expenses').find().toArray();
-    return expenses;
-  };
-
 }

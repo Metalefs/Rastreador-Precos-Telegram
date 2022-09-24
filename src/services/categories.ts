@@ -1,16 +1,8 @@
 import { Db } from "mongodb";
+import { BaseService } from "./base.service";
 
-export class CategoriesService {
-  constructor(private dbconnection:Db) {
+export class CategoriesService extends BaseService{
+  constructor(protected dbconnection:Db) {
+    super(dbconnection, 'categories')
   }
-
-  add = async (category) => {
-    await this.dbconnection.collection('categories').insertOne(category);
-  }
-
-  list = async () => {
-    const products =  this.dbconnection.collection('categories').find().toArray();
-    return products;
-  };
-
 }

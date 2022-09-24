@@ -1,17 +1,11 @@
 import moment from "moment";
 import { Db } from "mongodb";
+import { BaseService } from "./base.service";
 
-export class ProductsService {
-  constructor(private dbconnection: Db) {}
-
-  add = async (product) => {
-    await this.dbconnection.collection("products").insertOne(product);
-  };
-
-  list = async () => {
-    const products = this.dbconnection.collection("products").find().toArray();
-    return products;
-  };
+export class ProductsService extends BaseService{
+  constructor(protected dbconnection: Db) {
+    super(dbconnection, 'products')
+  }
 
   addTowishlist = async (product) => {
     const count = await this.dbconnection
