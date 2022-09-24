@@ -285,13 +285,7 @@ export class BotService {
     const [chatId, idx] = this.parseChat(msg, match);
 
     if (idx === undefined) {
-      this.bot.on("callback_query", (callBackQuery) => {
-        const callBackData = callBackQuery.data;
-        console.log(callBackData);
-        this.bot.answerCallbackQuery(callBackQuery.id).then((e) => {
-          this.bot.sendMessage(chatId, "teste");
-        });
-      });
+      this.bot.sendMessage(chatId, "Passe o id de um item da lista");
       return;
     }
 
