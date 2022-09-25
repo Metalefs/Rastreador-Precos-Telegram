@@ -9,7 +9,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -19,7 +18,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -29,7 +27,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -39,7 +36,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -49,7 +45,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -59,7 +54,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -69,7 +63,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -79,7 +72,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -89,7 +81,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -99,7 +90,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -109,7 +99,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -119,7 +108,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -129,7 +117,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -139,7 +126,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -149,7 +135,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -165,7 +150,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -181,7 +165,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -191,7 +174,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -201,7 +183,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -211,7 +192,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -221,7 +201,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -231,7 +210,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -241,7 +219,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -251,7 +228,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -261,7 +237,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -271,7 +246,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -281,7 +255,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },
@@ -291,7 +264,6 @@ export const categories: Array<Category> =
                 {
                     name: '',
                     max_price: 0,
-                    features: ['']
                 }
             ]
         },

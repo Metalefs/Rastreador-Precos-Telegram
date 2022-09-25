@@ -2,29 +2,31 @@ import moment from "moment";
 import { Db } from "mongodb";
 import { BaseService } from "../models/base.service";
 
-export class ProductsService extends BaseService{
+export class ProductsService extends BaseService {
   constructor(protected dbconnection: Db) {
-    super(dbconnection, 'wishlist')
+    super(dbconnection, "wishlist");
   }
 
-  addTowishlist = async (product, chatId) => {
+  addTowishlist = async (product, chatId, offer?) => {
     const count = await this.dbconnection
       .collection("wishlist")
       .countDocuments();
-    await this.dbconnection
-      .collection("wishlist")
-      .insertOne({
+    await this.update(
+      { name: product },
+      {
         name: product,
         chatId,
         date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
         id: count,
-      });
+        offer
+      }
+    );
   };
 
   removeWishlist = async (id) => {
     const result = await this.dbconnection
       .collection("wishlist")
-      .deleteOne({ id: parseInt(id) });
+      .deleteOne({ name: id });
     if (result.deletedCount === 1) {
       console.log("Successfully deleted one document.", id);
     } else {
@@ -35,7 +37,7 @@ export class ProductsService extends BaseService{
   };
 
   getWishlist = async (chatId) => {
-    return this.dbconnection.collection("wishlist").find({chatId}).toArray();
+    return this.dbconnection.collection("wishlist").find({ chatId }).toArray();
   };
 
   getWishlistFromAllChats = async () => {
@@ -49,11 +51,8 @@ export class ProductsService extends BaseService{
       .toArray();
   };
 
-  getWishlistByName = async (id) => {
-    return this.dbconnection
-      .collection("wishlist")
-      .find({ name: parseInt(id) })
-      .toArray();
+  getWishlistByName = async (name) => {
+    return this.dbconnection.collection("wishlist").findOne({ name: name });
   };
 
   emptyWishlist = async () => {
@@ -61,34 +60,6 @@ export class ProductsService extends BaseService{
   };
 
   async addToCategory(product, category) {
-    const wishlist = this.dbconnection.collection("wishlist");
-
-    // create a filter for a movie to update
-
-    const filter = { name: product };
-
-    // this option instructs the method to create a document if no documents match the filter
-
-    const options = { upsert: true };
-
-    // create a document that sets the plot of the movie
-
-    const updateDoc = {
-
-      $set: {
-
-        category
-
-      },
-
-    };
-
-    const result = await wishlist.updateOne(filter, updateDoc, options);
-
-    console.log(
-
-      `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
-
-    );
+    await this.update({ name: product }, { category });
   }
 }

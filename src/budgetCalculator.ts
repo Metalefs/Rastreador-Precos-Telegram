@@ -7,12 +7,17 @@ const _expenses = {
   bills: 270,
   subscriptions: 22,
   taxes: 1200,
+  chatId: 0,
+  available: 0,
+  income: 0,
+  _id: "0"
 };
 
 export function getBudget(amount = 0, expenses = _expenses) {
   let availableAmount = (process.env.AVAILABLE_VALUE as any) || amount; 
-  Object.values(expenses).forEach(expense => {
-    availableAmount -= expense;
+  const { chatId, _id, available, income, ...expensesWithouChatId } = expenses
+  Object.values(expensesWithouChatId).forEach(expense => {
+    availableAmount -= expense || 0;
   })
   return availableAmount;
 }

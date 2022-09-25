@@ -5,19 +5,40 @@ import { takeScreenshotFromHtml } from "../browser";
 import { createProductTable, createWishlistTable } from "../util";
 import randomstring from 'randomstring';
 
-const fileServerUrl = 'https://7c4d-2804-296c-2103-e07-2184-f0dd-96de-966e.sa.ngrok.io';
+const fileServerUrl = 'https://01c8-2804-296c-2103-e07-2184-f0dd-96de-966e.sa.ngrok.io';
 
-export  const uploadProductScreenshot = async (products) => {
-  let image = await takeScreenshotFromHtml(createProductTable(products));
-
-  fs.writeFileSync("./src/static/image.png", image);
-  //return await upload("./src/static/image.png");
-  return fileServerUrl+'/image.png';
+export const uploadProductTableScreenshot = async (products,chatId) => {
+  const image = await takeScreenshotFromHtml(createProductTable(products));
+  const path = saveFile(`product-table-${chatId}`,'png',image);
+  //return await upload('./src/static/'+path);
+  return fileServerUrl+'/'+path;
 };
 
-export  const uploadWishlistScreenshot = async (products) => {
-  let image = await takeScreenshotFromHtml(createWishlistTable(products));
+export const uploadProductTableHTML = async (products, chatId) => {
+  const html = createProductTable(products);
+  const path = saveFile(`product-table-${chatId}`,'html',html);
+  //return await upload('./src/static/'+path);
+  return fileServerUrl+'/'+path;
+}
+
+export  const uploadWishlistTableScreenshot = async (products, chatId) => {
+  const image = await takeScreenshotFromHtml(createWishlistTable(products));
+  const path = saveFile(`wishlist-${chatId}`,'png',image);
+  //return await upload('./src/static/'+path);
+  return fileServerUrl+'/'+path;
+};
+
+export  const uploadWishlistTableHTML = async (products, chatId) => {
+  const html = createWishlistTable(products);
+  const path = saveFile(`wishlist-${chatId}`,'html',html);
+  //return await upload('./src/static/'+path);
+  return fileServerUrl+'/'+path;
+};
+
+function saveFile(name,ext,data){
   const rand = randomstring.generate();
-  fs.writeFileSync(`./src/static/wishlist${rand}.png`, image);
-  return fileServerUrl+`/wishlist${rand}.png`;
-};
+  const basePath = './src/static/';
+  const path = `${basePath}${name}-${rand}.${ext}`;
+  fs.writeFileSync(path, data);
+  return `${name}-${rand}.${ext}`;
+}

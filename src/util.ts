@@ -6,12 +6,19 @@ export function createProductTable(products) {
     flag: "r",
   });
 
+  let showHTML = false;
+
+  if (products.some((x) => x.hasOwnProperty("html"))) {
+    showHTML = true;
+  }
+
   let HTML = `
     <table class='table table-sm table-striped table-dark'>
       <thead>
         <tr>
           <th>Name</th>
           <th>Price</th>
+          ${showHTML ? "<th>Conteúdo</th>" : ""}
         </tr>
       </thead>
       <tbody>`;
@@ -21,6 +28,7 @@ export function createProductTable(products) {
         <tr>
           <td>${product.name}</td>
           <td>${product.max_price || ""}</td>
+          ${showHTML ? `<td>${product.offer.html ?? ""}</td>` : ""}
         </tr>`;
     }
   }
@@ -45,7 +53,6 @@ export function createWishlistTable(products: Array<any>) {
     <table class='table table-sm table-striped table-dark'>
       <thead>
         <tr>
-          <th>Id</th>
           <th>Name</th>
           <th>Date</th>
           ${showCategory ? "<th>Category</th>" : ""}
@@ -56,7 +63,6 @@ export function createWishlistTable(products: Array<any>) {
     if (product.name != "") {
       HTML += `
         <tr>
-          <td>${product.id}</td>
           <td>${product.name}</td>
           <td>${product.date || ""}</td>
           ${showCategory ? `<td>${product.category ?? ""}</td>` : ""}
