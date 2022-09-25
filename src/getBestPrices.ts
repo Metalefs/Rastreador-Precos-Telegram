@@ -9,29 +9,36 @@ export class PriceFinder {
 
   }
 
-  getPrices = async(query, force = false) => {
+  getPrices = async (query, force = false) => {
+    const googleOffers = await scoutGoogleShopping(query);
+
+    await this.dbconnection.collection("offers").insertOne(googleOffers);
+
+    console.log(googleOffers)
+
+    return googleOffers;
+  }
+
+  getPricesArray = async (query, force = false) => {
+    let offers:any = [];
     const lastSearch = await this.dbconnection
       .collection("searches")
       .find()
       .sort("date", -1)
       .toArray()[0];
-    let googleOffers:any = [];
+
 
     if ((!lastSearch || lastSearch.date <= moment().add(-1, "d") || force)) {
       this.dbconnection.collection("searches").insertOne({
         date: new Date(),
       });
-      query.forEach(async(q)=>{
-        const result = await scoutGoogleShopping(q);
-        googleOffers.push(result);
-        console.log(result);
-        
-        this.dbconnection.collection("offers").insertOne(result);
-      });
+
+      query.forEach(async q => {
+        offers.push(await this.getPrices(q));
+      })
+      return offers;
     } else {
-      googleOffers = await this.dbconnection.collection("offers").find().toArray();
+      return await this.dbconnection.collection("offers").find().toArray();
     }
-    console.log(googleOffers)
-    return googleOffers;
   }
 }

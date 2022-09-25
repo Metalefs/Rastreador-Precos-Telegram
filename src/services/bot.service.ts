@@ -274,7 +274,7 @@ export class BotService {
     const [chatId, idx] = this.parseChat(msg, match);
 
     let products = await this.productService.getWishlist();
-    const offers = await this.priceFinder.getPrices(
+    const offers = await this.priceFinder.getPricesArray(
       products.map((prd) => prd.name)
     );
 
@@ -290,7 +290,7 @@ export class BotService {
     }
 
     let products = await this.productService.getWishlistById(idx);
-    const offers = await this.priceFinder.getPrices(
+    const offers = await this.priceFinder.getPricesArray(
       products.map((prd) => prd.name)
     );
 

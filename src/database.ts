@@ -16,5 +16,5 @@ export async function dbconnection() {
   console.log('Connected successfully to server');
   const db = client.db(dbName);
 
-  return [db,connection];
+  return [db,connection,client];
 }
