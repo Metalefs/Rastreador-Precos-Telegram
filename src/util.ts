@@ -8,7 +8,7 @@ export function createProductTable(products) {
 
   let showHTML = false;
 
-  if (products.some((x) => x.hasOwnProperty("html"))) {
+  if (products.some((x) => x.hasOwnProperty("offer"))) {
     showHTML = true;
   }
 
@@ -17,6 +17,7 @@ export function createProductTable(products) {
       <thead>
         <tr>
           <th>Name</th>
+          <th>Promotional Price</th>
           <th>Price</th>
           ${showHTML ? "<th>Conteúdo</th>" : ""}
         </tr>
@@ -27,7 +28,8 @@ export function createProductTable(products) {
       HTML += `
         <tr>
           <td>${product.name}</td>
-          <td>${product.max_price || ""}</td>
+          <td>${product.offer?.promoPrice ?? ""}</td>
+          <td>${product.offer?.normalPrice ?? ""}</td>
           ${showHTML ? `<td>${product.offer.html ?? ""}</td>` : ""}
         </tr>`;
     }
@@ -35,7 +37,7 @@ export function createProductTable(products) {
   HTML += `</tbody>
     </table>`;
 
-  return productTableHTML.replace("{{table}}", HTML);
+  return productTableHTML.replace("__table__", HTML);
 }
 export function createWishlistTable(products: Array<any>) {
   const productTableHTML = fs.readFileSync("./src/static/wishlistTable.html", {

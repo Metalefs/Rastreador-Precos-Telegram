@@ -429,7 +429,7 @@ export class BotService {
         return this.bot.onNextMessage(chatId, async (msg) => {
           await this.addProductToCategory(productName, msg.text);
 
-          this.bot.sendMessage(
+          await this.bot.sendMessage(
             chatId,
             `Produto foi rotulado com a categoria "${msg.text}"`,
             {
@@ -443,12 +443,22 @@ export class BotService {
             productName
           );
 
+          await this.bot.sendMessage(
+            chatId,
+            `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
+            {
+              reply_markup: {
+                keyboard: this.commands,
+              },
+            }
+          );
+
           await this.productEnrichmentService.enrich(product as any, chatId);
 
           const [path] = await this.getWishlistScreenshot(chatId);
           const [htmlLink] = await this.getWishlistHTML(chatId);
 
-          this.bot.sendPhoto(chatId, path, {
+          await this.bot.sendPhoto(chatId, path, {
             caption:
               "Aqui está a sua lista. digite '/wishlistOffers' Para ver as ofertas relacionadas a sua lista de desejos.",
           });

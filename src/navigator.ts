@@ -44,6 +44,7 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
   return elements
     .map((el) => {
       let link = el.getAttribute("href");
+      
       let allSpans = el.querySelectorAll("span");
       let allB = el.querySelectorAll("b");
       let promoPriceSpans = el.querySelectorAll("span.T14wmb");
@@ -77,6 +78,7 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
         let url = new URL(baseUrl);
         link = url.origin + link;
         const features = el.text.split('R$')[0];
+        el = el.setAttribute('href', link);
         return { link, store, features, promoPrice, normalPrice, html: el.outerHTML };
       }
     })
