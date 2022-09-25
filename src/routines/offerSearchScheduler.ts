@@ -1,7 +1,7 @@
 import { Agenda } from "agenda/es";
 import { Db } from "mongodb";
 import { mongoConnectionString } from "../database";
-import { SearchService } from "./searchService";
+import { SearchService } from "../services/searchService";
 
 export class OfferSearchScheduler {
   agenda;

@@ -9,6 +9,6 @@ export class ProductEnrichmentService {
   async enrich(product:Product, chatId?) {
     const result = await this.priceFinder.getPrices(product.name);
 
-    this.productService.addTowishlist(product.name, chatId || product.chatId, result);
+    this.productService.updatewishlist(product.name, result);
   }
 }

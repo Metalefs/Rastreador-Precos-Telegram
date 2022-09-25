@@ -23,6 +23,20 @@ export class ProductsService extends BaseService {
     );
   };
 
+  updatewishlist = async (product, offer?) => {
+    const count = await this.dbconnection
+      .collection("wishlist")
+      .countDocuments();
+    await this.update(
+      { name: product },
+      {
+        date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
+        id: count,
+        offer
+      }
+    );
+  };
+
   removeWishlist = async (id) => {
     const result = await this.dbconnection
       .collection("wishlist")

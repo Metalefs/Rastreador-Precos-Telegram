@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { MongoClient } from 'mongodb';
 import { dbconnection } from '../database';
-import { OfferSearchScheduler } from '../services/offerSearchScheduler';
+import { OfferSearchScheduler } from '../routines/offerSearchScheduler';
 import { SearchService } from '../services/searchService';
 
 
