@@ -9,10 +9,10 @@ export class SearchService {
   async search(force = false) {
     let offers: any = [];
 
-    if ((await this.hasSearchedToday()) && !force) return;
+    //if ((await this.hasSearchedToday()) && !force) return;
 
     const productsService = new ProductsService(this.dbconnection);
-    const products = await productsService.getWishlist();
+    const products = await productsService.getWishlistFromAllChats();
 
     const priceFinder = new PriceFinder(this.dbconnection);
 
@@ -29,15 +29,20 @@ export class SearchService {
     });
   }
 
-  private async hasSearchedToday() {
-    const lastSearch = await this.dbconnection
-      .collection("searches")
-      .find()
-      .sort("date", -1)
-      .toArray()[0];
+  async hasSearchedToday() {
+    const lastSearch = await this.getLastSearch();
 
     return (
       lastSearch && moment(new Date(lastSearch.date)).isSame(new Date(), "day")
     );
+  }
+
+  
+  async getLastSearch(){
+    return this.dbconnection
+    .collection("searches")
+    .find()
+    .sort("date", -1)
+    .toArray()[0];
   }
 }

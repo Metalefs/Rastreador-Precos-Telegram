@@ -273,7 +273,7 @@ export class BotService {
   enrich = async (msg, match) => {
     const [chatId, idx] = this.parseChat(msg, match);
 
-    let products = await this.productService.getWishlist();
+    let products = await this.productService.getWishlist(chatId);
     const offers = await this.priceFinder.getPricesArray(
       products.map((prd) => prd.name)
     );
@@ -289,7 +289,7 @@ export class BotService {
       return;
     }
 
-    let products = await this.productService.getWishlistById(idx);
+    let products = await this.productService.getWishlistItemById(idx);
     const offers = await this.priceFinder.getPricesArray(
       products.map((prd) => prd.name)
     );
@@ -308,8 +308,8 @@ export class BotService {
       return;
     }
 
-    await this.productService.addTowishlist(productName);
-    const [path] = await this.getWishlistScreenshot();
+    await this.productService.addTowishlist(productName, chatId);
+    const [path] = await this.getWishlistScreenshot(chatId);
 
     const categories = await this.categoryService.list();
 
@@ -342,7 +342,7 @@ export class BotService {
           );
 
           this.bot.sendPhoto(chatId, path, {
-            caption: "Aqui está a sua lista",
+            caption: "Aqui está a sua lista. '/wishlistOffers' Para ver as ofertas relacionadas a sua lista de desejos.",
           });
         });
       });
@@ -350,8 +350,8 @@ export class BotService {
 
   mywishlist = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
-    const [path] = await this.getWishlistScreenshot();
-    this.bot.sendPhoto(chatId, path, { caption: "Aqui está a sua lista !" });
+    const [path] = await this.getWishlistScreenshot(chatId);
+    this.bot.sendPhoto(chatId, path, { caption: "Aqui está a sua lista. '/wishlistOffers' Para ver as ofertas relacionadas a sua lista de desejos." });
   };
 
   removewishlist = async (msg, match) => {
@@ -366,7 +366,7 @@ export class BotService {
     }
 
     await this.productService.removeWishlist(id);
-    const [path] = await this.getWishlistScreenshot();
+    const [path] = await this.getWishlistScreenshot(chatId);
 
     this.bot.sendPhoto(chatId, path, { caption: "Aqui está a sua lista !" });
   };
@@ -393,8 +393,8 @@ export class BotService {
     return [msg.chat.id, match[1]];
   }
 
-  private async getWishlistScreenshot() {
-    let products = await this.productService.getWishlist();
+  private async getWishlistScreenshot(chatId) {
+    let products = await this.productService.getWishlist(chatId);
     const path = await uploadWishlistScreenshot(products);
     return [path, products];
   }

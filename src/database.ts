@@ -3,8 +3,8 @@ import { MongoClient } from 'mongodb';
 // import { MongoClient } from 'mongodb'
 
 // Connection URL
-const url = 'mongodb://127.0.0.1:27017';
-const client = new MongoClient(url);
+export const mongoConnectionString = 'mongodb://127.0.0.1:27017';
+const client = new MongoClient(mongoConnectionString);
 
 // Database Name
 const dbName = 'products';

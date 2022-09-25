@@ -7,7 +7,7 @@ export class ProductsService extends BaseService{
     super(dbconnection, 'wishlist')
   }
 
-  addTowishlist = async (product) => {
+  addTowishlist = async (product, chatId) => {
     const count = await this.dbconnection
       .collection("wishlist")
       .countDocuments();
@@ -15,6 +15,7 @@ export class ProductsService extends BaseService{
       .collection("wishlist")
       .insertOne({
         name: product,
+        chatId,
         date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
         id: count,
       });
@@ -33,11 +34,15 @@ export class ProductsService extends BaseService{
     }
   };
 
-  getWishlist = async () => {
+  getWishlist = async (chatId) => {
+    return this.dbconnection.collection("wishlist").find({chatId}).toArray();
+  };
+
+  getWishlistFromAllChats = async () => {
     return this.dbconnection.collection("wishlist").find().toArray();
   };
 
-  getWishlistById = async (id) => {
+  getWishlistItemById = async (id) => {
     return this.dbconnection
       .collection("wishlist")
       .find({ id: parseInt(id) })

@@ -9,8 +9,11 @@ export class BaseService {
   }
 
   list = async () => {
-    const expenses =  this.dbconnection.collection(this.collection).find().toArray();
-    return expenses;
+    return this.dbconnection.collection(this.collection).find().toArray();
   };
+
+  find = async (filter) => {
+    return this.dbconnection.collection(this.collection).find(filter).toArray();
+  }
 
 }

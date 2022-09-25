@@ -2,8 +2,9 @@ require("dotenv").config();
 
 // Create a bot that uses 'polling' to fetch new updates
 import { BotService } from "./services/bot.service";
+import { ChatIdService } from "./services/chatId.service";
 
-export const init = (bot, botService: BotService) => {
+export const init = (bot, botService: BotService, chatIdService:ChatIdService) => {
   bot.onText(/\/start/, botService.start);
 
   bot.onText(/\/setincome/, botService.setincome);
@@ -35,9 +36,9 @@ export const init = (bot, botService: BotService) => {
     );
   });
 
-  bot.on("message", (msg) => {
+  bot.on("message", async(msg) => {
     const chatId = msg.chat.id;
-
+    await chatIdService.add(msg);
     let nextMsg = bot.nextMessage[chatId];
     if (nextMsg) {
       nextMsg.callback(msg);

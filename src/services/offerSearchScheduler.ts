@@ -1,24 +1,30 @@
 import { Agenda } from "agenda/es";
-import { MongoClient } from "mongodb";
+import { Db } from "mongodb";
+import { mongoConnectionString } from "../database";
 import { SearchService } from "./searchService";
 
 export class OfferSearchScheduler {
-  constructor(private mongoClient: MongoClient) {}
+  agenda;
+  constructor(private db: Db) {
+    this.agenda = new Agenda({ db: { address: mongoConnectionString+'/agenda' } });
+  }
 
   start() {
-    const searchService = new SearchService(this.mongoClient.db())
+    const searchService = new SearchService(this.db)
 
-    const agenda = new Agenda({mongo: this.mongoClient});
-
-    agenda.define("search new offers", async (job) => {
+    this.agenda.define("search new offers", async (job) => {
       await searchService.search();
     });
 
-    (async function () {
+    (async ()=> {
       // IIFE to give access to async/await
-      await agenda.start();
+      await this.agenda.start();
 
-      await agenda.every("1 day", "search new offers");
+      await this.agenda.every("1 day", "search new offers");
     })();
+  }
+
+  async stop() {
+    const numRemoved = await this.agenda.cancel({ name: "search new offers" });
   }
 }
