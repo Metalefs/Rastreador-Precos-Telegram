@@ -15,7 +15,7 @@ export const init = (bot, botService: BotService) => {
 
   bot.onText(/\/enrich/, botService.enrich);
 
-  bot.onText(/\/searchwishlist (.+)/, botService.searchwishlist);
+  bot.onText(/\/enrichitem (.+)/, botService.enrichitem);
 
   bot.onText(/\/removewishlist (.+)/, botService.removewishlist);
 

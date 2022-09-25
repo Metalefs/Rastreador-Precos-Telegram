@@ -1,10 +1,10 @@
 import moment from "moment";
 import { Db } from "mongodb";
-import { BaseService } from "./base.service";
+import { BaseService } from "../models/base.service";
 
 export class ProductsService extends BaseService{
   constructor(protected dbconnection: Db) {
-    super(dbconnection, 'products')
+    super(dbconnection, 'wishlist')
   }
 
   addTowishlist = async (product) => {

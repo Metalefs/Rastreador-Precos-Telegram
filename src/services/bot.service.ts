@@ -1,10 +1,10 @@
 import { getBudgetAsPercentage, getBudget } from "../budgetCalculator";
 import { PriceFinder } from "../getBestPrices";
 import { splitIntoChunk } from "../util";
-import { CategoriesService } from "./categories";
-import { ExpensesService } from "./expenses";
-import { uploadProductScreenshot, uploadWishlistScreenshot } from "./files";
-import { ProductsService } from "./products";
+import { CategoriesService } from "./categories.service";
+import { ExpensesService } from "./expenses.service";
+import { uploadProductScreenshot, uploadWishlistScreenshot } from "./files.service";
+import { ProductsService } from "./wishlist.service";
 
 export class BotService {
   income = {};
@@ -35,7 +35,7 @@ export class BotService {
 
       ["/addwishlist"],
       ["/enrich"],
-      ["/searchwishlist 0"],
+      ["/enrichitem 0"],
       ["/removewishlist 0"],
       ["/emptywishlist"],
       ["/wishlistOffers"],
@@ -260,7 +260,7 @@ export class BotService {
     }
     const budget = getBudget(this.income[chatId], this.expenses[chatId]);
     const budgetPercentage = getBudgetAsPercentage(this.income[chatId]);
-    this.bot.sendMessage(chatId, JSON.stringify(budget));
+    this.bot.sendMessage(chatId, "R$" + JSON.stringify(budget));
     this.bot.sendMessage(
       chatId,
       this.parseBudgetPercentage(budgetPercentage),
@@ -281,7 +281,7 @@ export class BotService {
     this.bot.sendMessage(chatId, JSON.stringify(offers, undefined, 4));
   };
 
-  searchwishlist = async (msg, match) => {
+  enrichitem = async (msg, match) => {
     const [chatId, idx] = this.parseChat(msg, match);
 
     if (idx === undefined) {

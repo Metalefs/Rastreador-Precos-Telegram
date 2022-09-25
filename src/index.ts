@@ -6,9 +6,9 @@ import { init } from "./bot";
 import { dbconnection } from "./database";
 import { PriceFinder } from "./getBestPrices";
 import { BotService } from "./services/bot.service";
-import { CategoriesService } from "./services/categories";
-import { ExpensesService } from "./services/expenses";
-import { ProductsService } from "./services/products";
+import { CategoriesService } from "./services/categories.service";
+import { ExpensesService } from "./services/expenses.service";
+import { ProductsService } from "./services/wishlist.service";
 
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
