@@ -4,7 +4,7 @@ import { mongoConnectionString } from "../database";
 const fs = require('fs');
 const path = require('path');
 
-const directories = ['./src/static', './src/webservice/serve-pages/public'];
+const directories = ['./src/static', './src/webservice/public'];
 export class PurgeStaticFilesScheduler {
     agenda;
     constructor(private db: Db) {

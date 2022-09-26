@@ -9,7 +9,7 @@
   "scripts": {
     "start": "nodemon ./src/index.ts --ignore webservice/",
     "start-search": "ts-node ./src/getBestPrices.ts",
-    "serve-files": "node ./src/serve-files.js",
+    "start-web": "cd ./src/webservice && npm start",
     "seed-categories": "ts-node ./src/seed/registerCategories.ts",
     "test": "jest --detectOpenHandles",
     "coverage": "jest --coverage"

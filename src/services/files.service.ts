@@ -37,7 +37,7 @@ export  const uploadWishlistTableHTML = async (products, chatId) => {
 
 function saveFile(name,ext,data){
   const rand = randomstring.generate();
-  const basePath = './src/webservice/serve-pages/public/';
+  const basePath = './src/webservice/public/';
   const path = `${basePath}${name}-${rand}.${ext}`;
   fs.writeFileSync(path, data);
   return `${name}-${rand}.${ext}`;
