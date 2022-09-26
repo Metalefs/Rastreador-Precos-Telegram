@@ -17,9 +17,11 @@ export class OfferSearchScheduler {
       await searchService.search();
 
       this.chats = await this.db.collection('chatId').distinct('chat.id');
+
       this.chats.forEach(chat=>{
+        console.log(chat)
         this.bot.sendMessage(
-          chat.chat.id,
+          chat,
           `Acabei de atualizar as suas ofertas. /mywishlist para verificar`
         );
       })
