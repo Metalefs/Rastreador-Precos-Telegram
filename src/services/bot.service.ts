@@ -521,12 +521,10 @@ export class BotService {
     let result = await uploadProductTableScreenshot(products, chatId);
     let htmlLink = await uploadProductTableHTML(products, chatId);
 
-    this.bot.sendPhoto(msg.chat.id, result);
-    this.bot.sendMessage(
-      msg.chat.id,
-      `<a href="${htmlLink}">Veja a lista no browser</a>`,
-      { parse_mode: "HTML" }
-    );
+    this.bot.sendPhoto(msg.chat.id, result, {
+      caption: `<a href="${htmlLink}">Veja a lista no browser</a>`,
+      parse_mode: "HTML"
+    });
   };
 
   async addProductToCategory(product, category) {

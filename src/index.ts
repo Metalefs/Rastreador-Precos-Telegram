@@ -27,7 +27,7 @@ async function main() {
         init(bot, botService, chatIdService);
         
         
-        new OfferSearchScheduler(db as unknown as Db).start();
+        new OfferSearchScheduler(db as unknown as Db,bot).start();
         new PurgeStaticFilesScheduler(db as unknown as Db).start();
         
 

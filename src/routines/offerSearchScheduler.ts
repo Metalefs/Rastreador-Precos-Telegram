@@ -5,7 +5,8 @@ import { SearchService } from "../services/searchService";
 
 export class OfferSearchScheduler {
   agenda;
-  constructor(private db: Db) {
+  chats;
+  constructor(private db: Db, private bot) {
     this.agenda = new Agenda({ db: { address: mongoConnectionString+'/agenda' } });
   }
 
@@ -14,6 +15,14 @@ export class OfferSearchScheduler {
 
     this.agenda.define("search new offers", async (job) => {
       await searchService.search();
+
+      this.chats = await this.db.collection('chatId').distinct('chat.id');
+      this.chats.forEach(chat=>{
+        this.bot.sendMessage(
+          chat.chat.id,
+          `Acabei de atualizar as suas ofertas. /mywishlist para verificar`
+        );
+      })
     });
 
     (async ()=> {
