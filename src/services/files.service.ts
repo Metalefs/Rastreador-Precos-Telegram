@@ -5,7 +5,7 @@ import { takeScreenshotFromHtml } from "../browser";
 import { createProductTable, createWishlistTable } from "../util";
 import randomstring from 'randomstring';
 
-const fileServerUrl = 'https://01c8-2804-296c-2103-e07-2184-f0dd-96de-966e.sa.ngrok.io';
+const fileServerUrl = 'https://2381-2804-296c-2103-e07-adc1-a304-9b58-ca3a.sa.ngrok.io';
 
 export const uploadProductTableScreenshot = async (products,chatId) => {
   const image = await takeScreenshotFromHtml(createProductTable(products));
@@ -37,7 +37,7 @@ export  const uploadWishlistTableHTML = async (products, chatId) => {
 
 function saveFile(name,ext,data){
   const rand = randomstring.generate();
-  const basePath = './src/static/';
+  const basePath = './src/webservice/serve-pages/public/';
   const path = `${basePath}${name}-${rand}.${ext}`;
   fs.writeFileSync(path, data);
   return `${name}-${rand}.${ext}`;

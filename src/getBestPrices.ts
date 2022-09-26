@@ -18,15 +18,10 @@ export class PriceFinder {
         let product_offers = element.merchant.offers;
         product_offers.forEach(offer => {
           if(offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
-            if(offer.link && (offer.normalPrice != '' || offer.normalPrice != '') && offer.store){
-              
-              const offerPrice = parseFloat((offer.normalPrice!).replace('R$','').replace(',','.'));
-              const offerPromo = parseFloat((offer.promoPrice!).replace('R$','').replace(',','.'));
-              
-              if((offerPrice! < bestOffer.normalPrice) || offerPromo < bestOffer.promoPrice){
-                bestOffer = offer;
-              }
-            }
+            bestOffer = this.filterBestPrice(offer,bestOffer);
+          }
+          else {
+            bestOffer = this.filterBestPrice(offer,bestOffer);
           }
         })
       }
@@ -34,6 +29,19 @@ export class PriceFinder {
 
     return bestOffer as Offer;
   };
+
+  private filterBestPrice(offer, bestOffer){
+    if(offer.link && (offer.normalPrice != '' || offer.normalPrice != '') && offer.store){
+              
+      const offerPrice = parseFloat((offer.normalPrice!).replace('R$','').replace(',','.'));
+      const offerPromo = parseFloat((offer.promoPrice!).replace('R$','').replace(',','.'));
+      
+      if((offerPrice! < bestOffer.normalPrice) || offerPromo < bestOffer.promoPrice){
+        return offer;
+      }
+    }
+    return bestOffer;
+  }
 
   getPricesArray = async (query, force = false) => {
     let offers: any = [];

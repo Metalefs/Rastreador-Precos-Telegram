@@ -17,7 +17,6 @@ describe('Budget calculator', () => {
             income: 7800,
             _id: ""
           });
-        console.log(budget)
         expect(budget).toBe(2993);
 
     });

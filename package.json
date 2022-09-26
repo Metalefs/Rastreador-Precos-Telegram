@@ -7,7 +7,7 @@
     "module": "CommonJS"
   },
   "scripts": {
-    "start": "nodemon ./src/index.ts",
+    "start": "nodemon ./src/index.ts --ignore webservice/",
     "start-search": "ts-node ./src/getBestPrices.ts",
     "serve-files": "node ./src/serve-files.js",
     "seed-categories": "ts-node ./src/seed/registerCategories.ts",
@@ -18,12 +18,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/static": "^6.5.0",
+    "@fastify/view": "^7.1.0",
     "@google-cloud/storage": "^6.5.2",
+    "@nestjs/platform-fastify": "^9.1.2",
     "@types/puppeteer": "^5.4.6",
     "agenda": "^4.3.0",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "firebase": "^9.10.0",
+    "handlebars": "^4.7.7",
     "moment": "^2.29.4",
     "mongodb": "^4.10.0",
     "node-html-parser": "^6.1.0",

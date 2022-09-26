@@ -67,7 +67,7 @@ export class BotService {
       .sendMessage(chatId, "Para começar, insira a sua renda mensal.")
       .then(() => {
         return this.bot.onNextMessage(chatId, async (msg) => {
-          this.finances[chatId] = msg.text;
+          this.finances[chatId] = {};
 
           Object.assign(this.finances[chatId], {
             chatId: chatId,
@@ -87,7 +87,8 @@ export class BotService {
             await this.financesService.find({ chatId: chatId })
           ).at(0);
           console.log(finances);
-          Object.assign(this.finances, { [chatId]: finances || {} });
+          if(finances)  
+            Object.assign(this.finances, { [chatId]: finances || {} });
           this.bot
             .sendMessage(chatId, "Insira o seu gasto com aluguel")
             .then(() => {
@@ -460,7 +461,7 @@ export class BotService {
 
           await this.bot.sendPhoto(chatId, path, {
             caption:
-              "Aqui está a sua lista. digite '/wishlistOffers' Para ver as ofertas relacionadas a sua lista de desejos.",
+              "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistOffers' para ver as ofertas relacionadas a sua lista de desejos.",
           });
           this.bot.sendMessage(
             msg.chat.id,

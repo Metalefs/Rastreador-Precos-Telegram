@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
 export function createProductTable(products) {
-  const productTableHTML = fs.readFileSync("./src/static/productTable.html", {
+  const productTableHTML = fs.readFileSync("./src/templates/productTable.html", {
     encoding: "utf8",
     flag: "r",
   });
@@ -40,7 +40,7 @@ export function createProductTable(products) {
   return productTableHTML.replace("__table__", HTML);
 }
 export function createWishlistTable(products: Array<any>) {
-  const productTableHTML = fs.readFileSync("./src/static/wishlistTable.html", {
+  const productTableHTML = fs.readFileSync("./src/templates/wishlistTable.html", {
     encoding: "utf8",
     flag: "r",
   });
