@@ -22,9 +22,9 @@ export class BotService {
     ["/mybudget"],
 
     ["/addwishlist"],
-    ["/removewishlist 0"],
+    ["/removewishlist {item}"],
     ["/emptywishlist"],
-    ["/wishlistOffers"],
+    ["/wishlistoffers"],
   ];
 
   constructor(

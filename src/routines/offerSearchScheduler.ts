@@ -20,7 +20,7 @@ export class OfferSearchScheduler {
       // IIFE to give access to async/await
       await this.agenda.start();
 
-      await this.agenda.every("1 day", "search new offers");
+      await this.agenda.every("30 minutes", "search new offers");
     })();
   }
 

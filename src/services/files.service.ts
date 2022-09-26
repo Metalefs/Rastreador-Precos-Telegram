@@ -18,7 +18,7 @@ export const uploadProductTableHTML = async (products, chatId) => {
   const html = createProductTable(products);
   const path = saveFile(`product-table-${chatId}`,'html',html);
   //return await upload('./src/static/'+path);
-  return fileServerUrl+'/'+path;
+  return fileServerUrl+'/'+chatId;
 }
 
 export  const uploadWishlistTableScreenshot = async (products, chatId) => {
@@ -32,7 +32,7 @@ export  const uploadWishlistTableHTML = async (products, chatId) => {
   const html = createWishlistTable(products);
   const path = saveFile(`wishlist-${chatId}`,'html',html);
   //return await upload('./src/static/'+path);
-  return fileServerUrl+'/'+path;
+  return fileServerUrl+'/'+chatId;
 };
 
 function saveFile(name,ext,data){
