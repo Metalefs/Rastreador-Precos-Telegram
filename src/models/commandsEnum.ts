@@ -6,5 +6,5 @@ export enum botCommands {
   searchwishlist,
   removewishlist,
   emptywishlist,
-  wishlistOffers,
+  wishlistoffers,
 }

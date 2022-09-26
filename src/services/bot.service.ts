@@ -461,7 +461,7 @@ export class BotService {
 
           await this.bot.sendPhoto(chatId, path, {
             caption:
-              "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistOffers' para ver as ofertas relacionadas a sua lista de desejos.",
+              "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
           });
           this.bot.sendMessage(
             msg.chat.id,

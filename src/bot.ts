@@ -22,7 +22,7 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
 
   bot.onText(/\/emptywishlist/, botService.emptywishlist);
 
-  bot.onText(/\/wishlistOffers/, botService.wishlistOffers);
+  bot.onText(/\/wishlistoffers/, botService.wishlistOffers);
 
   bot.on("callback_query", async (callbackQuery) => {
     const message = callbackQuery.message;
