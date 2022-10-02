@@ -11,7 +11,7 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
   bot.onText(/\/mybudget/, botService.mybudget);
 
   bot.onText(/\/addwishlist/, botService.addwishlist);
-
+  
   bot.onText(/\/mywishlist/, botService.mywishlist);
 
   bot.onText(/\/enrich/, botService.enrich);

@@ -12,6 +12,7 @@ import {
 import { ProductsService } from "./wishlist.service";
 import { ProductEnrichmentService } from "./productEnrichment.service";
 import { PriceHistoryService } from "./priceHistory.service";
+import { GroceriesService } from "./groceries.service";
 
 export class BotService {
   finances = {};
@@ -34,7 +35,8 @@ export class BotService {
     private categoryService: CategoriesService,
     private financesService: FinancesService,
     private priceFinder: PriceFinder,
-    private priceHistoryService: PriceHistoryService
+    private priceHistoryService: PriceHistoryService,
+    private groceriesService: GroceriesService
   ) {
     this.bot.nextMessage = {};
     this.bot.onNextMessage = (chatId, callback) => {
@@ -479,6 +481,10 @@ export class BotService {
         });
       });
   };
+  
+  // addgrocery = async (msg, match) => {
+        
+  // };
 
   mywishlist = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
