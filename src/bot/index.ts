@@ -3,7 +3,7 @@ import { Db, MongoClient } from 'mongodb';
 import * as TelegramBot from 'node-telegram-bot-api';
 
 import { init } from './bot';
-import { dbconnection } from './database';
+import { dbconnection } from '../database';
 import { PriceFinder } from './getBestPrices';
 import { OfferSearchScheduler } from './routines/offerSearchScheduler';
 import { PurgeStaticFilesScheduler } from './routines/purgeStaticFiles';
@@ -12,6 +12,7 @@ import { CategoriesService } from './services/categories.service';
 import { ChatIdService } from './services/chatId.service';
 import { FinancesService } from './services/finances.service';
 import { ProductsService } from './services/wishlist.service';
+import { PriceHistoryService } from './services/priceHistory.service';
 
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
@@ -23,12 +24,14 @@ export async function initBot() {
     const expenseService = new FinancesService(db as unknown as Db);
     const chatIdService = new ChatIdService(db as unknown as Db);
     const priceFinder = new PriceFinder(db as unknown as Db);
+    const priceHistoryService = new PriceHistoryService(db as unknown as Db);
     const botService = new BotService(
       bot,
       productService,
       categoryService,
       expenseService,
       priceFinder,
+      priceHistoryService
     );
     init(bot, botService, chatIdService);
 

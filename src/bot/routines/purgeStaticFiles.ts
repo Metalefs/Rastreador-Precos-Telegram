@@ -1,10 +1,10 @@
 import { Agenda } from "agenda/es";
 import { Db } from "mongodb";
-import { mongoConnectionString } from "../database";
+import { mongoConnectionString } from "../../database";
 const fs = require('fs');
 const path = require('path');
 
-const directories = ['./src/bot/static', './src/public'];
+const directories = ['./src/bot/static', './public'];
 export class PurgeStaticFilesScheduler {
     agenda;
     constructor(private db: Db) {

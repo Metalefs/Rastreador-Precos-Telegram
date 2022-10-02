@@ -1,6 +1,6 @@
 import { Agenda } from 'agenda/es';
 import { Db } from 'mongodb';
-import { mongoConnectionString } from '../database';
+import { mongoConnectionString } from '../../database';
 import { SearchService } from '../services/searchService';
 
 export class OfferSearchScheduler {
@@ -22,7 +22,7 @@ export class OfferSearchScheduler {
 
       this.chats.forEach((chat) => {
         console.log(chat);
-        this.bot.sendMessage(
+        this.bot?.sendMessage(
           chat,
           `Acabei de atualizar as suas ofertas. /wishlistoffers para verificar`,
         );

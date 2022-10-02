@@ -1,6 +1,6 @@
 import moment from "moment";
 import { Db } from "mongodb";
-import { BaseService } from "../models/base.service";
+import { BaseService } from "../../models/base.service";
 
 export class ProductsService extends BaseService {
   constructor(protected dbconnection: Db) {
@@ -16,7 +16,7 @@ export class ProductsService extends BaseService {
       {
         name: product,
         chatId,
-        date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
+        date: new Date(),
         id: count,
         offer
       }
@@ -25,14 +25,22 @@ export class ProductsService extends BaseService {
 
   updatewishlist = async (product, offer?) => {
     const count = await this.dbconnection
-      .collection("wishlist")
+      .collection('wishlist')
       .countDocuments();
+
+    const priceHistory = product.priceHistory ?? [];
+    priceHistory.push({
+      date: new Date(),
+      price: offer.promoPrice || offer.normalPrice
+    });
+
     await this.update(
       { name: product },
       {
-        date: moment().format("dddd, MMMM Do YYYY, h:mm:ss a"),
+        date: new Date(),
         id: count,
-        offer
+        offer,
+        priceHistory
       }
     );
   };

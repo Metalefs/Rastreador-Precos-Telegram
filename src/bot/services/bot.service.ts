@@ -11,6 +11,7 @@ import {
 } from "./files.service";
 import { ProductsService } from "./wishlist.service";
 import { ProductEnrichmentService } from "./productEnrichment.service";
+import { PriceHistoryService } from "./priceHistory.service";
 
 export class BotService {
   finances = {};
@@ -32,18 +33,20 @@ export class BotService {
     private productService: ProductsService,
     private categoryService: CategoriesService,
     private financesService: FinancesService,
-    private priceFinder: PriceFinder
+    private priceFinder: PriceFinder,
+    private priceHistoryService: PriceHistoryService
   ) {
     this.bot.nextMessage = {};
     this.bot.onNextMessage = (chatId, callback) => {
-      let promise = new Promise((resolve) => {
+      const promise = new Promise((resolve) => {
         this.bot.nextMessage[chatId] = { callback: callback, next: resolve };
       });
       return promise;
     };
     this.productEnrichmentService = new ProductEnrichmentService(
       priceFinder,
-      productService
+      productService,
+      priceHistoryService
     );
   }
 
@@ -373,7 +376,7 @@ export class BotService {
   enrich = async (msg, match) => {
     const [chatId, idx] = this.parseChat(msg, match);
 
-    let products = await this.productService.getWishlist(chatId);
+    const products = await this.productService.getWishlist(chatId);
     const offers = await this.priceFinder.getPricesArray(
       products.map((prd) => prd.name)
     );
@@ -389,7 +392,7 @@ export class BotService {
       return;
     }
 
-    let products = await this.productService.getWishlistItemById(idx);
+    const products = await this.productService.getWishlistItemById(idx);
     const offers = await this.priceFinder.getPricesArray(
       products.map((prd) => prd.name)
     );
@@ -517,9 +520,9 @@ export class BotService {
 
   wishlistOffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
-    let products = await this.productService.list();
-    let result = await uploadProductTableScreenshot(products, chatId);
-    let htmlLink = await uploadProductTableHTML(products, chatId);
+    const products = await this.productService.list();
+    const result = await uploadProductTableScreenshot(products, chatId);
+    const htmlLink = await uploadProductTableHTML(products, chatId);
 
     this.bot.sendPhoto(msg.chat.id, result, {
       caption: `<a href="${htmlLink}">Veja a lista no browser</a>`,
@@ -536,12 +539,12 @@ export class BotService {
   }
 
   private async getWishlistScreenshot(chatId) {
-    let products = await this.productService.getWishlist(chatId);
+    const products = await this.productService.getWishlist(chatId);
     const path = await uploadWishlistTableScreenshot(products, chatId);
     return [path, products];
   }
   private async getWishlistHTML(chatId) {
-    let products = await this.productService.getWishlist(chatId);
+    const products = await this.productService.getWishlist(chatId);
     const path = await uploadWishlistTableHTML(products, chatId);
     return [path, products];
   }

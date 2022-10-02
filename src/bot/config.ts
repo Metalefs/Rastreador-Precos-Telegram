@@ -1,5 +1,5 @@
-import { GoogleShoppingMerchants } from "./models/googleShoppingMerchants"
-import { Store } from "./models/stores"
+import { GoogleShoppingMerchants } from "../models/googleShoppingMerchants"
+import { Store } from "../models/stores"
 
 export const config = {
     websites: {
@@ -10,13 +10,21 @@ export const config = {
     acceptedStores: [
         Store.Amazon,
         Store["Casas Bahia"],
+        Store["Magazine Luisa"],
         Store["Mercado Livre"],
-        Store["Magazine Luisa"]
+        Store["Ponto Frio"],
+        Store.Americanas,
+        Store["Extra"],
+        Store["Kabum"],
     ],
     merchants: [
         GoogleShoppingMerchants.Amazon,
         GoogleShoppingMerchants["Casas Bahia"],
         GoogleShoppingMerchants["Magazine Luisa"],
-        GoogleShoppingMerchants["Mercado Livre"]
+        GoogleShoppingMerchants["Mercado Livre"],
+        GoogleShoppingMerchants["Ponto Frio"],
+        GoogleShoppingMerchants.Americanas,
+        GoogleShoppingMerchants.Extra,
+        GoogleShoppingMerchants.Kabum,
     ]
 }

@@ -24,7 +24,7 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
 
   bot.onText(/\/wishlistoffers/, botService.wishlistOffers);
 
-  bot.on("callback_query", async (callbackQuery) => {
+  bot.on('callback_query', async (callbackQuery) => {
     const message = callbackQuery.message;
     const data = JSON.parse(callbackQuery.data);
 
@@ -36,14 +36,14 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
     );
   });
 
-  bot.on("message", async(msg) => {
+  bot.on('message', async(msg) => {
     const chatId = msg.chat.id;
     await chatIdService.add(msg);
-    let nextMsg = bot.nextMessage[chatId];
+    const nextMsg = bot.nextMessage[chatId];
     if (nextMsg) {
       nextMsg.callback(msg);
       nextMsg.next(msg);
       bot.nextMessage[chatId] = undefined;
     }
-  });
+  })
 };

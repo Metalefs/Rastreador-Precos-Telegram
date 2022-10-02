@@ -1,9 +1,8 @@
 require("dotenv").config();
 
 import { scoutGoogleShopping } from "./navigator";
-import moment from "moment";
 import { Db } from "mongodb";
-import { Offer } from "./interfaces/offer";
+import { Offer } from "../interfaces/offer";
 
 export class PriceFinder {
   constructor(private dbconnection: Db) {}
@@ -15,7 +14,7 @@ export class PriceFinder {
     for (let i = 0; i < googleOffers.offers.length; i++) {
       const element = googleOffers.offers[i];
       if(element.merchant.offers){
-        let product_offers = element.merchant.offers;
+        const product_offers = element.merchant.offers;
         product_offers.forEach(offer => {
           if(offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
             bestOffer = this.filterBestPrice(offer,bestOffer);
@@ -44,7 +43,7 @@ export class PriceFinder {
   }
 
   getPricesArray = async (query, force = false) => {
-    let offers: any = [];
+    const offers: any = [];
 
     query.forEach(async (q) => {
       offers.push(await this.getPrices(q));

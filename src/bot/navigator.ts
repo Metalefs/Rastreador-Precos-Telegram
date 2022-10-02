@@ -2,13 +2,13 @@ import { Page } from "puppeteer-core";
 import { parse } from "node-html-parser";
 import { navigate } from "./browser";
 import { config } from "./config";
-import { GoogleShoppingMerchants } from "./models/googleShoppingMerchants";
-import { Offer } from "./interfaces/offer";
+import { GoogleShoppingMerchants } from "../models/googleShoppingMerchants";
+import { Offer } from "../interfaces/offer";
 
 export async function scoutGoogleShopping(query) {
   return navigate(config.websites.googleShopping(query)).then(
     async ([page, browser]) => {
-      let offers: {
+      const offers: {
         merchant: {
           name:string, 
           id:string,
@@ -17,7 +17,7 @@ export async function scoutGoogleShopping(query) {
       }[] = [];
       const baseUrl = (page as unknown as Page).url();
       config.merchants.forEach(async (merchant) => {
-        let merchantOffers = getOffersFromMerchant(
+        const merchantOffers = getOffersFromMerchant(
           merchant,
           await (page as unknown as Page).content(),
           baseUrl
@@ -25,10 +25,10 @@ export async function scoutGoogleShopping(query) {
         offers.push({ merchant: { name: GoogleShoppingMerchants[merchant], id: merchant, offers: merchantOffers }, });
       });
       await (page as unknown as Page).screenshot({
-        path: `./src/static/${query}.png`,
+        path: `./src/bot/static/${query}.png`,
         fullPage: true,
       });
-      let result = {
+      const result = {
         query,
         offers
       }
@@ -45,15 +45,15 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
     .map((el) => {
       let link = el.getAttribute("href");
       
-      let allSpans = el.querySelectorAll("span");
-      let allB = el.querySelectorAll("b");
-      let promoPriceSpans = el.querySelectorAll("span.T14wmb");
-      let normalPriceSpans = el.querySelectorAll("span.Wn67te");
-      let storeSpans = el.querySelectorAll("span.E5ocAb");
+      const allSpans = el.querySelectorAll("span");
+      const allB = el.querySelectorAll("b");
+      const promoPriceSpans = el.querySelectorAll("span.T14wmb");
+      const normalPriceSpans = el.querySelectorAll("span.Wn67te");
+      const storeSpans = el.querySelectorAll("span.E5ocAb");
 
       let promoPrice = promoPriceSpans[0]?.textContent ?? '';
       let normalPrice = normalPriceSpans[0]?.textContent ?? '';
-      let store = storeSpans[0]?.textContent ?? '';
+      const store = storeSpans[0]?.textContent ?? '';
 
       const promoPriceSecondPriceIdx = promoPrice.lastIndexOf("R$");
       promoPrice = promoPrice.substring(0, promoPriceSecondPriceIdx);
@@ -75,7 +75,7 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
       }
 
       if (link?.startsWith("/")) {
-        let url = new URL(baseUrl);
+        const url = new URL(baseUrl);
         link = url.origin + link;
         const features = el.text.split('R$')[0];
         el = el.setAttribute('href', link);

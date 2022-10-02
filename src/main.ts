@@ -3,6 +3,8 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import handlebars from 'handlebars';
+import * as hbsf from 'handlebars-dateformat';
 import { join } from 'path';
 import { AppModule } from './app/app.module';
 import { initBot } from './bot'
@@ -11,7 +13,8 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  
+  handlebars.registerHelper('dateFormat', hbsf);
+
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),
     prefix: '/public/',

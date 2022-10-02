@@ -23,7 +23,7 @@ export function createProductTable(products) {
         </tr>
       </thead>
       <tbody>`;
-  for (let product of products) {
+  for (const product of products) {
     if (product.name != "") {
       HTML += `
         <tr>
@@ -61,7 +61,7 @@ export function createWishlistTable(products: Array<any>) {
         </tr>
       </thead>
       <tbody>`;
-  for (let product of products) {
+  for (const product of products) {
     if (product.name != "") {
       HTML += `
         <tr>
@@ -78,7 +78,7 @@ export function createWishlistTable(products: Array<any>) {
 }
 
 export function splitIntoChunk(arr, chunk) {
-  var result:any = [];
+  const result:any = [];
   for (let i = 0; i < arr.length; i += chunk) {
     let tempArray;
     tempArray = arr.slice(i, i + chunk);

@@ -1,6 +1,6 @@
 import { Db } from "mongodb";
-import { dbconnection } from "../database";
-import { categories } from "../models/categories";
+import { dbconnection } from "../../database";
+import { categories } from "../../models/categories";
 
 export default async function main(){
     await dbconnection().then(([db,connection])=>{
