@@ -27,9 +27,6 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
-  "config": {
-    "myAddress": "https://7a4b-2804-296c-2103-d5dc-5d35-8a46-1c9e-e432.sa.ngrok.io"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

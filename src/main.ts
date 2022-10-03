@@ -31,7 +31,7 @@ async function bootstrap() {
   });
 
   (async () => {
-    const tunnel = await localtunnel({ port: 8080 });
+    const tunnel = await localtunnel({ port: 8080, subdomain: config.fileServerUrl});
     
     config.fileServerUrl = tunnel.url;
 
