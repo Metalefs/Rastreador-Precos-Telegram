@@ -24,7 +24,7 @@ export class OfferSearchScheduler {
         console.log(chat);
         this.bot?.sendMessage(
           chat,
-          `Acabei de atualizar as suas ofertas. /wishlistoffers para verificar`,
+          `Acabei de atualizar as suas ofertas. /wishlistoffers ou /groceryoffers para verificar`,
         );
       });
     });

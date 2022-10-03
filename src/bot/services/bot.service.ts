@@ -727,7 +727,7 @@ export class BotService {
     this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))
   };
 
-  futureexpenses = async (msg, match) => {
+  expectedexpenses = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
     await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + await this.getGroceryExpenses(chatId));
 
