@@ -72,4 +72,8 @@ export class ProductsService extends BaseService {
   async addToCategory(product, category) {
     await this.update({ name: product }, { category });
   }
+
+  async addQuantity(product, quantity) {
+    await this.update({ name: product }, { quantity });
+  }
 }

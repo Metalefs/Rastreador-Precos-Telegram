@@ -20,6 +20,7 @@ export function createOffersTable(products) {
           <th>Promotional Price</th>
           <th>Price</th>
           ${showHTML ? "<th>Conteúdo</th>" : ""}
+          <th>Quantidade</th>
         </tr>
       </thead>
       <tbody>`;
@@ -31,6 +32,7 @@ export function createOffersTable(products) {
           <td>${product.offer?.promoPrice ?? ""}</td>
           <td>${product.offer?.normalPrice ?? ""}</td>
           ${showHTML ? `<td>${product.offer.html ?? ""}</td>` : ""}
+          <td>${product?.quantity ?? '1'}</td>
         </tr>`;
     }
   }
@@ -58,6 +60,7 @@ export function createWishlistTable(products: Array<any>) {
           <th>Name</th>
           <th>Date</th>
           ${showCategory ? "<th>Category</th>" : ""}
+          <th>Quantidade</th>
         </tr>
       </thead>
       <tbody>`;
@@ -68,6 +71,7 @@ export function createWishlistTable(products: Array<any>) {
           <td>${product.name}</td>
           <td>${product.date || ""}</td>
           ${showCategory ? `<td>${product.category ?? ""}</td>` : ""}
+          <td>${product?.quantity ?? '1'}</td>
         </tr>`;
     }
   }
@@ -99,6 +103,7 @@ export function createGroceriesTable(products: Array<any>) {
             <th>Data da busca</th>
             <th>Nome</th>
             <th>Preço</th>
+            <th>Quantidade</th>
           </tr>
         </thead>
       <tbody>`;
@@ -106,12 +111,13 @@ export function createGroceriesTable(products: Array<any>) {
     if (product.name != "") {
       HTML += `
         <tr>
-        <td>${product.offer.html ?? ''}</td>
-        <td>${product.offer.promoPrice ?? ''}</td>
-        <td>${product.offer.store ?? ''}</td>
-        <td>${product.date}</td>
-        <td>${product.name}       <a href="/history/${product.name}">Ver histórico</a></td>
-        <td>${product.offer.normalPrice ?? ''}</td>
+          <td>${product?.offer?.html ?? ''}</td>
+          <td>${product?.offer?.promoPrice ?? ''}</td>
+          <td>${product?.offer?.store ?? ''}</td>
+          <td>${product?.date}</td>
+          <td>${product?.name}       <a href="/history/${product?.name}">Ver histórico</a></td>
+          <td>${product?.offer?.normalPrice ?? ''}</td>
+          <td>${product?.quantity ?? '1'}</td>
         </tr>`;
     }
   }

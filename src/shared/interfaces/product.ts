@@ -6,4 +6,5 @@ export interface Product extends Offer {
   features?: string;
   category?: string;
   chatId?: string;
+  quantity?: number;
 }

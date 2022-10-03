@@ -275,7 +275,7 @@ export class BotService {
   };
 
   private parseBudgetPercentage(budgetPercentage) {
-    let message =  "Seu orçamento em porcentagem: ";
+    let message = "Seu orçamento em porcentagem: ";
     const { chatId, _id, available, ...expensesWithouChatId } = budgetPercentage
 
     Object.entries(expensesWithouChatId).forEach(entry => {
@@ -323,12 +323,12 @@ export class BotService {
         .sendMessage(chatId, "Por favor, passe um nome de despesa")
         .then(() => {
           return this.bot.onNextMessage(chatId, async (msg) => {
-            this.addNewExpense(chatId,msg.text);
+            this.addNewExpense(chatId, msg.text);
           });
         });
       return;
     }
-    this.addNewExpense(chatId,expenseName);
+    this.addNewExpense(chatId, expenseName);
   }
 
   private addNewExpense(chatId, expenseName) {
@@ -447,71 +447,92 @@ export class BotService {
   private async setProductCategory(chatId, productName) {
     const categories = await this.categoryService.list();
 
+
     this.bot
-      .sendMessage(chatId, "Defina uma categoria para o produto:", {
+      .sendMessage(chatId, "Defina a quantidade:", {
         reply_markup: JSON.stringify({
           force_reply: true,
-          keyboard: splitIntoChunk(
-            categories.map((cat) => {
-              return cat.name;
-            }),
-            1
-          ),
-          resize_keyboard: true,
-          one_time_keyboard: true,
         }),
       })
       .then(() => {
         return this.bot.onNextMessage(chatId, async (msg) => {
-          await this.addProductToCategory(productName, msg.text.trim());
-
+          const quantity = parseFloat(msg.text || 0);
+          await this.bot.sendMessage(chatId, "Quantidade: " + msg.text);
+          await this.productService.addQuantity(productName, quantity);
           await this.bot.sendMessage(
             chatId,
-            `Produto foi rotulado com a categoria "${msg.text}"`,
-            {
-              reply_markup: {
-                keyboard: this.commands,
-              },
-            }
+            `Produto foi adicionado com (${msg.text.trim()}) unidades`,
           );
 
-          const product = await this.productService.getWishlistByName(
-            productName
-          );
+          this.bot
+            .sendMessage(chatId, "Defina uma categoria para o produto:", {
+              reply_markup: JSON.stringify({
+                force_reply: true,
+                keyboard: splitIntoChunk(
+                  categories.map((cat) => {
+                    return cat.name;
+                  }),
+                  1
+                ),
+                resize_keyboard: true,
+                one_time_keyboard: true,
+              }),
+            })
+            .then(() => {
+              return this.bot.onNextMessage(chatId, async (msg) => {
+                await this.addProductToCategory(productName, msg.text.trim());
 
-          await this.bot.sendMessage(
-            chatId,
-            `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
-            {
-              reply_markup: {
-                keyboard: this.commands,
-              },
-            }
-          );
+                await this.bot.sendMessage(
+                  chatId,
+                  `Produto foi rotulado com a categoria "${msg.text}"`,
+                  {
+                    reply_markup: {
+                      keyboard: this.commands,
+                    },
+                  }
+                );
 
-          await this.productEnrichmentService.enrich(product as any, chatId);
+                const product = await this.productService.getWishlistByName(
+                  productName
+                );
 
-          const [path] = await this.getWishlistScreenshot(chatId);
+                await this.bot.sendMessage(
+                  chatId,
+                  `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
+                  {
+                    reply_markup: {
+                      keyboard: this.commands,
+                    },
+                  }
+                );
 
-          await this.bot.sendPhoto(chatId, path[1], {
-            caption:
-              "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
-          });
-          this.bot.sendMessage(
-            msg.chat.id,
-            `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
-            {
-              parse_mode: "HTML",
-              reply_markup: {
-                remove_keyboard: true,
-              },
-            }
-          );
+                await this.productEnrichmentService.enrich(product as any, chatId);
 
-          const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
-          await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
-        });
-      });
+                const [path] = await this.getWishlistScreenshot(chatId);
+
+                await this.bot.sendPhoto(chatId, path[1], {
+                  caption:
+                    "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
+                });
+                this.bot.sendMessage(
+                  msg.chat.id,
+                  `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
+                  {
+                    parse_mode: "HTML",
+                    reply_markup: {
+                      remove_keyboard: true,
+                    },
+                  }
+                );
+
+                const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
+                await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
+
+                await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
+              });
+            });
+        })
+      })
   }
 
   addgrocery = async (msg, match) => {
@@ -520,21 +541,21 @@ export class BotService {
     if (productName === "") {
       const defaultProducts = await this.defaultGroceriesService.sort({ name: 1 });
       this.bot
-      .sendMessage(chatId,
-        "Por favor, forneca o nome de um produto. Ex: /addgrocery Iogurte grego 100ml. Ou use algum dos items sugeridos:",
-        {
-        reply_markup: JSON.stringify({
-          force_reply: true,
-          keyboard: splitIntoChunk(
-            defaultProducts.map((prod) => {
-              return prod.name;
+        .sendMessage(chatId,
+          "Por favor, forneca o nome de um produto. Ex: /addgrocery Iogurte grego 100ml. Ou use algum dos items sugeridos:",
+          {
+            reply_markup: JSON.stringify({
+              force_reply: true,
+              keyboard: splitIntoChunk(
+                defaultProducts.map((prod) => {
+                  return prod.name;
+                }),
+                1
+              ),
+              resize_keyboard: true,
+              one_time_keyboard: true,
             }),
-            1
-          ),
-          resize_keyboard: true,
-          one_time_keyboard: true,
-        }),
-      })
+          })
         .then(() => {
           return this.bot.onNextMessage(chatId, async (msg) => {
             productName = msg.text;
@@ -553,81 +574,96 @@ export class BotService {
     const categories = await this.supermarketCategoriesService.list();
 
     this.bot
-      .sendMessage(chatId, "Defina uma marca (opcional) para o produto (ex. 3 corações, itambé):", {
+      .sendMessage(chatId, "Defina a quantidade:", {
         reply_markup: JSON.stringify({
           force_reply: true,
         }),
       })
       .then(() => {
         return this.bot.onNextMessage(chatId, async (msg) => {
-          const brand = msg.text;
-          await this.bot.sendMessage(chatId, "Marca: " + msg.text);
-          await this.groceriesService.addToBrand(productName, brand);
+          const quantity = parseFloat(msg.text || 0);
+          await this.bot.sendMessage(chatId, "Quantidade: " + msg.text);
+          await this.groceriesService.addQuantity(productName, quantity);
           await this.bot.sendMessage(
             chatId,
-            `Produto foi rotulado com a marca "${msg.text.trim()}"`,
-            {
-              reply_markup: {
-                keyboard: this.commands,
-              },
-            }
+            `Produto foi adicionado com (${msg.text.trim()}) unidades`,
           );
+
           this.bot
-            .sendMessage(chatId, "Defina uma categoria para o produto:", {
+            .sendMessage(chatId, "Defina uma marca (opcional) para o produto (ex. 3 corações, itambé) * ou N/A:", {
               reply_markup: JSON.stringify({
                 force_reply: true,
-                keyboard: splitIntoChunk(
-                  categories.map((cat) => {
-                    return cat.name;
-                  }),
-                  1
-                ),
-                resize_keyboard: true,
-                one_time_keyboard: true,
               }),
             })
             .then(() => {
               return this.bot.onNextMessage(chatId, async (msg) => {
+                if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
 
-                await this.addGroceryToCategory(productName, msg.text.trim());
-
+                const brand = msg.text;
+                await this.bot.sendMessage(chatId, "Marca: " + msg.text);
+                await this.groceriesService.addToBrand(productName, brand);
                 await this.bot.sendMessage(
                   chatId,
-                  `Produto foi rotulado com a categoria "${msg.text}"`,
+                  `Produto foi rotulado com a marca "${msg.text.trim()}"`,
                 );
+                this.bot
+                  .sendMessage(chatId, "Defina uma categoria para o produto:", {
+                    reply_markup: JSON.stringify({
+                      force_reply: true,
+                      keyboard: splitIntoChunk(
+                        categories.map((cat) => {
+                          return cat.name;
+                        }),
+                        1
+                      ),
+                      resize_keyboard: true,
+                      one_time_keyboard: true,
+                    }),
+                  })
+                  .then(() => {
+                    return this.bot.onNextMessage(chatId, async (msg) => {
 
-                const product = await this.groceriesService.getByName(
-                  productName
-                );
+                      await this.addGroceryToCategory(productName, msg.text.trim());
 
-                await this.bot.sendMessage(
-                  chatId,
-                  `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
-                );
+                      await this.bot.sendMessage(
+                        chatId,
+                        `Produto foi rotulado com a categoria "${msg.text}"`,
+                      );
 
-                await this.productEnrichmentService.enrichGrocery(product as any, chatId);
+                      const product = await this.groceriesService.getByName(
+                        productName
+                      );
 
-                const [path] = await this.getGroceriesScreenshot(chatId);
+                      await this.bot.sendMessage(
+                        chatId,
+                        `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
+                      );
 
-                await this.bot.sendPhoto(chatId, path[1], {
-                  caption:
-                    "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mygroceries' ou '/groceryoffers' para ver as ofertas relacionadas a sua lista de desejos.",
-                });
-                this.bot.sendMessage(
-                  msg.chat.id,
-                  `<a href="${path[0]}/groceries/${chatId}">Veja a lista no browser</a>`,
-                  {
-                    parse_mode: "HTML",
-                    reply_markup: {
-                      remove_keyboard: true,
-                    },
-                  }
-                );
-                const totalGroceryExpense = await this.groceriesService.totalCostbyChatId(chatId);
-                await this.bot.sendMessage(chatId, 'Valor total com mercado: ' + totalGroceryExpense);
-              });
+                      await this.productEnrichmentService.enrichGrocery(product as any, chatId);
 
-            });
+                      const [path] = await this.getGroceriesScreenshot(chatId);
+
+                      await this.bot.sendPhoto(chatId, path[1], {
+                        caption:
+                          "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mygroceries' ou '/groceryoffers' para ver as ofertas relacionadas a sua lista de desejos.",
+                      });
+                      this.bot.sendMessage(
+                        msg.chat.id,
+                        `<a href="${path[0]}/${chatId}/groceries">Veja a lista no browser</a>`,
+                        {
+                          parse_mode: "HTML",
+                          reply_markup: {
+                            remove_keyboard: true,
+                          },
+                        }
+                      );
+                      const totalGroceryExpense = await this.groceriesService.totalCostbyChatId(chatId);
+                      await this.bot.sendMessage(chatId, 'Gasto total com mercado: ' + totalGroceryExpense);
+                    });
+
+                  });
+              })
+            })
         })
       })
   }
@@ -639,6 +675,8 @@ export class BotService {
       caption:
         "Aqui está a sua lista. '/groceryoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
+    this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))
+
     this.bot.sendMessage(
       msg.chat.id,
       `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
@@ -690,7 +728,7 @@ export class BotService {
 
     await this.productService.removeByName(id);
     const [path] = await this.getWishlistScreenshot(chatId);
-
+    
     this.bot.sendPhoto(chatId, path[1], { caption: "Aqui está a sua lista !" });
   };
 
@@ -715,8 +753,8 @@ export class BotService {
       caption: `<a href="${result[0]}/${chatId}/offers">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
+    await this.bot.sendMessage(chatId, this.parseWishlistToHTML(products), { parse_mode: "HTML" })
     this.bot.sendMessage(chatId, "Total: R$" + await this.getProductExpenses(chatId))
-
   };
 
   groceryoffers = async (msg, match) => {
@@ -728,6 +766,7 @@ export class BotService {
       caption: `<a href="${result[0]}/${chatId}/groceries">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
+    await this.bot.sendMessage(chatId, this.parseGroceryListToHTML(products), { parse_mode: "HTML" })
     this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))
   };
 
@@ -737,6 +776,24 @@ export class BotService {
 
     const totalGroceryExpense = await this.getProductExpenses(chatId);
     await this.bot.sendMessage(chatId, 'Valor total com mercado: ' + totalGroceryExpense);
+  }
+
+  private parseGroceryListToHTML(list) {
+    let message = list && list?.length ? '' : 'Nenhum produto';
+    list.forEach(grocery => {
+      message += `<a href="${grocery.offer?.link}">${grocery.offer?.features} - de ${grocery.offer?.store}</a> (${grocery.quantity || 1} unidades) <b>${grocery.offer?.promoPrice}</b>
+      `
+    })
+    return message;
+  }
+
+  private parseWishlistToHTML(list) {
+    let message = list && list?.length ? '' : 'Nenhum produto';
+    list.forEach(product => {
+      message += `<a href="${product.offer?.link}">${product.offer?.features} - de ${product.offer?.store}</a> (${product.quantity || 1} unidades) <b>${product.offer?.promoPrice}</b>
+      `
+    })
+    return message;
   }
 
   private async getGroceryExpenses(chatId) {

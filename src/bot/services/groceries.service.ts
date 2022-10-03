@@ -49,6 +49,10 @@ export class GroceriesService extends BaseService {
     await this.update({ name: product }, { category });
   }
 
+  async addQuantity(product, quantity) {
+    await this.update({ name: product }, { quantity });
+  }
+
   async addToBrand(product, brand) {
     await this.update({ name: product }, { brand });
   }
@@ -57,7 +61,7 @@ export class GroceriesService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Grocery[];
     let value = 0;
     list.forEach((item: any) => {
-      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.') ?? '0');
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.') ?? '0') * (item.quantity || 1);
     })
     return value;
   }
