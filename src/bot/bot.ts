@@ -9,6 +9,7 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
 
   bot.onText(/\/setincome/, botService.setincome);
   bot.onText(/\/mybudget/, botService.mybudget);
+  bot.onText(/\/futureexpenses/, botService.futureexpenses);
 
   bot.onText(/\/addwishlist/, botService.addwishlist);
   bot.onText(/\/mywishlist/, botService.mywishlist);

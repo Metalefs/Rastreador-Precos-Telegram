@@ -29,7 +29,8 @@ export class ProductEnrichmentService {
       promoPrice: result.promoPrice,
       normalPrice: result.normalPrice,
       store: result.store,
-      html: result.html
+      html: result.html,
+      link: result.link
     });
   }
 
@@ -49,7 +50,8 @@ export class ProductEnrichmentService {
       promoPrice: result.promoPrice,
       normalPrice: result.normalPrice,
       store: result.store,
-      html: result.html
+      html: result.html,
+      link: result.link
     });
   }
 }

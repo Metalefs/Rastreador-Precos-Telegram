@@ -9,7 +9,7 @@ import { join } from 'path';
 import { AppModule } from './web/app.module';
 import { initBot } from './bot'
 
-import localtunnel = require("localtunnel");
+const localtunnel = require("localtunnel");
 import { config } from './bot/config';
 
 async function bootstrap() {
@@ -29,20 +29,18 @@ async function bootstrap() {
     },
     templates: join(__dirname, '..', 'views'),
   });
-
-  (async () => {
+  
+  (async ()=>{
     const tunnel = await localtunnel({ port: 8080, subdomain: config.fileServerUrl});
-    
-    config.fileServerUrl = tunnel.url;
-
+    console.log(tunnel.url)
     await initBot(tunnel.url);
-
+  
     tunnel.on('close', () => {
       // tunnels are closed
     });
-  })();
-  
+  })()
   await app.listen(8080);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
+
 bootstrap();

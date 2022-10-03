@@ -1,4 +1,5 @@
 import { Db } from "mongodb";
+import { Offer } from "src/shared/interfaces/offer";
 import { BaseService } from "../../shared/models/base.service";
 
 export class ProductsService extends BaseService {
@@ -63,6 +64,15 @@ export class ProductsService extends BaseService {
   getWishlistByName = async (name) => {
     return this.dbconnection.collection("wishlist").findOne({ name: name });
   };
+
+  async totalCostbyChatId(chatId){
+    const list = await this.findByChatId(chatId) as unknown as Offer[];
+    let value = 0;
+    list.forEach((item: any) => {
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.') ?? '0');
+    })
+    return value;
+  }
 
   async addToCategory(product, category) {
     await this.update({ name: product }, { category });

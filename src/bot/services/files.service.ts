@@ -20,7 +20,8 @@ export class FileService{
     const html = createOffersTable(products);
     const path = this.saveFile(`offer-table-${chatId}`,'html',html);
     //return await upload('./src/static/'+path);
-    return this.serverUrl+'/'+chatId+'/offers';
+    //return this.serverUrl+'/'+chatId+'/offers';
+    return this.serverUrl+'/'+path;
   }
   
   uploadWishlistTableScreenshot = async (products, chatId) => {
@@ -34,14 +35,16 @@ export class FileService{
     const html = createWishlistTable(products);
     const path = this.saveFile(`wishlist-${chatId}`,'html',html);
     //return await upload('./src/static/'+path);
-    return this.serverUrl+'/'+chatId+'/offers';
+    //return this.serverUrl+'/'+chatId+'/offers';
+    return this.serverUrl+'/'+path;
   };
   
   uploadGroceriesTableScreenshot = async (products,chatId) => {
     const image = await takeScreenshotFromHtml(createGroceriesTable(products));
     const path = this.saveFile(`groceries-table-${chatId}`,'png',image);
     //return await upload('./src/static/'+path);
-    return this.serverUrl+'/'+chatId+'/groceries';
+    //return this.serverUrl+'/'+chatId+'/groceries';
+    return this.serverUrl+'/'+path;
   };
   
   

@@ -357,6 +357,7 @@ export class BotService {
       );
       return;
     }
+
     const budget = getBudget(
       this.finances[chatId]["income"],
       this.finances[chatId]
@@ -364,6 +365,7 @@ export class BotService {
     const budgetPercentage = getBudgetAsPercentage(
       this.finances[chatId]["income"]
     );
+
     this.bot.sendMessage(
       chatId,
       "Valor disponivel para gastar : <b>R$" + JSON.stringify(budget) + "</b>",
@@ -371,6 +373,7 @@ export class BotService {
         parse_mode: "HTML",
       }
     );
+    this.bot.sendMessage(chatId, "Despesas previstas: R$" + await this.allPredictedExpenses(chatId));
     this.bot.sendMessage(chatId, this.parseBudgetPercentage(budgetPercentage), {
       parse_mode: "HTML",
     });
@@ -488,6 +491,9 @@ export class BotService {
               },
             }
           );
+
+          const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId); 
+          await this.bot.sendMessage(chatId, 'Valor total com produtos: '+ totalGroceryExpense);
         });
       });
   }
@@ -598,7 +604,10 @@ export class BotService {
                     },
                   }
                 );
+                const totalGroceryExpense = await this.groceriesService.totalCostbyChatId(chatId); 
+                await this.bot.sendMessage(chatId, 'Valor total com mercado: '+ totalGroceryExpense);
               });
+
             });
         })
       })
@@ -666,10 +675,12 @@ export class BotService {
     const products = await this.productService.list();
     const result = await this.fileService.uploadOffersTableScreenshot(products, chatId);
 
-    this.bot.sendPhoto(msg.chat.id, result, {
+    await this.bot.sendPhoto(msg.chat.id, result, {
       caption: `<a href="${config.fileServerUrl}/${chatId}">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
+    this.bot.sendMessage(chatId, "Total: R$" + await this.getProductExpenses(chatId))
+
   };
 
   groceryoffers = async (msg, match) => {
@@ -677,11 +688,34 @@ export class BotService {
     const products = await this.groceriesService.list();
     const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
 
-    this.bot.sendPhoto(msg.chat.id, result, {
+    await this.bot.sendPhoto(msg.chat.id, result, {
       caption: `<a href="${config.fileServerUrl}/${chatId}/groceries">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
+    this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))
   };
+
+  futureexpenses = async (msg, match) => {
+    const [chatId, resp] = this.parseChat(msg, match);
+    await this.bot.sendMessage(chatId, 'Valor total com produtos: '+ await this.getGroceryExpenses(chatId));
+
+    const totalGroceryExpense = await this.getProductExpenses(chatId); 
+    await this.bot.sendMessage(chatId, 'Valor total com mercado: '+ totalGroceryExpense);
+  }
+
+  private async getGroceryExpenses(chatId){
+    return this.groceriesService.totalCostbyChatId(chatId); 
+  }
+
+  private async getProductExpenses(chatId){
+    return this.productService.totalCostbyChatId(chatId);
+  } 
+
+  private async allPredictedExpenses(chatId){
+    const totalExpense = await this.productService.totalCostbyChatId(chatId); 
+    const totalGroceryExpense = await this.groceriesService.totalCostbyChatId(chatId); 
+    return totalExpense + totalGroceryExpense;
+  }
 
   async addGroceryToCategory(product, category) {
     return this.groceriesService.addToCategory(product, category);

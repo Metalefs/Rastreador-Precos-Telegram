@@ -33,8 +33,6 @@ export async function initBot(url) {
 
     const fileService = new FileService(url);
 
-    console.log(url)
-
     const botService = new BotService(
       bot,
       productService,

@@ -45,7 +45,7 @@
   <body>
     <div>
       <h1><a href="#">Histórico de {{productName}} no ShoppingList Sensei do Telegram</a></h1>
-
+      <a href="javascript:window.history.back()">Voltar</a>
       <div class="table-responsive">
         <table class="table table-sm table-striped table-hover">
           <thead>
@@ -59,10 +59,10 @@
           <tbody>
             {{#each history}}
               <tr>
-                <td>{{this.product}}</td>
+                <td><a href="{{this.link}}">{{this.product}}</a></td>
                 <td>{{this.normalPrice}} / {{this.promoPrice}}</td>
                 <td>{{this.store}}</td>
-                <td>{{dateFormat this.date format "MM-DD-YYYY HH:mm:ss"}}</td>
+                <td>{{dateFormat this.date format utc}}</td>
               </tr>
             {{/each}}
           </tbody>

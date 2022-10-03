@@ -1,4 +1,5 @@
 import { Db } from "mongodb";
+import { Grocery } from "src/shared/interfaces/grocery";
 import { BaseService } from "../../shared/models/base.service";
 
 export class GroceriesService extends BaseService {
@@ -50,5 +51,14 @@ export class GroceriesService extends BaseService {
 
   async addToBrand(product, brand) {
     await this.update({ name: product }, { brand });
+  }
+
+  async totalCostbyChatId(chatId){
+    const list = await this.findByChatId(chatId) as unknown as Grocery[];
+    let value = 0;
+    list.forEach((item: any) => {
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.') ?? '0');
+    })
+    return value;
   }
 }

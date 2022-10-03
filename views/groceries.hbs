@@ -64,9 +64,8 @@
                 <td>{{{this.offer.html}}}</td>
                 <td>{{this.offer.promoPrice}}</td>
                 <td>{{this.offer.store}}</td>
-                <td>{{dateFormat this.date format "MM-DD-YYYY HH:mm:ss"}}</td>
-
-                <td>{{this.name}}       <a href="#">Ver histórico</a></td>
+                <td>{{dateFormat this.date format utc}}</td>
+                <td>{{this.name}}       <a href="/history/{{this.name}}">Ver histórico</a></td>
                 <td>{{this.offer.normalPrice}}</td>
               </tr>
             {{/each}}

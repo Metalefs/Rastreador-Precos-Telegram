@@ -89,22 +89,29 @@ export function createGroceriesTable(products: Array<any>) {
   }
 
   let HTML = `
-    <table class='table table-sm table-striped table-dark'>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Date</th>
-          ${showCategory ? "<th>Category</th>" : ""}
-        </tr>
-      </thead>
+      <div class="table-responsive">
+      <table class="table table-sm table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Oferta</th>
+            <th>Promoção</th>
+            <th>Loja</th>
+            <th>Data da busca</th>
+            <th>Nome</th>
+            <th>Preço</th>
+          </tr>
+        </thead>
       <tbody>`;
   for (const product of products) {
     if (product.name != "") {
       HTML += `
         <tr>
-          <td>${product.name}</td>
-          <td>${product.date || ""}</td>
-          ${showCategory ? `<td>${product.category ?? ""}</td>` : ""}
+        <td>${product.offer.html ?? ''}</td>
+        <td>${product.offer.promoPrice ?? ''}</td>
+        <td>${product.offer.store ?? ''}</td>
+        <td>${product.date}</td>
+        <td>${product.name}       <a href="/history/${product.name}">Ver histórico</a></td>
+        <td>${product.offer.normalPrice ?? ''}</td>
         </tr>`;
     }
   }
