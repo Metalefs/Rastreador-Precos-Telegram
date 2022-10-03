@@ -8,6 +8,10 @@ import * as hbsf from 'handlebars-dateformat';
 import { join } from 'path';
 import { AppModule } from './web/app.module';
 import { initBot } from './bot'
+
+import localtunnel = require("localtunnel");
+import { config } from './bot/config';
+
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -25,7 +29,19 @@ async function bootstrap() {
     },
     templates: join(__dirname, '..', 'views'),
   });
-  await initBot();
+
+  (async () => {
+    const tunnel = await localtunnel({ port: 8080 });
+    
+    config.fileServerUrl = tunnel.url;
+
+    await initBot(tunnel.url);
+
+    tunnel.on('close', () => {
+      // tunnels are closed
+    });
+  })();
+  
   await app.listen(8080);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

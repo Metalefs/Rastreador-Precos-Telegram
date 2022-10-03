@@ -3,17 +3,14 @@ import { PriceFinder } from "../getBestPrices";
 import { splitIntoChunk } from "../html-generator";
 import { CategoriesService } from "./categories.service";
 import { FinancesService } from "./finances.service";
-import {
-  uploadGroceriesTableScreenshot,
-  uploadOffersTableScreenshot,
-  uploadWishlistTableScreenshot,
-} from "./files.service";
+
 import { ProductsService } from "./wishlist.service";
 import { ProductEnrichmentService } from "./productEnrichment.service";
 import { PriceHistoryService } from "./priceHistory.service";
 import { GroceriesService } from "./groceries.service";
 import { SupermarketCategoriesService } from "./supermarketCategories.service";
 import { config } from "../config";
+import { FileService } from "./files.service";
 
 export class BotService {
   finances = {};
@@ -39,6 +36,7 @@ export class BotService {
     private priceHistoryService: PriceHistoryService,
     private groceriesService: GroceriesService,
     private supermarketCategoriesService: SupermarketCategoriesService,
+    private fileService: FileService
   ) {
     this.bot.nextMessage = {};
     this.bot.onNextMessage = (chatId, callback) => {
@@ -666,7 +664,7 @@ export class BotService {
   wishlistoffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
     const products = await this.productService.list();
-    const result = await uploadOffersTableScreenshot(products, chatId);
+    const result = await this.fileService.uploadOffersTableScreenshot(products, chatId);
 
     this.bot.sendPhoto(msg.chat.id, result, {
       caption: `<a href="${config.fileServerUrl}/${chatId}">Veja a lista no browser</a>`,
@@ -677,7 +675,7 @@ export class BotService {
   groceryoffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
     const products = await this.groceriesService.list();
-    const result = await uploadGroceriesTableScreenshot(products, chatId);
+    const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
 
     this.bot.sendPhoto(msg.chat.id, result, {
       caption: `<a href="${config.fileServerUrl}/${chatId}/groceries">Veja a lista no browser</a>`,
@@ -699,12 +697,12 @@ export class BotService {
 
   private async getGroceriesScreenshot(chatId) {
     const products = await this.groceriesService.findByChatId(chatId);
-    const path = await uploadGroceriesTableScreenshot(products, chatId);
+    const path = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
     return [path, products];
   }
   private async getWishlistScreenshot(chatId) {
     const products = await this.productService.getWishlist(chatId);
-    const path = await uploadWishlistTableScreenshot(products, chatId);
+    const path = await this.fileService.uploadWishlistTableScreenshot(products, chatId);
     return [path, products];
   }
 }

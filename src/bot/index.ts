@@ -15,11 +15,12 @@ import { ProductsService } from './services/wishlist.service';
 import { PriceHistoryService } from './services/priceHistory.service';
 import { GroceriesService } from './services/groceries.service';
 import { SupermarketCategoriesService } from './services/supermarketCategories.service';
+import { FileService } from './services/files.service';
 
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
-export async function initBot() {
+export async function initBot(url) {
   dbconnection().then(([db, connection]) => {
     const productService = new ProductsService(db as unknown as Db);
     const categoryService = new CategoriesService(db as unknown as Db);
@@ -30,6 +31,10 @@ export async function initBot() {
     const priceHistoryService = new PriceHistoryService(db as unknown as Db);
     const groceriesService = new GroceriesService(db as unknown as Db);
 
+    const fileService = new FileService(url);
+
+    console.log(url)
+
     const botService = new BotService(
       bot,
       productService,
@@ -38,7 +43,8 @@ export async function initBot() {
       priceFinder,
       priceHistoryService,
       groceriesService,
-      supermarketCategoriesService
+      supermarketCategoriesService,
+      fileService
     );
     init(bot, botService, chatIdService);
 
