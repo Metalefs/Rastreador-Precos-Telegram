@@ -14,27 +14,38 @@ const _expenses = {
 };
 
 export function getBudget(amount = 0, expenses = _expenses) {
-  let availableAmount = (process.env.AVAILABLE_VALUE as any) || amount; 
-  const { chatId, _id, available, income, ...expensesWithouChatId } = expenses
+  let availableAmount = (process.env.AVAILABLE_VALUE as any) || amount;
+  const { chatId, _id, available, income, ...expensesWithouChatId } = expenses;
+
   Object.values(expensesWithouChatId).forEach(expense => {
     availableAmount -= expense || 0;
   })
   return availableAmount;
 }
 
-export function getBudgetAsPercentage(amount = (process.env.AVAILABLE_VALUE as any) ||0, expense = _expenses){
-  function parsePencentage(_expense:any){
+export function getBudgetAsPercentage(amount = (process.env.AVAILABLE_VALUE as any) || 0, expense = _expenses) {
+  function parsePencentage(_expense: any) {
     return ((_expense / amount) * 100).toFixed(2) + "%"
   }
+
+  const { chatId, _id, available, income, ...expensesWithouChatId } = expense
+
   const value = {
-    rent: parsePencentage(expense.rent),
-    investments: parsePencentage(expense.investments),
-    groceries: parsePencentage(expense.groceries),
-    bills: parsePencentage(expense.bills),
-    subscriptions: parsePencentage(expense.subscriptions),
-    taxes: parsePencentage(expense.taxes),
-    budget: parsePencentage(getBudget(amount)),
+    rent: parsePencentage(expensesWithouChatId.rent),
+    investments: parsePencentage(expensesWithouChatId.investments),
+    groceries: parsePencentage(expensesWithouChatId.groceries),
+    bills: parsePencentage(expensesWithouChatId.bills),
+    subscriptions: parsePencentage(expensesWithouChatId.subscriptions),
+    taxes: parsePencentage(expensesWithouChatId.taxes),
+    budget: parsePencentage(getBudget(amount, expense)),
   }
-  console.log(value);
+
+  Object.entries(expensesWithouChatId).forEach(expense => {
+    if (expense[0] != 'budget')
+      Object.assign(value, {
+        [expense[0]]: parsePencentage(expense[1])
+      })
+  })
+
   return value;
 }
