@@ -461,7 +461,7 @@ export class BotService {
           await this.productService.addQuantity(productName, quantity);
           await this.bot.sendMessage(
             chatId,
-            `Produto foi adicionado com (${msg.text.trim()}) unidades`,
+            `Produto foi adicionado com (${msg.text.trim()}) unidade(s)`,
           );
 
           this.bot
@@ -485,11 +485,6 @@ export class BotService {
                 await this.bot.sendMessage(
                   chatId,
                   `Produto foi rotulado com a categoria "${msg.text}"`,
-                  {
-                    reply_markup: {
-                      keyboard: this.commands,
-                    },
-                  }
                 );
 
                 const product = await this.productService.getWishlistByName(
@@ -499,11 +494,6 @@ export class BotService {
                 await this.bot.sendMessage(
                   chatId,
                   `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
-                  {
-                    reply_markup: {
-                      keyboard: this.commands,
-                    },
-                  }
                 );
 
                 await this.productEnrichmentService.enrich(product as any, chatId);
@@ -586,7 +576,7 @@ export class BotService {
           await this.groceriesService.addQuantity(productName, quantity);
           await this.bot.sendMessage(
             chatId,
-            `Produto foi adicionado com (${msg.text.trim()}) unidades`,
+            `Produto foi adicionado com (${msg.text.trim()}) unidade(s)`,
           );
 
           this.bot
@@ -715,7 +705,8 @@ export class BotService {
         "Aqui está a sua lista. '/wishlistoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
     const products = await this.productService.list();
-    await this.bot.sendMessage(chatId, this.parseWishlistToHTML(products), { parse_mode: "HTML" })
+    await this.bot.sendMessage(chatId, this.parseWishlistToHTML(products), { parse_mode: "HTML" });
+    await this.bot.sendMessage(chatId, "Total: R$" + await this.getProductExpenses(chatId))
     this.bot.sendMessage(
       msg.chat.id,
       `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
@@ -791,7 +782,7 @@ export class BotService {
   private parseGroceryListToHTML(list) {
     let message = list && list?.length ? '' : 'Nenhum produto';
     list.forEach(grocery => {
-      message += `<a href="${grocery.offer?.link}">${grocery.offer?.features} - de ${grocery.offer?.store}</a> (${grocery.quantity || 1} unidades) <b>${grocery.offer?.promoPrice}</b>
+      message += `<a href="${grocery.offer?.link}">${grocery.offer?.features} - de ${grocery.offer?.store}</a> (${grocery.quantity || 1} unidade(s)) <b>${grocery.offer?.promoPrice}</b>
       `
     })
     return message;
@@ -800,7 +791,7 @@ export class BotService {
   private parseWishlistToHTML(list) {
     let message = list && list?.length ? '' : 'Nenhum produto';
     list.forEach(product => {
-      message += `<a href="${product.offer?.link}">${product.offer?.features} - de ${product.offer?.store}</a> (${product.quantity || 1} unidades) <b>${product.offer?.promoPrice}</b>
+      message += `<a href="${product.offer?.link}">${product.offer?.features} - de ${product.offer?.store}</a> (${product.quantity || 1} unidade(s)) <b>${product.offer?.promoPrice}</b>
       `
     })
     return message;

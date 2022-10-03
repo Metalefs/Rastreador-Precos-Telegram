@@ -30,10 +30,10 @@ export class PriceFinder {
   private filterBestPrice(offer, bestOffer){
     if(offer.link && (offer.normalPrice != '' || offer.normalPrice != '') && offer.store){
               
-      const offerPrice = parseFloat((offer.normalPrice).replace('R$','').replace(',','.'));
+      //const offerPrice = parseFloat((offer.normalPrice).replace('R$','').replace(',','.'));
       const offerPromo = parseFloat((offer.promoPrice).replace('R$','').replace(',','.'));
       
-      if((offerPrice < bestOffer.normalPrice) || offerPromo < bestOffer.promoPrice){
+      if(/*(offerPrice < bestOffer.normalPrice) || */offerPromo < bestOffer.promoPrice){
         return offer;
       }
     }

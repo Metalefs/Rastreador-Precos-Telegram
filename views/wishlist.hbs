@@ -26,14 +26,11 @@
     />
     <style>
       * { margin: 0; padding: 0; } *, *:before, *:after { box-sizing:
-      border-box; } html, body {
-        background-image: url('/public/shopping-trolley-with-little-snooze.jpg'); 
-        background-size: cover;
-        font-family: "Helvetica Neue", "Helvetica",
-      "Arial", sans-serif; } div { padding: 1rem; } h1 { font-size: 48px;
-      line-height: 56px; margin: 0; text-align: center; }
-      table div {
-      }
+      border-box; } html, body { background-image:
+      url('/public/shopping-trolley-with-little-snooze.jpg'); background-size:
+      cover; font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif; }
+      div { padding: 1rem; } h1 { font-size: 48px; line-height: 56px; margin: 0;
+      text-align: center; } table div { }
     </style>
     <link
       rel="stylesheet"
@@ -44,7 +41,10 @@
   </head>
   <body>
     <div>
-      <h1><a href="#">Ofertas de {{user.from.first_name}} {{user.from.last_name}} no ShoppingList Sensei do Telegram</a></h1>
+      <h1><a href="#">Ofertas de
+          {{user.from.first_name}}
+          {{user.from.last_name}}
+          no ShoppingList Sensei do Telegram</a></h1>
 
       <div class="table-responsive">
         <table class="table table-sm table-striped table-hover">
@@ -61,11 +61,14 @@
           <tbody>
             {{#each wishlist}}
               <tr>
-                <td>{{{this.offer.html}}}</td>
+                <td
+                  onclick="javascript:window.open('{{this.offer.link}}'); event.preventDefault()"
+                >{{{this.offer.html}}}</td>
                 <td>{{this.offer.promoPrice}}</td>
                 <td>{{this.offer.store}}</td>
                 <td>{{dateFormat this.date format utc}}</td>
-                <td>{{this.name}}       <a href="/history/{{this.name}}">Ver histórico</a></td>
+                <td>{{this.name}}
+                  <a href="/history/{{this.name}}">Ver histórico</a></td>
                 <td>{{this.offer.normalPrice}}</td>
               </tr>
             {{/each}}

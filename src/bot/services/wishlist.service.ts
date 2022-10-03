@@ -64,7 +64,7 @@ export class ProductsService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Offer[];
     let value = 0;
     list.forEach((item: any) => {
-      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.') ?? '0');
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').trim().replace(' ','').replace(',','.') ?? '0');
     })
     return value;
   }

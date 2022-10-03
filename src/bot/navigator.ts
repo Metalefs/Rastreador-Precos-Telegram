@@ -80,19 +80,22 @@ function getOffersData(selectors = [], html, baseUrl) {
   const root = parse(html);
   const elements = root.querySelectorAll(selectors[0]);
   return elements
-    .map((el) => {
+  .filter((el) => el != undefined)
+    ?.map((el) => {
+      if(!el || el===undefined || el==null) return null;
+
       let link = el.getAttribute("href");
 
       if(!link) {
-        link = el.querySelector('a').getAttribute("href");
+        link = el.querySelector('a')?.getAttribute("href");
       }
 
       const allSpans = el.querySelectorAll("span");
       const allB = el.querySelectorAll("b");
-      const promoPriceSpans = el.querySelectorAll(selectors[1]||"span.T14wmb");
-      const normalPriceSpans = el.querySelectorAll(selectors[2]||"span.Wn67te");
-      const storeSpans = el.querySelectorAll(selectors[3]||"span.E5ocAb");
-      let features = el.querySelector(selectors[4]||".sh-np__product-title.translate-content").innerText;
+      const promoPriceSpans = el.querySelectorAll(selectors[1]??"span.T14wmb");
+      const normalPriceSpans = el.querySelectorAll(selectors[2]??"span.Wn67te");
+      const storeSpans = el.querySelectorAll(selectors[3]??"span.E5ocAb");
+      let features = el.querySelector(selectors[4]??".sh-np__product-title")?.innerText;
 
       let promoPrice = promoPriceSpans[0]?.textContent ?? '';
       let normalPrice = normalPriceSpans[0]?.textContent ?? '';
@@ -125,6 +128,9 @@ function getOffersData(selectors = [], html, baseUrl) {
           normalPrice = allB[0]?.textContent ?? '';
         } catch (ex) { }
       }
+
+      normalPrice = normalPrice.replace("R$", '').trim().replace(' ', '.');
+      promoPrice = promoPrice.replace("R$", '').trim().replace(' ', '.');
 
       if (link?.startsWith("/")) {
         const url = new URL(baseUrl);

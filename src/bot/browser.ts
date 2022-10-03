@@ -13,7 +13,8 @@ export const launch = async () => {
       // This will write shared memory files into /tmp instead of /dev/shm,
       // because Docker’s default for /dev/shm is 64MB
       "--disable-dev-shm-usage",
-    ],
+      '--lang=pt-BR,pt'
+    ], env: { LANGUAGE: "pt-BR" }
   });
   return browser;
 };
