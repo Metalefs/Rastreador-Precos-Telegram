@@ -47,6 +47,11 @@ export class BaseService {
     }
   };
 
+  removeByName = async (name) => {
+    const result = await this.removeByFilter({ name: name });
+    return result;
+  }
+
   update = async (filter, fields) => {
     const options = { upsert: true };
 

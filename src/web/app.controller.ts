@@ -22,6 +22,8 @@ export class AppController {
   @Render('groceries.hbs')
   async groceries(@Param() params) {
     const groceries = await this.appService.getGroceries(params.id);
-    return { groceries };
+    const user = await this.appService.getUser(params.id);
+
+    return { groceries, user };
   }
 }

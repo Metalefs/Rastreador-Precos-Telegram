@@ -18,12 +18,10 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
   bot.onText(/\/addgrocery/, botService.addgrocery);
   bot.onText(/\/mygroceries/, botService.mygroceries);
 
-  bot.onText(/\/enrich/, botService.enrich);
-  bot.onText(/\/enrichitem (.+)/, botService.enrichitem);
-
   bot.onText(/\/removewishlist (.+)/, botService.removewishlist);
   bot.onText(/\/emptywishlist/, botService.emptywishlist);
-
+  
+  bot.onText(/\/removegrocery (.+)/, botService.removegrocery);
   bot.onText(/\/emptygroceries/, botService.emptygroceries);
 
   bot.onText(/\/wishlistoffers/, botService.wishlistoffers);

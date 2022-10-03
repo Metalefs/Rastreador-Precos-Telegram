@@ -45,11 +45,6 @@ export class ProductsService extends BaseService {
     );
   };
 
-  removeWishlist = async (id) => {
-    const result = await this.removeByFilter({ name: id });
-    return result;
-  };
-
   getWishlist = async (chatId) => {
     return this.dbconnection.collection("wishlist").find({ chatId }).toArray();
   };

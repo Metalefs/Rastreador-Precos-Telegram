@@ -421,33 +421,6 @@ export class BotService {
     });
   };
 
-  enrich = async (msg, match) => {
-    const [chatId, idx] = this.parseChat(msg, match);
-
-    const products = await this.productService.getWishlist(chatId);
-    const offers = await this.priceFinder.getPricesArray(
-      products.map((prd) => prd.name)
-    );
-
-    this.bot.sendMessage(chatId, JSON.stringify(offers, undefined, 4));
-  };
-
-  enrichitem = async (msg, match) => {
-    const [chatId, idx] = this.parseChat(msg, match);
-
-    if (idx === undefined) {
-      this.bot.sendMessage(chatId, "Passe o id de um item da lista");
-      return;
-    }
-
-    const products = await this.productService.getWishlistItemById(idx);
-    const offers = await this.priceFinder.getPricesArray(
-      products.map((prd) => prd.name)
-    );
-
-    this.bot.sendMessage(chatId, JSON.stringify(offers, undefined, 4));
-  };
-
   addwishlist = async (msg, match) => {
     const chatId = msg.chat.id;
     let productName = match.input.replace("/addwishlist", "").trim();
@@ -519,13 +492,13 @@ export class BotService {
 
           const [path] = await this.getWishlistScreenshot(chatId);
 
-          await this.bot.sendPhoto(chatId, path, {
+          await this.bot.sendPhoto(chatId, path[1], {
             caption:
               "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
           });
           this.bot.sendMessage(
             msg.chat.id,
-            `<a href="${config.fileServerUrl}/${chatId}">Veja a lista no browser</a>`,
+            `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
             {
               parse_mode: "HTML",
               reply_markup: {
@@ -658,27 +631,44 @@ export class BotService {
   mygroceries = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
     const [path] = await this.getGroceriesScreenshot(chatId);
-    this.bot.sendPhoto(chatId, path, {
+    await this.bot.sendPhoto(chatId, path[1], {
       caption:
         "Aqui está a sua lista. '/groceryoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
     this.bot.sendMessage(
       msg.chat.id,
-      `<a href="${path}">Veja a lista no browser</a>`,
+      `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
       { parse_mode: "HTML" }
     );
+  };
+
+  removegrocery = async (msg, match) => {
+    const [chatId, id] = this.parseChat(msg, match);
+
+    if (!id) {
+      this.bot.sendMessage(
+        chatId,
+        "Esse comando precisa de um argumento. Ex: /removegrocery {{name}}"
+      );
+      return;
+    }
+
+    await this.groceriesService.removeByName(id);
+    const [path] = await this.getGroceriesScreenshot(chatId);
+
+    this.bot.sendPhoto(chatId, path, { caption: "Aqui está a sua lista !" });
   };
 
   mywishlist = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
     const [path] = await this.getWishlistScreenshot(chatId);
-    this.bot.sendPhoto(chatId, path, {
+    this.bot.sendPhoto(chatId, path[1], {
       caption:
         "Aqui está a sua lista. '/wishlistoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
     this.bot.sendMessage(
       msg.chat.id,
-      `<a href="${path}">Veja a lista no browser</a>`,
+      `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
       { parse_mode: "HTML" }
     );
   };
@@ -694,10 +684,10 @@ export class BotService {
       return;
     }
 
-    await this.productService.removeWishlist(id);
+    await this.productService.removeByName(id);
     const [path] = await this.getWishlistScreenshot(chatId);
 
-    this.bot.sendPhoto(chatId, path, { caption: "Aqui está a sua lista !" });
+    this.bot.sendPhoto(chatId, path[1], { caption: "Aqui está a sua lista !" });
   };
 
   emptywishlist = async (msg, match) => {
@@ -717,8 +707,8 @@ export class BotService {
     const products = await this.productService.list();
     const result = await this.fileService.uploadOffersTableScreenshot(products, chatId);
 
-    await this.bot.sendPhoto(msg.chat.id, result, {
-      caption: `<a href="${config.fileServerUrl}/${chatId}/offers">Veja a lista no browser</a>`,
+    await this.bot.sendPhoto(msg.chat.id, result[1], {
+      caption: `<a href="${result[0]}/${chatId}/offers">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
     this.bot.sendMessage(chatId, "Total: R$" + await this.getProductExpenses(chatId))
@@ -730,8 +720,8 @@ export class BotService {
     const products = await this.groceriesService.list();
     const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
 
-    await this.bot.sendPhoto(msg.chat.id, result, {
-      caption: `<a href="${config.fileServerUrl}/${chatId}/groceries">Veja a lista no browser</a>`,
+    await this.bot.sendPhoto(msg.chat.id, result[1], {
+      caption: `<a href="${result[0]}/${chatId}/groceries">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
     this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))

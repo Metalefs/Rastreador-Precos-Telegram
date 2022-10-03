@@ -19,12 +19,12 @@ describe('Scrape', () => {
     (client as MongoClient).close()
   }, 20000);
 
-  test('search iogurte grego 100ml', async () => {
+  test('search iogurte grego 100g', async () => {
 
     const [db, connection, client] = await dbconnection();
     const priceFinder = new PriceFinder(db as any);
 
-    const result = await priceFinder.getPrices('iogurte grego 100ml', { useMerchants: false });
+    const result = await priceFinder.getPrices('iogurte grego 100g', { useMerchants: false });
 
     fs.writeFileSync(`./src/tests/bot/results/scrape/groceries-result.json`, JSON.stringify(result));
 
