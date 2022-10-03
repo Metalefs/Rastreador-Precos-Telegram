@@ -9,7 +9,9 @@
   "scripts": {
     "start-search": "ts-node ./src/getBestPrices.ts",
     "start-web": "cd ./src/webservice && npm start",
-    "seed-categories": "ts-node ./src/seed/registerCategories.ts",
+    "seed-categories": "ts-node ./src/bot/seed/registerCategories.ts",
+    "seed-groceries": "ts-node ./src/bot/seed/registerGroceries.ts",
+    "seed-supermarket-categories": "ts-node ./src/bot/seed/registerSupermarketCategories.ts",
     "test": "jest --detectOpenHandles",
     "coverage": "jest --coverage",
     "prebuild": "rimraf dist",

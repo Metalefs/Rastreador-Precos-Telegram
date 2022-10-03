@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { MongoClient } from 'mongodb';
 // or as an es module:
 // import { MongoClient } from 'mongodb'

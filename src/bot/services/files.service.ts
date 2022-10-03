@@ -2,21 +2,22 @@ import * as fs from "fs";
 
 import { takeScreenshotFromHtml } from "../browser";
 //import { upload } from "./images";
-import { createProductTable, createWishlistTable } from "../util";
+import { createGroceriesTable, createOffersTable, createWishlistTable } from "../html-generator";
 import * as randomstring from 'randomstring';
+import { config } from "../config";
 
-const fileServerUrl = 'https://7a4b-2804-296c-2103-d5dc-5d35-8a46-1c9e-e432.sa.ngrok.io';
+const fileServerUrl = config.fileServerUrl;
 
-export const uploadProductTableScreenshot = async (products,chatId) => {
-  const image = await takeScreenshotFromHtml(createProductTable(products));
-  const path = saveFile(`product-table-${chatId}`,'png',image);
+export const uploadOffersTableScreenshot = async (products,chatId) => {
+  const image = await takeScreenshotFromHtml(createOffersTable(products));
+  const path = saveFile(`offer-table-${chatId}`,'png',image);
   //return await upload('./src/static/'+path);
   return fileServerUrl+'/'+path;
 };
 
-export const uploadProductTableHTML = async (products, chatId) => {
-  const html = createProductTable(products);
-  const path = saveFile(`product-table-${chatId}`,'html',html);
+export const uploadOffersTableHTML = async (products, chatId) => {
+  const html = createOffersTable(products);
+  const path = saveFile(`offer-table-${chatId}`,'html',html);
   //return await upload('./src/static/'+path);
   return fileServerUrl+'/'+chatId;
 }
@@ -34,6 +35,14 @@ export  const uploadWishlistTableHTML = async (products, chatId) => {
   //return await upload('./src/static/'+path);
   return fileServerUrl+'/'+chatId;
 };
+
+export const uploadGroceriesTableScreenshot = async (products,chatId) => {
+  const image = await takeScreenshotFromHtml(createGroceriesTable(products));
+  const path = saveFile(`groceries-table-${chatId}`,'png',image);
+  //return await upload('./src/static/'+path);
+  return config.fileServerUrl+'/'+path;
+};
+
 
 function saveFile(name,ext,data){
   const rand = randomstring.generate();

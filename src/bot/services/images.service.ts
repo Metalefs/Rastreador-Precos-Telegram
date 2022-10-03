@@ -1,5 +1,5 @@
-const { Storage } = require("@google-cloud/storage");
-const UUID = require("uuid-v4");
+import { Storage } from "@google-cloud/storage";
+import UUID from "uuid-v4";
 const storage = new Storage();
 const bucketName = "shopping-automation-22ccf.appspot.com";
 const bucket = storage.bucket(bucketName);

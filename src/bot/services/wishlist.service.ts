@@ -1,6 +1,5 @@
-import moment from "moment";
 import { Db } from "mongodb";
-import { BaseService } from "../../models/base.service";
+import { BaseService } from "../../shared/models/base.service";
 
 export class ProductsService extends BaseService {
   constructor(protected dbconnection: Db) {
@@ -46,24 +45,12 @@ export class ProductsService extends BaseService {
   };
 
   removeWishlist = async (id) => {
-    const result = await this.dbconnection
-      .collection("wishlist")
-      .deleteOne({ name: id });
-    if (result.deletedCount === 1) {
-      console.log("Successfully deleted one document.", id);
-    } else {
-      console.log("No documents matched the query. Deleted 0 documents.", {
-        id,
-      });
-    }
+    const result = await this.removeByFilter({ name: id });
+    return result;
   };
 
   getWishlist = async (chatId) => {
     return this.dbconnection.collection("wishlist").find({ chatId }).toArray();
-  };
-
-  getWishlistFromAllChats = async () => {
-    return this.dbconnection.collection("wishlist").find().toArray();
   };
 
   getWishlistItemById = async (id) => {
@@ -75,10 +62,6 @@ export class ProductsService extends BaseService {
 
   getWishlistByName = async (name) => {
     return this.dbconnection.collection("wishlist").findOne({ name: name });
-  };
-
-  emptyWishlist = async () => {
-    return this.dbconnection.collection("wishlist").deleteMany((x) => x);
   };
 
   async addToCategory(product, category) {

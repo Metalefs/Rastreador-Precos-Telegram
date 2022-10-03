@@ -11,18 +11,21 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
   bot.onText(/\/mybudget/, botService.mybudget);
 
   bot.onText(/\/addwishlist/, botService.addwishlist);
-  
   bot.onText(/\/mywishlist/, botService.mywishlist);
 
-  bot.onText(/\/enrich/, botService.enrich);
+  bot.onText(/\/addgrocery/, botService.addgrocery);
+  bot.onText(/\/mygroceries/, botService.mygroceries);
 
+  bot.onText(/\/enrich/, botService.enrich);
   bot.onText(/\/enrichitem (.+)/, botService.enrichitem);
 
   bot.onText(/\/removewishlist (.+)/, botService.removewishlist);
-
   bot.onText(/\/emptywishlist/, botService.emptywishlist);
 
-  bot.onText(/\/wishlistoffers/, botService.wishlistOffers);
+  bot.onText(/\/emptygroceries/, botService.emptygroceries);
+
+  bot.onText(/\/wishlistoffers/, botService.wishlistoffers);
+  bot.onText(/\/groceryoffers/, botService.groceryoffers);
 
   bot.on('callback_query', async (callbackQuery) => {
     const message = callbackQuery.message;

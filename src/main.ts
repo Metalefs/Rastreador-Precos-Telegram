@@ -6,7 +6,7 @@ import {
 import handlebars from 'handlebars';
 import * as hbsf from 'handlebars-dateformat';
 import { join } from 'path';
-import { AppModule } from './app/app.module';
+import { AppModule } from './web/app.module';
 import { initBot } from './bot'
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

@@ -1,7 +1,9 @@
-import { GoogleShoppingMerchants } from "../models/googleShoppingMerchants"
-import { Store } from "../models/stores"
+import { GoogleShoppingMerchants } from "../shared/models/googleShoppingMerchants"
+import { Store } from "../shared/models/stores"
 
 export const config = {
+    fileServerUrl: 'https://shoppinglistchanbot.loca.lt',
+
     websites: {
         googleShopping: function (query) {
             return `https://www.google.com.br/search?tbm=shop&q=${query.replace(/\s/g,'+')}`

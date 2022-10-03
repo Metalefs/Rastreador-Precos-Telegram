@@ -1,10 +1,11 @@
 import moment from "moment";
 import { Db } from "mongodb";
 import { PriceFinder } from "../getBestPrices";
-import { Product } from "../../interfaces/product";
+import { Product } from "../../shared/interfaces/product";
 import { PriceHistoryService } from "./priceHistory.service";
 import { ProductEnrichmentService } from "./productEnrichment.service";
 import { ProductsService } from "./wishlist.service";
+import { GroceriesService } from "./groceries.service";
 
 export class SearchService {
   constructor(private dbconnection: Db) {}
@@ -12,15 +13,18 @@ export class SearchService {
   async search(force = false) {
     const offers: any = [];
 
-    //if ((await this.hasSearchedToday()) && !force) return;
-
     const productsService = new ProductsService(this.dbconnection);
+    const groceriesService = new GroceriesService(this.dbconnection);
     const priceFinder = new PriceFinder(this.dbconnection);
     const priceHistoryService = new PriceHistoryService(this.dbconnection);
-    const products = await productsService.getWishlistFromAllChats();
+    const products = await productsService.list();
+    const groceries = await groceriesService.list();
 
-    const productEnrichmentService = new ProductEnrichmentService(priceFinder,productsService,priceHistoryService);
+    const productEnrichmentService = new ProductEnrichmentService(priceFinder,productsService,groceriesService,priceHistoryService);
 
+    groceries.forEach(async (product) => {
+      offers.push(await productEnrichmentService.enrichGrocery(product as unknown as Product));
+    });
     products.forEach(async (product) => {
       offers.push(await productEnrichmentService.enrich(product as unknown as Product));
     });
