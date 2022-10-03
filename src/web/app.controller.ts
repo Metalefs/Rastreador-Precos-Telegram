@@ -8,12 +8,10 @@ export class AppController {
   @Get('/history/:id')
   @Render('pricehistory.hbs')
   async history(@Param() params) {
-    console.log("history")
     const history = await this.appService.getPriceHistory(params.id);
-    console.log(history)
-    return { history };
+    return { history, productName:params.id };
   }
-  @Get(':id')
+  @Get(':id/offers')
   @Render('wishlist.hbs')
   async root(@Param() params) {
     const products = await this.appService.getProducts(params.id);

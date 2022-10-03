@@ -79,7 +79,6 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
 function getOffersData(selectors = [], html, baseUrl) {
   const root = parse(html);
   const elements = root.querySelectorAll(selectors[0]);
-  console.log(elements)
   return elements
     .map((el) => {
       let link = el.getAttribute("href");

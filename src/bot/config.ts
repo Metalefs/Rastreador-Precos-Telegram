@@ -2,7 +2,7 @@ import { GoogleShoppingMerchants } from "../shared/models/googleShoppingMerchant
 import { Store } from "../shared/models/stores"
 
 export const config = {
-    fileServerUrl: 'https://shoppinglistchanbot.loca.lt',
+    fileServerUrl: 'https://weak-eagle-30.loca.lt',//'https://shoppinglistchanbot.loca.lt',
 
     websites: {
         googleShopping: function (query) {

@@ -19,7 +19,7 @@ export const uploadOffersTableHTML = async (products, chatId) => {
   const html = createOffersTable(products);
   const path = saveFile(`offer-table-${chatId}`,'html',html);
   //return await upload('./src/static/'+path);
-  return fileServerUrl+'/'+chatId;
+  return fileServerUrl+'/'+chatId+'/offers';
 }
 
 export  const uploadWishlistTableScreenshot = async (products, chatId) => {
@@ -33,14 +33,14 @@ export  const uploadWishlistTableHTML = async (products, chatId) => {
   const html = createWishlistTable(products);
   const path = saveFile(`wishlist-${chatId}`,'html',html);
   //return await upload('./src/static/'+path);
-  return fileServerUrl+'/'+chatId;
+  return fileServerUrl+'/'+chatId+'/offers';
 };
 
 export const uploadGroceriesTableScreenshot = async (products,chatId) => {
   const image = await takeScreenshotFromHtml(createGroceriesTable(products));
   const path = saveFile(`groceries-table-${chatId}`,'png',image);
   //return await upload('./src/static/'+path);
-  return config.fileServerUrl+'/'+path;
+  return fileServerUrl+'/'+chatId+'/groceries';
 };
 
 
