@@ -504,7 +504,8 @@ export class BotService {
                   caption:
                     "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
                 });
-                this.bot.sendMessage(
+                await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
+                await this.bot.sendMessage(
                   msg.chat.id,
                   `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
                   {
@@ -516,7 +517,6 @@ export class BotService {
                 );
 
                 const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
-                await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
 
                 await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
               });
@@ -731,6 +731,22 @@ export class BotService {
     this.bot.sendPhoto(chatId, path[1], { caption: "Aqui está a sua lista !" });
   };
 
+  pricehistory = async (msg, match) => {
+    const [chatId, id] = this.parseChat(msg, match);
+
+    if (!id) {
+      this.bot.sendMessage(
+        chatId,
+        "Esse comando precisa de um argumento. Ex: /pricehistory {{item}}"
+      );
+      return;
+    }
+
+    const history = await this.priceHistoryService.find({product:id});
+    
+    this.bot.sendMessage(chatId, this.parsePriceHistoryToHTML(history), { parse_mode: "HTML" });
+  };
+
   emptywishlist = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
     await this.productService.emptyCollection();
@@ -792,6 +808,15 @@ export class BotService {
     let message = list && list?.length ? '' : 'Nenhum produto';
     list.forEach(product => {
       message += `<a href="${product.offer?.link}">${product.offer?.features} - de ${product.offer?.store}</a> (${product.quantity || 1} unidade(s)) <b>${product.offer?.promoPrice}</b>
+      `
+    })
+    return message;
+  }
+
+  private parsePriceHistoryToHTML(list) {
+    let message = list && list?.length ? '' : 'Nenhum registro';
+    list.forEach(product => {
+      message += `<u>${product.product} - de ${product.store}</u> <b>(${product.promoPrice})/${product.normalPrice}</b> <i>- Em : ${new Date(product.date).toLocaleString()}</i>
       `
     })
     return message;

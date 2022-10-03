@@ -27,6 +27,8 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
   bot.onText(/\/wishlistoffers/, botService.wishlistoffers);
   bot.onText(/\/groceryoffers/, botService.groceryoffers);
 
+  bot.onText(/\/pricehistory (.+)/, botService.pricehistory);
+
   bot.on('callback_query', async (callbackQuery) => {
     const message = callbackQuery.message;
     const data = JSON.parse(callbackQuery.data);
