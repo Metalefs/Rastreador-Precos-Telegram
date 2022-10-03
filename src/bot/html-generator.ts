@@ -16,9 +16,9 @@ export function createOffersTable(products) {
     <table class='table table-sm table-striped table-dark'>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Promotional Price</th>
-          <th>Price</th>
+          <th>Nome</th>
+          <th>Promoção</th>
+          <th>Preço</th>
           ${showHTML ? "<th>Conteúdo</th>" : ""}
           <th>Quantidade</th>
         </tr>
@@ -57,9 +57,9 @@ export function createWishlistTable(products: Array<any>) {
     <table class='table table-sm table-striped table-dark'>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Date</th>
-          ${showCategory ? "<th>Category</th>" : ""}
+          <th>Nome</th>
+          <th>Data</th>
+          ${showCategory ? "<th>Categoria</th>" : ""}
           <th>Quantidade</th>
         </tr>
       </thead>

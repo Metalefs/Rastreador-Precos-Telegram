@@ -670,16 +670,21 @@ export class BotService {
 
   mygroceries = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
+    await this.bot.sendMessage(chatId, 'Buscando dados..');
     const [path] = await this.getGroceriesScreenshot(chatId);
     await this.bot.sendPhoto(chatId, path[1], {
       caption:
         "Aqui está a sua lista. '/groceryoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
+
+    const products = await this.groceriesService.list();
+    await this.bot.sendMessage(chatId, this.parseGroceryListToHTML(products), { parse_mode: "HTML" })
+
     this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))
 
     this.bot.sendMessage(
       msg.chat.id,
-      `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
+      `<a href="${path[0]}/${chatId}/groceries">Veja a lista no browser</a>`,
       { parse_mode: "HTML" }
     );
   };
@@ -703,11 +708,14 @@ export class BotService {
 
   mywishlist = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
+    await this.bot.sendMessage(chatId, 'Buscando dados..');
     const [path] = await this.getWishlistScreenshot(chatId);
     this.bot.sendPhoto(chatId, path[1], {
       caption:
         "Aqui está a sua lista. '/wishlistoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
+    const products = await this.productService.list();
+    await this.bot.sendMessage(chatId, this.parseWishlistToHTML(products), { parse_mode: "HTML" })
     this.bot.sendMessage(
       msg.chat.id,
       `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
@@ -746,6 +754,7 @@ export class BotService {
 
   wishlistoffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
+    await this.bot.sendMessage(chatId, 'Buscando dados..');
     const products = await this.productService.list();
     const result = await this.fileService.uploadOffersTableScreenshot(products, chatId);
 
@@ -759,6 +768,7 @@ export class BotService {
 
   groceryoffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
+    await this.bot.sendMessage(chatId, 'Buscando dados..');
     const products = await this.groceriesService.list();
     const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
 
