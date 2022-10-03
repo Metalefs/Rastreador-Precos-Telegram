@@ -11,6 +11,10 @@ export class BaseService {
     return this.dbconnection.collection(this.collection).find().toArray();
   };
 
+  sort = async (sort?) => {
+    return this.dbconnection.collection(this.collection).find().sort(sort).toArray();
+  };
+
   find = async (filter) => {
     return this.dbconnection.collection(this.collection).find(filter).toArray();
   };

@@ -11,6 +11,7 @@ import { GroceriesService } from "./groceries.service";
 import { SupermarketCategoriesService } from "./supermarketCategories.service";
 import { config } from "../config";
 import { FileService } from "./files.service";
+import { DefaultGroceriesService } from "./defaultGroceries.service";
 
 export class BotService {
   finances = {};
@@ -36,7 +37,8 @@ export class BotService {
     private priceHistoryService: PriceHistoryService,
     private groceriesService: GroceriesService,
     private supermarketCategoriesService: SupermarketCategoriesService,
-    private fileService: FileService
+    private fileService: FileService,
+    private defaultGroceriesService: DefaultGroceriesService
   ) {
     this.bot.nextMessage = {};
     this.bot.onNextMessage = (chatId, callback) => {
@@ -273,7 +275,6 @@ export class BotService {
   };
 
   private parseBudgetPercentage(budgetPercentage) {
-
     let message =  "Seu orçamento em porcentagem: ";
     const { chatId, _id, available, ...expensesWithouChatId } = budgetPercentage
 
@@ -517,10 +518,23 @@ export class BotService {
     const chatId = msg.chat.id;
     let productName = match.input.replace("/addgrocery", "").trim();
     if (productName === "") {
-      this.bot.sendMessage(
-        chatId,
-        "Por favor, forneca o nome de um produto. Ex: /addgrocery Iogurte grego 100ml"
-      )
+      const defaultProducts = await this.defaultGroceriesService.sort({ name: 1 });
+      this.bot
+      .sendMessage(chatId,
+        "Por favor, forneca o nome de um produto. Ex: /addgrocery Iogurte grego 100ml. Ou use algum dos items sugeridos:",
+        {
+        reply_markup: JSON.stringify({
+          force_reply: true,
+          keyboard: splitIntoChunk(
+            defaultProducts.map((prod) => {
+              return prod.name;
+            }),
+            1
+          ),
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        }),
+      })
         .then(() => {
           return this.bot.onNextMessage(chatId, async (msg) => {
             productName = msg.text;
@@ -580,11 +594,6 @@ export class BotService {
                 await this.bot.sendMessage(
                   chatId,
                   `Produto foi rotulado com a categoria "${msg.text}"`,
-                  {
-                    reply_markup: {
-                      keyboard: this.commands,
-                    },
-                  }
                 );
 
                 const product = await this.groceriesService.getByName(
@@ -594,24 +603,19 @@ export class BotService {
                 await this.bot.sendMessage(
                   chatId,
                   `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
-                  {
-                    reply_markup: {
-                      keyboard: this.commands,
-                    },
-                  }
                 );
 
                 await this.productEnrichmentService.enrichGrocery(product as any, chatId);
 
                 const [path] = await this.getGroceriesScreenshot(chatId);
 
-                await this.bot.sendPhoto(chatId, path, {
+                await this.bot.sendPhoto(chatId, path[1], {
                   caption:
                     "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mygroceries' ou '/groceryoffers' para ver as ofertas relacionadas a sua lista de desejos.",
                 });
                 this.bot.sendMessage(
                   msg.chat.id,
-                  `<a href="${config.fileServerUrl}/groceries/${chatId}">Veja a lista no browser</a>`,
+                  `<a href="${path[0]}/groceries/${chatId}">Veja a lista no browser</a>`,
                   {
                     parse_mode: "HTML",
                     reply_markup: {
@@ -656,7 +660,7 @@ export class BotService {
     await this.groceriesService.removeByName(id);
     const [path] = await this.getGroceriesScreenshot(chatId);
 
-    this.bot.sendPhoto(chatId, path, { caption: "Aqui está a sua lista !" });
+    this.bot.sendPhoto(chatId, path[0], { caption: "Aqui está a sua lista !" });
   };
 
   mywishlist = async (msg, match) => {

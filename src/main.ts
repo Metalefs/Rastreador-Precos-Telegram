@@ -36,7 +36,7 @@ async function bootstrap() {
     await initBot(tunnel.url);
   
     tunnel.on('close', () => {
-      // tunnels are closed
+      bootstrap()
     });
   })()
   await app.listen(8080);
