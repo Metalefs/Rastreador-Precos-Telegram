@@ -9,7 +9,6 @@ import { ProductEnrichmentService } from "./productEnrichment.service";
 import { PriceHistoryService } from "./priceHistory.service";
 import { GroceriesService } from "./groceries.service";
 import { SupermarketCategoriesService } from "./supermarketCategories.service";
-import { config } from "../config";
 import { FileService } from "./files.service";
 import { DefaultGroceriesService } from "./defaultGroceries.service";
 

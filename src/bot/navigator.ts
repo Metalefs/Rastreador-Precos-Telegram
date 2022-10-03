@@ -30,7 +30,6 @@ function getGoogleAnyResult(query) {
         baseUrl
       );
       offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers }, });
-      console.log(offers)
       await (page as unknown as Page).screenshot({
         path: `./src/bot/static/${query}.png`,
         fullPage: true,
