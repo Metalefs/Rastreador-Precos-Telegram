@@ -19,6 +19,7 @@ export class BotService {
   commands = [
     ["/mywishlist"],
     ["/setincome"],
+    ["/addToincome"],
     ["/mybudget"],
 
     ["/addwishlist {item}"],
@@ -217,11 +218,6 @@ export class BotService {
                                                         ],
                                                         this.finances[chatId]
                                                       );
-                                                    await this.bot.sendMessage(
-                                                      chatId,
-                                                      "Seu valor disponível para torrar é : R$" +
-                                                      JSON.stringify(budget)
-                                                    );
                                                     Object.assign(
                                                       this.finances[chatId],
                                                       {
@@ -232,28 +228,18 @@ export class BotService {
                                                       { chatId: chatId },
                                                       this.finances[chatId]
                                                     );
+                                                
                                                     await this.bot.sendMessage(
                                                       chatId,
-                                                      "Despesas salvas."
-                                                    );
-                                                    await this.bot.sendMessage(
-                                                      chatId,
-                                                      this.parseBudgetPercentage(
-                                                        budgetPercentage
-                                                      ),
+                                                      "Valor disponivel para gastar : <b>R$" + JSON.stringify(budget) + "</b>",
                                                       {
                                                         parse_mode: "HTML",
                                                       }
                                                     );
-                                                    await this.bot.sendMessage(
-                                                      chatId,
-                                                      "Pronto para utilizar os comandos:",
-                                                      {
-                                                        reply_markup: {
-                                                          keyboard: this.commands,
-                                                        },
-                                                      }
-                                                    );
+                                                    await this.bot.sendMessage(chatId, this.parseBudgetPercentage(budgetPercentage), {
+                                                      parse_mode: "HTML",
+                                                    });
+                                                    await this.bot.sendMessage(chatId, "Despesas previstas: R$" + await this.allPredictedExpenses(chatId));
                                                   }
                                                 );
                                               });
@@ -310,6 +296,58 @@ export class BotService {
 
     this.trySetBudget(chatId);
   };
+
+  addtoincome = async (msg,match) => {
+    const chatId = msg.chat.id;
+    const extra = match.input.replace("/addtoincome", "");
+
+    await this.beforeEach(chatId);
+
+    if (extra === "") {
+      this.bot
+        .sendMessage(chatId, "Por favor, passe um valor para renda extra")
+        .then(() => {
+          return this.bot.onNextMessage(chatId, async (msg) => {
+            this.finances[chatId]["income"] += parseFloat(msg.text) || 0;
+
+            this.sendSetIncomeReply(chatId);
+            this.trySetBudget(chatId);
+          });
+        });
+      return;
+    }
+    this.finances[chatId]["income"] += parseFloat(extra) || 0;
+
+    this.sendSetIncomeReply(chatId);
+
+    this.trySetBudget(chatId);
+  }
+
+  removefromincome = async (msg,match) => {
+    const chatId = msg.chat.id;
+    const amount = match.input.replace("/removefromincome", "");
+
+    await this.beforeEach(chatId);
+
+    if (amount === "") {
+      this.bot
+        .sendMessage(chatId, "Por favor, passe um valor para remover da renda")
+        .then(() => {
+          return this.bot.onNextMessage(chatId, async (msg) => {
+            this.finances[chatId]["income"] -= parseFloat(msg.text) || 0;
+
+            this.sendSetIncomeReply(chatId);
+            this.trySetBudget(chatId);
+          });
+        });
+      return;
+    }
+    this.finances[chatId]["income"] -= parseFloat(amount) || 0;
+
+    this.sendSetIncomeReply(chatId);
+
+    this.trySetBudget(chatId);
+  }
 
   setexpense = async (msg, match) => {
     const chatId = msg.chat.id;

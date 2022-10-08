@@ -2,7 +2,6 @@ import { Page } from "puppeteer-core";
 import { parse } from "node-html-parser";
 import { navigate } from "./browser";
 import { config } from "./config";
-import { GoogleShoppingMerchants } from "../shared/models/googleShoppingMerchants";
 import { Offer } from "src/shared/interfaces/offer";
 
 interface ThisOffer {
@@ -55,7 +54,7 @@ function getGoogleMerchantsResult(query) {
           await (page as unknown as Page).content(),
           baseUrl
         );
-        offers.push({ merchant: { name: GoogleShoppingMerchants[merchant], id: merchant, offers: merchantOffers }, });
+        offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }, });
       });
       await (page as unknown as Page).screenshot({
         path: `./src/bot/static/${query}.png`,

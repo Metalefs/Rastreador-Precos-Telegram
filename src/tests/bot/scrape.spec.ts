@@ -5,7 +5,7 @@ import { MongoClient } from "mongodb";
 import * as fs from 'fs';
 
 describe('Scrape', () => {
-  test('search xbox series s', async () => {
+  test.only('search xbox series s', async () => {
 
     const [db, connection, client] = await dbconnection();
     const priceFinder = new PriceFinder(db as any);
