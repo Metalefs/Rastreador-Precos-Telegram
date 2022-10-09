@@ -17,9 +17,9 @@ export class PriceFinder {
       if(element.merchant.offers){
         const product_offers = element.merchant.offers;
         product_offers.forEach((_offer, idx) => {
-          if(_offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
+          //if(_offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
             bestOffer = this.filterBestPrice(_offer,bestOffer,idx);
-          }
+          //}
         })
       }
     }

@@ -5,7 +5,7 @@ import { MongoClient } from "mongodb";
 import * as fs from 'fs';
 
 describe('Scrape', () => {
-  test.only('search xbox series s', async () => {
+  test('search xbox series s', async () => {
 
     const [db, connection, client] = await dbconnection();
     const priceFinder = new PriceFinder(db as any);
@@ -19,7 +19,7 @@ describe('Scrape', () => {
     (client as MongoClient).close()
   }, 20000);
 
-  test('search iogurte grego 100g', async () => {
+  test.only('search iogurte grego 100g', async () => {
 
     const [db, connection, client] = await dbconnection();
     const priceFinder = new PriceFinder(db as any);
