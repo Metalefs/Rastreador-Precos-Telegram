@@ -46,6 +46,7 @@
     "agenda": "^4.3.0",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "got": "^11.8.5",
     "firebase": "^9.10.0",
     "handlebars": "^4.7.7",
     "handlebars-dateformat": "^1.1.3",

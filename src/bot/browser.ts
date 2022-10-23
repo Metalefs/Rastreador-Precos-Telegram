@@ -13,8 +13,7 @@ export const launch = async () => {
       '--disable-dev-shm-usage',
       '--disable-web-security',
       '--disable-features=IsolateOrigins,site-per-process',
-      '--shm-size=3gb', // this solves the issue
-      '--no-sandbox',
+      '--shm-size=3gb',
       '--disable-gpu',
       '--no-zygote',
       '--single-process'

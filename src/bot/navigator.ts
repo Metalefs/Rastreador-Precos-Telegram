@@ -1,8 +1,8 @@
-import { Page } from "puppeteer-core";
 import { parse } from "node-html-parser";
-import { CloseBrowserWithText, navigate } from "./browser";
 import { config } from "./config";
 import { Offer } from "src/shared/interfaces/offer";
+
+import got from 'got';
 
 interface ThisOffer {
   merchant: {
@@ -13,55 +13,59 @@ interface ThisOffer {
 }
 
 export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }) {
-  const result = searchconfig.useMerchants ? 
-    await getGoogleMerchantsResult(query) : 
+  const result = searchconfig.useMerchants ?
+    await getGoogleMerchantsResult(query) :
     await getGoogleAnyResult(query);
 
   return result;
 }
 
 async function getGoogleAnyResult(query) {
-  const [page, browser] = await navigate(config.websites.googleShopping(query));
+  const response = await got(
+    config.websites.googleShopping(query),
+    {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/79.0.3945.0 Safari/537.36'
+      }
+    }
+  );
   const offers: ThisOffer[] = [];
-  const baseUrl = (page as unknown as Page).url();
+  const baseUrl = response.url;
   const merchantOffers = getOffersData(
     ['.i0X6df', '.a8Pemb.OFFNJ', '.a8Pemb.OFFNJ', '.aULzUe.IuHnof', '.Xjkr3b'],
-    await (page as unknown as Page).content(),
+    getContent(response as any),
     baseUrl
   );
   offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers }, });
-  // await (page as unknown as Page).screenshot({
-  //   path: `./src/bot/static/${query}.png`,
-  //   fullPage: true,
-  // });
-  await page.close().catch(error => console.log(`Error closing page: ${error}.`));
-  return CloseBrowserWithText(browser as any, {
+  return {
     query,
     offers
-  });
+  };
 }
 
 async function getGoogleMerchantsResult(query) {
-  const [page, browser] = await navigate(config.websites.googleShopping(query));
+  const response = await got(
+    config.websites.googleShopping(query),
+    {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/79.0.3945.0 Safari/537.36'
+      }
+    }
+  );
   const offers: ThisOffer[] = [];
-  const baseUrl = (page as unknown as Page).url();
+  const baseUrl = response.url;
   config.merchants.forEach(async (merchant) => {
     const merchantOffers = getOffersFromMerchant(
       merchant,
-      await (page as unknown as Page).content(),
+      getContent(response as any),
       baseUrl
     );
     offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }, });
   });
-  // await (page as unknown as Page).screenshot({
-  //   path: `./src/bot/static/${query}.png`,
-  //   fullPage: true,
-  // }); 
-  await page.close().catch(error => console.log(`Error closing page: ${error}.`));
-  return CloseBrowserWithText(browser as any, {
+  return {
     query,
     offers
-  });
+  }
 }
 
 function getOffersFromMerchant(merchant, html, baseUrl) {
@@ -71,6 +75,7 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
 function getOffersData(selectors = [], html, baseUrl) {
   const root = parse(html);
   const elements = root.querySelectorAll(selectors[0]);
+
   return elements
     .filter((el) => el != undefined)
     ?.map((el) => {
@@ -133,4 +138,10 @@ function getOffersData(selectors = [], html, baseUrl) {
       }
     })
     .filter((el) => el != undefined);
+}
+
+function getContent(response) {
+  const buffer = response.rawBody;
+  const decoder = new TextDecoder("utf-8");
+  return decoder.decode(buffer);
 }
