@@ -6,11 +6,13 @@ export const launch = async () => {
     //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     headless: true,
     args: [
-      // Required for Docker version of Puppeteer
+      '--enable-features=NetworkService',
       '--no-sandbox',
       '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
-      '--lang=pt-BR,pt'
+      '--disable-web-security',
+      '--disable-features=IsolateOrigins,site-per-process',
+      '--shm-size=3gb', // this solves the issue
     ],
     //env: { LANGUAGE: 'pt-BR' },
   });
