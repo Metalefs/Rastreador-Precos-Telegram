@@ -29,10 +29,10 @@ function getGoogleAnyResult(query) {
         baseUrl
       );
       offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers }, });
-      await (page as unknown as Page).screenshot({
-        path: `./src/bot/static/${query}.png`,
-        fullPage: true,
-      });
+      // await (page as unknown as Page).screenshot({
+      //   path: `./src/bot/static/${query}.png`,
+      //   fullPage: true,
+      // });
       const result = {
         query,
         offers
@@ -56,10 +56,10 @@ function getGoogleMerchantsResult(query) {
         );
         offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }, });
       });
-      await (page as unknown as Page).screenshot({
-        path: `./src/bot/static/${query}.png`,
-        fullPage: true,
-      });
+      // await (page as unknown as Page).screenshot({
+      //   path: `./src/bot/static/${query}.png`,
+      //   fullPage: true,
+      // });
       const result = {
         query,
         offers

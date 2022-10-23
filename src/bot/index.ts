@@ -22,6 +22,7 @@ const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
 export async function initBot(url) {
+  console.log(url)
   dbconnection().then(([db, connection]) => {
     const productService = new ProductsService(db as unknown as Db);
     const categoryService = new CategoriesService(db as unknown as Db);

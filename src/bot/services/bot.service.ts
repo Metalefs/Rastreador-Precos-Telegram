@@ -826,10 +826,13 @@ export class BotService {
 
   expectedexpenses = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
-    await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + await this.getGroceryExpenses(chatId));
+    await this.bot.sendMessage(chatId, 'Valor total com mercado: ' + await this.getGroceryExpenses(chatId));
 
     const totalGroceryExpense = await this.getProductExpenses(chatId);
-    await this.bot.sendMessage(chatId, 'Valor total com mercado: ' + totalGroceryExpense);
+    await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
+
+    const totalExpenses = await this.allPredictedExpenses(chatId);
+    await this.bot.sendMessage(chatId, 'Valor total de despesas previstas: ' + totalExpenses);
   }
 
   private parseGroceryListToHTML(list) {

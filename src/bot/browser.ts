@@ -1,20 +1,18 @@
 require("dotenv").config();
-
 import * as puppeteer from 'puppeteer';
 
 export const launch = async () => {
   const browser = await puppeteer.launch({
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     headless: true,
     args: [
       // Required for Docker version of Puppeteer
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      // This will write shared memory files into /tmp instead of /dev/shm,
-      // because Docker’s default for /dev/shm is 64MB
-      "--disable-dev-shm-usage",
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
       '--lang=pt-BR,pt'
-    ], env: { LANGUAGE: "pt-BR" }
+    ],
+    //env: { LANGUAGE: 'pt-BR' },
   });
   return browser;
 };
@@ -27,10 +25,10 @@ export const navigate = async (url) => {
 export const takeScreenshotFromHtml = async (html) => {
   const browser = await launch();
   const page = await browser.newPage();
-  
+
   await page.setContent(html);
 
-  const content = await page.$("body");
+  const content = await page.$('body');
   const imageBuffer = await content!.screenshot({ omitBackground: true });
 
   await page.close();
@@ -42,11 +40,12 @@ export const takeScreenshotFromUrl = async (url) => {
   const page = await browser.newPage();
   await page.goto(url);
 
-  const content = await page.$("body");
+  const content = await page.$('body');
   const imageBuffer = await content!.screenshot({ omitBackground: true });
 
   await page.close();
   await browser.close();
   return imageBuffer;
 };
+
 

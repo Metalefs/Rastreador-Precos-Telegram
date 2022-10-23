@@ -1,8 +1,10 @@
+require("dotenv").config();
+
 import { MongoClient } from 'mongodb';
 // or as an es module:
 // import { MongoClient } from 'mongodb'
 // Connection URL
-export const mongoConnectionString = 'mongodb://127.0.0.1:27017';
+export const mongoConnectionString = process.env.DBURL;
 const client = new MongoClient(mongoConnectionString);
 // Database Name
 const dbName = 'products';

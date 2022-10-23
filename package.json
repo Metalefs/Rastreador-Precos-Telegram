@@ -6,7 +6,11 @@
   "compilerOptions": {
     "module": "CommonJS"
   },
-  "scripts": {
+  "engines": {
+    "node": "17.5",
+    "npm": "6.x"
+  },
+    "scripts": {
     "start-search": "ts-node ./src/getBestPrices.ts",
     "seed-categories": "ts-node ./src/bot/seed/registerCategories.ts",
     "seed-groceries": "ts-node ./src/bot/seed/registerGroceries.ts",

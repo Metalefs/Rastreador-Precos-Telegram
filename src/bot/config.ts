@@ -2,7 +2,8 @@ import { GoogleShoppingMerchants } from "../shared/models/googleShoppingMerchant
 import { Store } from "../shared/models/stores"
 
 export const config = {
-    fileServerUrl: 'shoppinglistchanbot',
+    localTunnelDomain: 'shoppinglistchanbot',
+    serverUrl: 'https://shopping-tracker-bot.herokuapp.com',
 
     websites: {
         googleShopping: function (query) {

@@ -11,6 +11,7 @@ import { initBot } from './bot'
 
 const localtunnel = require("localtunnel");
 import { config } from './bot/config';
+import { isProduction } from './env';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -31,13 +32,16 @@ async function bootstrap() {
   });
   
   (async ()=>{
-    const tunnel = await localtunnel({ port: 8080, subdomain: config.fileServerUrl});
-    console.log(tunnel.url)
-    await initBot(tunnel.url);
-  
-    tunnel.on('close', () => {
-      bootstrap()
-    });
+    if(!isProduction){
+      const tunnel = await localtunnel({ port: 8080, subdomain: config.localTunnelDomain });
+      await initBot(tunnel.url);
+      tunnel.on('close', () => {
+        bootstrap()
+      });
+    }
+    else {
+      await initBot(config.serverUrl);
+    }  
   })()
   await app.listen(8080);
   console.log(`Application is running on: ${await app.getUrl()}`);
