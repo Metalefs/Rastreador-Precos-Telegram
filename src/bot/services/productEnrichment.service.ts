@@ -15,7 +15,7 @@ export class ProductEnrichmentService {
 
   async enrich(product: Product, chatId?) {
     const result = await this.priceFinder.getPrices(product.name);
-
+    console.log({result})
     if(!result.link){
       console.error('could not find offers for '+product.name)
       return;
