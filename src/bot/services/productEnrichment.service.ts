@@ -17,7 +17,7 @@ export class ProductEnrichmentService {
     const result = await this.priceFinder.getPrices(product.name);
 
     if(!result.link){
-      console.error('could not find offers for '+product)
+      console.error('could not find offers for '+product.name)
       return;
     }
 
