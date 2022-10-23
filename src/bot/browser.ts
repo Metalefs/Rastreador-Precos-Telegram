@@ -1,5 +1,6 @@
 require("dotenv").config();
 import * as puppeteer from 'puppeteer';
+import { Browser } from 'puppeteer';
 
 export const launch = async () => {
   const browser = await puppeteer.launch({
@@ -13,11 +14,20 @@ export const launch = async () => {
       '--disable-web-security',
       '--disable-features=IsolateOrigins,site-per-process',
       '--shm-size=3gb', // this solves the issue
+      '--no-sandbox',
+      '--disable-gpu',
+      '--no-zygote',
+      '--single-process'
     ],
+
     //env: { LANGUAGE: 'pt-BR' },
   });
   return browser;
 };
+export async function CloseBrowserWithText(browser:Browser, text) {
+  if (browser && browser.process() != null) browser.process().kill("SIGINT");
+  return text;
+}
 export const navigate = async (url) => {
   const browser = await launch();
   const page = await browser.newPage();

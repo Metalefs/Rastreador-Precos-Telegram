@@ -9,7 +9,7 @@ describe('Agenda Offer Search Schedule ', () => {
     test('new search is logged in database', async () => {
 
         const [db, connection, client] = await dbconnection();
-        const offerSearchScheduler = new OfferSearchScheduler(db as any, null);
+        const offerSearchScheduler = new OfferSearchScheduler(db as any, client as any, null);
         await offerSearchScheduler.start();
 
         const searchService = new SearchService(db as any);

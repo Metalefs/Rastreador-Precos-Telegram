@@ -1,6 +1,6 @@
 import { Page } from "puppeteer-core";
 import { parse } from "node-html-parser";
-import { navigate } from "./browser";
+import { CloseBrowserWithText, navigate } from "./browser";
 import { config } from "./config";
 import { Offer } from "src/shared/interfaces/offer";
 
@@ -37,8 +37,7 @@ function getGoogleAnyResult(query) {
         query,
         offers
       }
-      await browser.close();
-      return result;
+      return CloseBrowserWithText(browser as any, result)
     }
   )
 }
@@ -64,8 +63,7 @@ function getGoogleMerchantsResult(query) {
         query,
         offers
       }
-      await browser.close();
-      return result;
+      return CloseBrowserWithText(browser as any, result);
     }
   )
 }
