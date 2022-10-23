@@ -43,7 +43,7 @@ async function bootstrap() {
       await initBot(config.serverUrl);
     }  
   })()
-  await app.listen(8080);
+  await app.listen(process.env.PORT || 8080);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
