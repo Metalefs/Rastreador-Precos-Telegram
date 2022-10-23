@@ -13,7 +13,9 @@ interface ThisOffer {
 }
 
 export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }) {
-  const result = searchconfig.useMerchants ? await getGoogleMerchantsResult(query) : await getGoogleAnyResult(query);
+  const result = searchconfig.useMerchants ? 
+    await getGoogleMerchantsResult(query) : 
+    await getGoogleAnyResult(query);
 
   return result;
 }
@@ -32,6 +34,7 @@ async function getGoogleAnyResult(query) {
   //   path: `./src/bot/static/${query}.png`,
   //   fullPage: true,
   // });
+  await page.close().catch(error => console.log(`Error closing page: ${error}.`));
   return CloseBrowserWithText(browser as any, {
     query,
     offers
@@ -54,6 +57,7 @@ async function getGoogleMerchantsResult(query) {
   //   path: `./src/bot/static/${query}.png`,
   //   fullPage: true,
   // }); 
+  await page.close().catch(error => console.log(`Error closing page: ${error}.`));
   return CloseBrowserWithText(browser as any, {
     query,
     offers
