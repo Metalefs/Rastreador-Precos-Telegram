@@ -23,7 +23,7 @@ const bot = new TelegramBot(token, { polling: true });
 
 export async function initBot(url) {
   console.log(url)
-  dbconnection().then(([db, connection]) => {
+  dbconnection().then(([db, connection, client]) => {
     const productService = new ProductsService(db as unknown as Db);
     const categoryService = new CategoriesService(db as unknown as Db);
     const supermarketCategoriesService = new SupermarketCategoriesService(db as unknown as Db);
@@ -50,8 +50,8 @@ export async function initBot(url) {
     );
     init(bot, botService, chatIdService);
 
-    new OfferSearchScheduler(db as unknown as Db, bot).start();
-    new PurgeStaticFilesScheduler(db as unknown as Db).start();
+    new OfferSearchScheduler(db as any, client as unknown as MongoClient, bot).start();
+    new PurgeStaticFilesScheduler(client as unknown as MongoClient).start();
 
     // When the mongodb server goes down, the driver emits a 'close' event
     (connection as MongoClient).on('close', () => {

@@ -2,14 +2,13 @@ import { Agenda } from 'agenda/es';
 import { Db } from 'mongodb';
 import { mongoConnectionString } from '../../database';
 import { SearchService } from '../services/searchService';
+import { MongoClient } from "mongodb";
 
 export class OfferSearchScheduler {
   agenda;
   chats;
-  constructor(private db: Db, private bot) {
-    this.agenda = new Agenda({
-      db: { address: mongoConnectionString + '/agenda' },
-    });
+  constructor(private db:Db, client: MongoClient, private bot) {
+    this.agenda = new Agenda({ mongo: client.db("agenda") });
   }
 
   start() {

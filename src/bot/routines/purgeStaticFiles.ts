@@ -3,12 +3,13 @@ import { Db } from "mongodb";
 import { mongoConnectionString } from "../../database";
 const fs = require('fs');
 const path = require('path');
+import { MongoClient } from "mongodb";
 
 const directories = ['./src/bot/static', './public'];
 export class PurgeStaticFilesScheduler {
     agenda;
-    constructor(private db: Db) {
-        this.agenda = new Agenda({ db: { address: mongoConnectionString + '/agenda' } });
+    constructor(client: MongoClient) {
+        this.agenda = new Agenda({ mongo: client.db("agenda") });
     }
 
     start() {
