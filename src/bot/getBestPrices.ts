@@ -9,7 +9,7 @@ export class PriceFinder {
 
   getPrices = async (query, config?) => {
     const googleOffers = await scoutGoogleShopping(query, config);
-
+    console.log(JSON.stringify(googleOffers));
     let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
 
     for(const offer of googleOffers.offers) {
