@@ -6,17 +6,16 @@ export const launch = async () => {
   const browser = await puppeteer.launch({
     //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     headless: true,
+    timeout: 20000,
+    ignoreHTTPSErrors: true,
+    slowMo: 0,
     args: [
-      '--enable-features=NetworkService',
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-web-security',
-      '--disable-features=IsolateOrigins,site-per-process',
-      '--shm-size=3gb',
       '--disable-gpu',
+      '--disable-dev-shm-usage',
+      '--disable-setuid-sandbox',
+      '--no-first-run',
+      '--no-sandbox',
       '--no-zygote',
-      '--single-process'
     ],
 
     //env: { LANGUAGE: 'pt-BR' },
