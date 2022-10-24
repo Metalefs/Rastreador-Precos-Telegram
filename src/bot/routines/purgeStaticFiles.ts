@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 import { MongoClient } from "mongodb";
 
-const directories = ['./src/bot/static', './public'];
+const directories = ['./src/bot/static', './public/temp'];
 export class PurgeStaticFilesScheduler {
     agenda;
     constructor(client: MongoClient) {

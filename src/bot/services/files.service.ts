@@ -49,9 +49,9 @@ export class FileService{
   
   private saveFile(name,ext,data){
     const rand = randomstring.generate();
-    const basePath = './public/';
+    const basePath = './public/temp/';
     const path = `${basePath}${name}-${rand}.${ext}`;
     fs.writeFileSync(path, data);
-    return `public/${name}-${rand}.${ext}`;
+    return `public/temp/${name}-${rand}.${ext}`;
   }
 }
