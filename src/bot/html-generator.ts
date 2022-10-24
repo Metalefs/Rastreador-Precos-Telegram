@@ -6,12 +6,6 @@ export function createOffersTable(products) {
     flag: "r",
   });
 
-  let showHTML = false;
-
-  if (products.some((x) => x.hasOwnProperty("offer"))) {
-    showHTML = true;
-  }
-
   let HTML = `
     <table class='table table-sm table-striped table-dark'>
       <thead>
@@ -19,7 +13,7 @@ export function createOffersTable(products) {
           <th>Nome</th>
           <th>Promoção</th>
           <th>Preço</th>
-          ${showHTML ? "<th>Conteúdo</th>" : ""}
+          <th>Conteúdo</th>
           <th>Quantidade</th>
         </tr>
       </thead>
@@ -31,7 +25,7 @@ export function createOffersTable(products) {
           <td>${product.name}</td>
           <td>${product.offer?.promoPrice ?? ""}</td>
           <td>${product.offer?.normalPrice ?? ""}</td>
-          ${showHTML ? `<td>${product.offer.html ?? ""}</td>` : ""}
+          <td>${product.offer?.html ?? ""}</td>
           <td>${product?.quantity ?? '1'}</td>
         </tr>`;
     }
