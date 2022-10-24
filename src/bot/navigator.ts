@@ -79,7 +79,7 @@ function getOffersFromMerchant(merchant, html, baseUrl, query, connection?) {
 async function getOffersData(selectors = [], html, baseUrl, search?, connection?: Db) {
   const root = parse(html);
  
-  //await connection.collection('scraping').updateOne({search}, {$set:{html}}, { upsert: true });
+  await connection.collection('scraping').updateOne({search}, {$set:{html}}, { upsert: true });
   const elements = root.querySelectorAll(selectors[0]);
   return elements
     .filter((el) => el != undefined)
