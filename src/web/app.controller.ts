@@ -26,4 +26,9 @@ export class AppController {
 
     return { groceries, user };
   }
+  @Get('/')
+  @Render('index.hbs')
+  async index() {
+    return '';
+  }
 }
