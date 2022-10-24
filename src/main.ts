@@ -9,7 +9,7 @@ import { join } from 'path';
 import { AppModule } from './web/app.module';
 import { initBot } from './bot'
 
-const localtunnel = require("localtunnel");
+import * as localtunnel from "localtunnel";
 import { config } from './bot/config';
 import { isProduction } from './env';
 
@@ -30,19 +30,16 @@ async function bootstrap() {
     },
     templates: join(__dirname, '..', 'views'),
   });
-  
-  (async ()=>{
-    if(!isProduction){
-      const tunnel = await localtunnel({ port: 8080, subdomain: config.localTunnelDomain });
-      await initBot(tunnel.url);
-      tunnel.on('close', () => {
-        bootstrap()
-      });
-    }
-    else {
-      await initBot(config.serverUrl);
-    }  
-  })()
+  if(isProduction){
+    await initBot(config.serverUrl);
+  }
+  else {
+    //const tunnel = await localtunnel({ port: 8080, subdomain: config.localTunnelDomain });
+    await initBot(/*tunnel.url*/config.serverUrl);
+    // tunnel.on('close', () => {
+    //   bootstrap()
+    // });
+  }  
   await app.listen(process.env.PORT || 8080);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

@@ -48,7 +48,7 @@ export class BotService {
       return promise;
     };
     this.productEnrichmentService = new ProductEnrichmentService(
-      priceFinder,
+      this.priceFinder,
       productService,
       groceriesService,
       priceHistoryService

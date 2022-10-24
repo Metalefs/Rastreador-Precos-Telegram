@@ -3,6 +3,7 @@ import { config } from "./config";
 import { Offer } from "src/shared/interfaces/offer";
 
 import got from 'got';
+import { Db } from "mongodb";
 
 interface ThisOffer {
   merchant: {
@@ -12,15 +13,15 @@ interface ThisOffer {
   }
 }
 
-export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }) {
+export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {
   const result = searchconfig.useMerchants ?
-    await getGoogleMerchantsResult(query) :
-    await getGoogleAnyResult(query);
+    await getGoogleMerchantsResult(query, connection) :
+    await getGoogleAnyResult(query, connection);
 
   return result;
 }
 
-async function getGoogleAnyResult(query) {
+async function getGoogleAnyResult(query, connection?) {
   const response = await got(
     config.websites.googleShopping(query),
     {
@@ -31,19 +32,21 @@ async function getGoogleAnyResult(query) {
   );
   const offers: ThisOffer[] = [];
   const baseUrl = response.url;
-  const merchantOffers = getOffersData(
+  const merchantOffers = await getOffersData(
     ['.i0X6df', '.a8Pemb.OFFNJ', '.a8Pemb.OFFNJ', '.aULzUe.IuHnof', '.Xjkr3b'],
     getContent(response as any),
-    baseUrl
+    baseUrl,
+    query,
+    connection
   );
-  offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers }, });
+  offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers }});
   return {
     query,
     offers
   };
 }
 
-async function getGoogleMerchantsResult(query) {
+async function getGoogleMerchantsResult(query, connection?) {
   const response = await got(
     config.websites.googleShopping(query),
     {
@@ -55,12 +58,14 @@ async function getGoogleMerchantsResult(query) {
   const offers: ThisOffer[] = [];
   const baseUrl = response.url;
   config.merchants.forEach(async (merchant) => {
-    const merchantOffers = getOffersFromMerchant(
+    const merchantOffers = await getOffersFromMerchant(
       merchant,
       getContent(response as any),
-      baseUrl
+      baseUrl,
+      query,
+      connection
     );
-    offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }, });
+    offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }});
   });
   return {
     query,
@@ -68,15 +73,15 @@ async function getGoogleMerchantsResult(query) {
   }
 }
 
-function getOffersFromMerchant(merchant, html, baseUrl) {
-  return getOffersData([`[data-merchant-id="${merchant}"]`], html, baseUrl);
+function getOffersFromMerchant(merchant, html, baseUrl, query, connection?) {
+  return getOffersData([`[data-merchant-id="${merchant}"]`], html, baseUrl, query, connection);
 }
 
-function getOffersData(selectors = [], html, baseUrl) {
+async function getOffersData(selectors = [], html, baseUrl, search?, connection?: Db) {
   const root = parse(html);
-  console.log(html);
+ 
+  await connection.collection('scraping').updateOne({search}, {$set:{html}}, { upsert: true });
   const elements = root.querySelectorAll(selectors[0]);
-
   return elements
     .filter((el) => el != undefined)
     ?.map((el) => {
@@ -135,8 +140,8 @@ function getOffersData(selectors = [], html, baseUrl) {
         link = url.origin + link;
         features = features ?? el.innerText.split('R$')[0];
         el = el.setAttribute('href', link);
-        return { link, store, features, promoPrice, normalPrice, html: el.outerHTML };
       }
+      return { link, store, features, promoPrice, normalPrice, html: el.outerHTML };
     })
     .filter((el) => el != undefined);
 }
