@@ -8,10 +8,13 @@ import * as hbsf from 'handlebars-dateformat';
 import { join } from 'path';
 import { AppModule } from './web/app.module';
 import { initBot } from './bot'
+import * as fs from "fs";
 
 import * as localtunnel from "localtunnel";
 import { config } from './bot/config';
-import { isProduction } from './env';
+import { isProduction, googleCredentials } from './env';
+
+fs.writeFileSync('./google-credentials.json', googleCredentials);
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -35,11 +38,11 @@ async function bootstrap() {
   }
   else {
     //const tunnel = await localtunnel({ port: 8080, subdomain: config.localTunnelDomain });
-    await initBot(/*tunnel.url*/config.serverUrl);
-    // tunnel.on('close', () => {
+    await initBot(config.serverUrl)//(tunnel.url);
+    //tunnel.on('close', () => {
     //   bootstrap()
-    // });
-  }  
+    //});
+  }
   await app.listen(process.env.PORT || 8080);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

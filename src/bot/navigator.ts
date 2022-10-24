@@ -17,7 +17,6 @@ export async function scoutGoogleShopping(query, searchconfig = { useMerchants: 
   const result = searchconfig.useMerchants ?
     await getGoogleMerchantsResult(query, connection) :
     await getGoogleAnyResult(query, connection);
-
   return result;
 }
 
@@ -80,7 +79,7 @@ function getOffersFromMerchant(merchant, html, baseUrl, query, connection?) {
 async function getOffersData(selectors = [], html, baseUrl, search?, connection?: Db) {
   const root = parse(html);
  
-  await connection.collection('scraping').updateOne({search}, {$set:{html}}, { upsert: true });
+  //await connection.collection('scraping').updateOne({search}, {$set:{html}}, { upsert: true });
   const elements = root.querySelectorAll(selectors[0]);
   return elements
     .filter((el) => el != undefined)
@@ -143,7 +142,7 @@ async function getOffersData(selectors = [], html, baseUrl, search?, connection?
       }
       return { link, store, features, promoPrice, normalPrice, html: el.outerHTML };
     })
-    .filter((el) => el != undefined);
+    .filter((el) => el != undefined && el?.link != undefined && el?.features != undefined && el?.normalPrice !== '' && el?.promoPrice !== '');
 }
 
 function getContent(response) {

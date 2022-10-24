@@ -1,15 +1,15 @@
 import { Storage } from "@google-cloud/storage";
-import UUID from "uuid-v4";
+import * as UUID from "uuid-v4";
 const storage = new Storage();
 const bucketName = "shopping-automation-22ccf.appspot.com";
 const bucket = storage.bucket(bucketName);
 
-export async function upload(filepath) {
+export async function upload(filepath, name) {
   // Creates a client
   
   const uuid = UUID();
   return bucket.upload(filepath, {
-    destination: 'image.png',
+    destination: name+'.png',
     metadata: {
       cacheControl: "public, max-age=315360000",
       contentType: "image/png",
