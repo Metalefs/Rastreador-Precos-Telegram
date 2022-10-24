@@ -74,6 +74,7 @@ function getOffersFromMerchant(merchant, html, baseUrl) {
 
 function getOffersData(selectors = [], html, baseUrl) {
   const root = parse(html);
+  console.log(root);
   const elements = root.querySelectorAll(selectors[0]);
 
   return elements
