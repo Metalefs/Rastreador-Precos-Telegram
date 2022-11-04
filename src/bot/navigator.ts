@@ -140,6 +140,7 @@ async function getOffersData(selectors = [], html, baseUrl, search?, connection?
         features = features ?? el.innerText.split('R$')[0];
         el = el.setAttribute('href', link);
       }
+      console.log({ link, store, features, promoPrice, normalPrice, html: el.outerHTML });
       return { link, store, features, promoPrice, normalPrice, html: el.outerHTML };
     })
     .filter((el) => el != undefined && el?.link != undefined && el?.features != undefined && el?.normalPrice !== '' && el?.promoPrice !== '');
