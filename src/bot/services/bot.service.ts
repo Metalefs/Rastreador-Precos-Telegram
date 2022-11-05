@@ -533,8 +533,8 @@ export class BotService {
                   `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
                 );
 
-                this.productEnrichmentService.enrich(product as any, chatId).then(async ()=>{
-                  const [path] = await this.getWishlistScreenshot(chatId);
+                await this.productEnrichmentService.enrich(product as any, chatId);
+                const [path] = await this.getWishlistScreenshot(chatId);
   
                   await this.bot.sendPhoto(chatId, path[1], {
                     caption:
@@ -555,7 +555,6 @@ export class BotService {
                   const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
   
                   await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
-                })
 
               });
             });
