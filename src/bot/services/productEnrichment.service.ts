@@ -21,7 +21,7 @@ export class ProductEnrichmentService {
       return;
     }
 
-    this.productService.updatewishlist(product.name, result);
+    await this.productService.updatewishlist(product.name, result);
 
     this.priceHistoryService.add({
       product: product.name,
@@ -42,7 +42,7 @@ export class ProductEnrichmentService {
       return;
     }
 
-    this.groceryService.updatelist(product.name, result);
+    await this.groceryService.updatelist(product.name, result);
 
     this.priceHistoryService.add({
       product: product.name,

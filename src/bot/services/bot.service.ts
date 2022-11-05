@@ -491,7 +491,7 @@ export class BotService {
           force_reply: true,
         }),
       })
-      .then(() => {
+      .then(async () => {
         return this.bot.onNextMessage(chatId, async (msg) => {
           const quantity = parseFloat(msg.text || 0);
           await this.bot.sendMessage(chatId, "Quantidade: " + msg.text);
@@ -515,7 +515,7 @@ export class BotService {
                 one_time_keyboard: true,
               }),
             })
-            .then(() => {
+            .then(async () => {
               return this.bot.onNextMessage(chatId, async (msg) => {
                 await this.addProductToCategory(productName, msg.text.trim());
 
