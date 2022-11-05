@@ -2,43 +2,40 @@ require("dotenv").config();
 
 import { scoutGoogleShopping, ThisOffer } from "./navigator";
 import { Db } from "mongodb";
-import { Offer } from "src/shared/interfaces/offer";
 
 export class PriceFinder {
   constructor(private dbconnection: Db) {}
 
   getPrices = async (query, config?) => {
-    return new Promise(async (resolve,reject)=>{
-      const googleOffers = await scoutGoogleShopping(query, config, this.dbconnection) as {
-        query: any;
-        offers: ThisOffer[];
-      };
-      console.log({googleOffers})
-      let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
-      for(const offer of googleOffers.offers) {
-        const element = offer;
-        if(element.merchant.offers){
-          const product_offers = element.merchant.offers;
-          product_offers.forEach((_offer, idx) => {
-            //if(_offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
-              bestOffer = this.filterBestPrice(_offer,bestOffer,idx);
-            //}
-          })
-        }
+    const googleOffers = await scoutGoogleShopping(query, config, this.dbconnection) as {
+      query: any;
+      offers: ThisOffer[];
+    };
+    console.log({googleOffers})
+    let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
+    for(const offer of googleOffers.offers) {
+      const element = offer;
+      if(element.merchant.offers){
+        const product_offers = element.merchant.offers;
+        product_offers.forEach((_offer, idx) => {
+          //if(_offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
+            bestOffer = this.filterBestPrice(_offer,bestOffer,idx);
+          //}
+        })
       }
-      const candidates = [];
-      googleOffers.offers.forEach(offer=> {
-        const result = offer.merchant.offers.find(merchOffer => {
-          return merchOffer.promoPrice === bestOffer.promoPrice;
-        });
-        result && candidates.push(result);
-      })
-      try{
-        bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
-      }catch(ex){}
-      console.log({bestOffer})
-      resolve(bestOffer as Offer);
+    }
+    const candidates = [];
+    googleOffers.offers.forEach(offer=> {
+      const result = offer.merchant.offers.find(merchOffer => {
+        return merchOffer.promoPrice === bestOffer.promoPrice;
+      });
+      result && candidates.push(result);
     })
+    try{
+      bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
+    }catch(ex){}
+    console.log({bestOffer})
+    return bestOffer;
   };
 
   private filterBestPrice(offer, bestOffer, idx){

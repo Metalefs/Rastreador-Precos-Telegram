@@ -14,12 +14,11 @@ export interface ThisOffer {
 }
 
 export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {
-  return new Promise(async (resolve,reject)=> {
-    const result = searchconfig.useMerchants ?
-      await getGoogleMerchantsResult(query, connection) :
-      await getGoogleAnyResult(query, connection);
-    resolve(result);
-  })
+  const result = searchconfig.useMerchants ?
+    await getGoogleMerchantsResult(query, connection) :
+    await getGoogleAnyResult(query, connection);
+  console.log({result})
+  return result;
 }
 
 async function getGoogleAnyResult(query, connection?) {
@@ -66,6 +65,7 @@ async function getGoogleMerchantsResult(query, connection?) {
       query,
       connection
     );
+    console.log({merchantOffers})
     offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }});
   });
   return {
