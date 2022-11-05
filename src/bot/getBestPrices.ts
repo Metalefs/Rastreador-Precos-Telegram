@@ -9,6 +9,7 @@ export class PriceFinder {
 
   getPrices = async (query, config?) => {
     const googleOffers = await scoutGoogleShopping(query, config, this.dbconnection);
+    console.log({googleOffers})
     let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
     for(const offer of googleOffers.offers) {
       const element = offer;
@@ -31,7 +32,7 @@ export class PriceFinder {
     try{
       bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
     }catch(ex){}
-
+    console.log({bestOffer})
     return bestOffer as Offer;
   };
 

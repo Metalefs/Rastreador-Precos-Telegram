@@ -22,6 +22,7 @@ export const config = {
     ],
     merchants: [
         GoogleShoppingMerchants.Amazon,
+        GoogleShoppingMerchants.Amazon2,
         GoogleShoppingMerchants["Casas Bahia"],
         GoogleShoppingMerchants["Magazine Luisa"],
         GoogleShoppingMerchants["Mercado Livre"],
