@@ -5,7 +5,7 @@ import { Offer } from "src/shared/interfaces/offer";
 import got from 'got';
 import { Db } from "mongodb";
 
-interface ThisOffer {
+export interface ThisOffer {
   merchant: {
     name: string,
     id: string,
@@ -14,10 +14,12 @@ interface ThisOffer {
 }
 
 export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {
-  const result = searchconfig.useMerchants ?
-    await getGoogleMerchantsResult(query, connection) :
-    await getGoogleAnyResult(query, connection);
-  return result;
+  return new Promise(async (resolve,reject)=> {
+    const result = searchconfig.useMerchants ?
+      await getGoogleMerchantsResult(query, connection) :
+      await getGoogleAnyResult(query, connection);
+    resolve(result);
+  })
 }
 
 async function getGoogleAnyResult(query, connection?) {
@@ -72,7 +74,7 @@ async function getGoogleMerchantsResult(query, connection?) {
   }
 }
 
-function getOffersFromMerchant(merchant, html, baseUrl, query, connection?) {
+async function getOffersFromMerchant(merchant, html, baseUrl, query, connection?) {
   return getOffersData([`[data-merchant-id="${merchant}"]`], html, baseUrl, query, connection);
 }
 

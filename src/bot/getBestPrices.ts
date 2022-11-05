@@ -1,14 +1,18 @@
 require("dotenv").config();
 
-import { scoutGoogleShopping } from "./navigator";
+import { scoutGoogleShopping, ThisOffer } from "./navigator";
 import { Db } from "mongodb";
-import { Offer } from "../shared/interfaces/offer";
+import { Offer } from "src/shared/interfaces/offer";
 
 export class PriceFinder {
   constructor(private dbconnection: Db) {}
 
   getPrices = async (query, config?) => {
-    return scoutGoogleShopping(query, config, this.dbconnection).then(googleOffers => {
+    return new Promise(async (resolve,reject)=>{
+      const googleOffers = await scoutGoogleShopping(query, config, this.dbconnection) as {
+        query: any;
+        offers: ThisOffer[];
+      };
       console.log({googleOffers})
       let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
       for(const offer of googleOffers.offers) {
@@ -33,8 +37,8 @@ export class PriceFinder {
         bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
       }catch(ex){}
       console.log({bestOffer})
-      return bestOffer as Offer;
-    });
+      resolve(bestOffer as Offer);
+    })
   };
 
   private filterBestPrice(offer, bestOffer, idx){
