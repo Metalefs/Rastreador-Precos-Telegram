@@ -533,29 +533,30 @@ export class BotService {
                   `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
                 );
 
-                await this.productEnrichmentService.enrich(product as any, chatId);
+                this.productEnrichmentService.enrich(product as any, chatId).then(async ()=>{
+                  const [path] = await this.getWishlistScreenshot(chatId);
+  
+                  await this.bot.sendPhoto(chatId, path[1], {
+                    caption:
+                      "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
+                  });
+                  await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
+                  await this.bot.sendMessage(
+                    msg.chat.id,
+                    `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
+                    {
+                      parse_mode: "HTML",
+                      reply_markup: {
+                        remove_keyboard: true,
+                      },
+                    }
+                  );
+  
+                  const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
+  
+                  await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
+                })
 
-                const [path] = await this.getWishlistScreenshot(chatId);
-
-                await this.bot.sendPhoto(chatId, path[1], {
-                  caption:
-                    "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
-                });
-                await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
-                await this.bot.sendMessage(
-                  msg.chat.id,
-                  `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
-                  {
-                    parse_mode: "HTML",
-                    reply_markup: {
-                      remove_keyboard: true,
-                    },
-                  }
-                );
-
-                const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
-
-                await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
               });
             });
         })

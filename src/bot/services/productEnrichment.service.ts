@@ -14,23 +14,24 @@ export class ProductEnrichmentService {
   ) {}
 
   async enrich(product: Product, chatId?) {
-    const result = await this.priceFinder.getPrices(product.name);
-    console.log({result})
-    if(!result.link){
-      console.error('could not find offers for '+product.name)
-      return;
-    }
-
-    await this.productService.updatewishlist(product.name, result);
-
-    this.priceHistoryService.add({
-      product: product.name,
-      date: new Date(),
-      promoPrice: result.promoPrice,
-      normalPrice: result.normalPrice,
-      store: result.store,
-      html: result.html,
-      link: result.link
+    this.priceFinder.getPrices(product.name).then(async (result)=>{
+      console.log({result})
+      if(!result.link){
+        console.error('could not find offers for '+product.name)
+        return;
+      }
+  
+      await this.productService.updatewishlist(product.name, result);
+  
+      this.priceHistoryService.add({
+        product: product.name,
+        date: new Date(),
+        promoPrice: result.promoPrice,
+        normalPrice: result.normalPrice,
+        store: result.store,
+        html: result.html,
+        link: result.link
+      });
     });
   }
 
