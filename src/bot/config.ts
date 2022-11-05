@@ -7,7 +7,7 @@ export const config = {
 
     websites: {
         googleShopping: function (query) {
-            return `https://www.google.com.br/search?&tbm=shop&q=${query.replace(/\s/g,'+')}&lr=&cr=countryBR&safe=high&glp=1&adtest=on&hl=PT&tci=g:2076&uule=w+CAIQICIGQnJhemls&tbs=lr:lang_1PT,ctr:countryBR&source=lnms&sa=X&ved=2ahUKEwjn26PfkpX7AhVDLrkGHUTSBdkQ_AUoAXoECAIQAw&biw=2513&bih=937&dpr=1`
+            return `https://www.google.com.br/search?&tbm=shop&q=${query.replace(/\s/g,'+')}&lr=&cr=countryBR&safe=high&glp=1&hl=PT&tci=g:2076&uule=w+CAIQICIGQnJhemls&tbs=lr:lang_1PT,ctr:countryBR&source=lnms&sa=X&ved=2ahUKEwjn26PfkpX7AhVDLrkGHUTSBdkQ_AUoAXoECAIQAw&biw=2513&bih=937&dpr=1`
         }
     },
     acceptedStores: [
