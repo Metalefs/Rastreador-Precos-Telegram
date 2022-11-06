@@ -63,7 +63,7 @@ async function getGoogleMerchantsResult(query, connection?) {
   );
   const offers: ThisOffer[] = [];
   const baseUrl = response.url;
-  config.merchants.forEach(async (merchant) => {
+  for(const merchant of config.merchants){
     const merchantOffers = await getOffersFromMerchant(
       merchant,
       getContent(response as any),
@@ -73,7 +73,7 @@ async function getGoogleMerchantsResult(query, connection?) {
     );
     console.log({merchantOffers})
     offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }});
-  });
+  }
   return {
     query,
     offers

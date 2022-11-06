@@ -6,7 +6,7 @@ import { Db } from "mongodb";
 export class PriceFinder {
   constructor(private dbconnection: Db) {}
 
-  getPrices = async (query, config?) => {
+  async getPrices(query, config?) {
     const googleOffers = await scoutGoogleShopping(query, config, this.dbconnection) as {
       query: any;
       offers: ThisOffer[];
@@ -20,7 +20,6 @@ export class PriceFinder {
         product_offers.forEach((_offer, idx) => {
           //if(_offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
             bestOffer = this.filterBestPrice(_offer,bestOffer,idx);
-          //}
         })
       }
     }
@@ -43,10 +42,7 @@ export class PriceFinder {
               
       //const offerPrice = parseFloat((offer.normalPrice).replace('R$','').replace(',','.'));
       const offerPromo = parseFloat((offer.promoPrice).replace('R$','').replace(',','.'));
-
       const bestOfferPromo = parseFloat(bestOffer.promoPrice.toString().replace('R$','').replace(',','.'));
-      //console.log(_offer.store);
-      //console.log(offerPromo, bestOfferPromo);
       
       if(/*(offerPrice < bestOffer.normalPrice) || */offerPromo <= bestOfferPromo){
         if(idx > 1 && bestOfferPromo - offerPromo >= 500) return bestOffer;
