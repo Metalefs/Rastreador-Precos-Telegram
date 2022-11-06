@@ -13,11 +13,6 @@ export interface ThisOffer {
   }
 }
 
-interface ret {
-  query: any;
-  offers: ThisOffer[];
-}
-
 export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {  
   const keepalive = await new Promise(async (resolve, reject) => {
     searchconfig.useMerchants ?
@@ -71,7 +66,6 @@ async function getGoogleMerchantsResult(query, connection?) {
       query,
       connection
     );
-    console.log({merchantOffers})
     offers.push({ merchant: { name: merchantOffers[0]?.store, id: merchant, offers: merchantOffers }});
   }
   return {
@@ -148,7 +142,6 @@ async function getOffersData(selectors = [], html, baseUrl, search?, connection?
         features = features ?? el.innerText.split('R$')[0];
         el = el.setAttribute('href', link);
       }
-      console.log({ link, store, features, promoPrice, normalPrice, html: el.outerHTML });
       return { link, store, features, promoPrice, normalPrice, html: el.outerHTML };
     })
     .filter((el) => el != undefined && el?.link != undefined && el?.features != undefined && el?.normalPrice !== '' && el?.promoPrice !== '');

@@ -32,18 +32,6 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
 
   bot.onText(/\/pricehistory (.+)/, botService.pricehistory);
 
-  bot.on('callback_query', async (callbackQuery) => {
-    const message = callbackQuery.message;
-    const data = JSON.parse(callbackQuery.data);
-
-    await botService.addProductToCategory(data.d, data.a);
-
-    bot.sendMessage(
-      message.chat.id,
-      `Produto foi rotulado com a categoria "${data.a}"`
-    );
-  });
-
   bot.on('message', async(msg) => {
     const chatId = msg.chat.id;
     await chatIdService.add(msg);

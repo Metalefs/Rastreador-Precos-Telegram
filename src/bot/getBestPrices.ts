@@ -11,7 +11,6 @@ export class PriceFinder {
       query: any;
       offers: ThisOffer[];
     };
-    console.log({googleOffers})
     let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
     for(const offer of googleOffers.offers) {
       const element = offer;
@@ -33,18 +32,15 @@ export class PriceFinder {
     try{
       bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
     }catch(ex){}
-    console.log({bestOffer})
     return bestOffer;
   };
 
   private filterBestPrice(offer, bestOffer, idx){
     if(offer.link && offer.normalPrice != '' || offer.normalPrice != '' && offer.store){
-              
-      //const offerPrice = parseFloat((offer.normalPrice).replace('R$','').replace(',','.'));
       const offerPromo = parseFloat((offer.promoPrice).replace('R$','').replace(',','.'));
       const bestOfferPromo = parseFloat(bestOffer.promoPrice.toString().replace('R$','').replace(',','.'));
       
-      if(/*(offerPrice < bestOffer.normalPrice) || */offerPromo <= bestOfferPromo){
+      if(offerPromo <= bestOfferPromo){
         if(idx > 1 && bestOfferPromo - offerPromo >= 500) return bestOffer;
         console.log({'best offer: ': offerPromo, store:offer.store });
         if(offerPromo === bestOfferPromo) {
