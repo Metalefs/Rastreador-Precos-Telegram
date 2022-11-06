@@ -13,12 +13,18 @@ export interface ThisOffer {
   }
 }
 
-export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {
-  const result = searchconfig.useMerchants ?
-    await getGoogleMerchantsResult(query, connection) :
-    await getGoogleAnyResult(query, connection);
-  console.log({result})
-  return result;
+interface ret {
+  query: any;
+  offers: ThisOffer[];
+}
+
+export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {  
+  const keepalive = await new Promise(async (resolve, reject) => {
+    searchconfig.useMerchants ?
+    resolve(await getGoogleMerchantsResult(query, connection)):
+    resolve(await getGoogleAnyResult(query, connection));
+  })
+  return keepalive;
 }
 
 async function getGoogleAnyResult(query, connection?) {
