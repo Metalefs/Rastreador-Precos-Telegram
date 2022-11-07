@@ -24,7 +24,7 @@ export async function scoutGoogleShopping(query, searchconfig = { useMerchants: 
 
 async function getGoogleAnyResult(query, connection?) {
   const response = await got(
-    config.websites.googleShopping(query),
+    config.websites.googleGroceryShopping(query),
     {
       headers: {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/79.0.3945.0 Safari/537.36'
