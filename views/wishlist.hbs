@@ -56,6 +56,7 @@
               <th>Data da busca</th>
               <th>Nome na lista</th>
               <th>Preço</th>
+              <th>Preço inserido</th>
             </tr>
           </thead>
           <tbody>
@@ -70,6 +71,7 @@
                 <td>{{this.name}}
                   <a href="/history/{{this.name}}">Ver histórico</a></td>
                 <td>{{this.offer.normalPrice}}</td>
+                <td>{{this.manualPrice}}</td>
               </tr>
             {{/each}}
           </tbody>

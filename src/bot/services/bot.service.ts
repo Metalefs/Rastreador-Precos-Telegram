@@ -834,6 +834,67 @@ export class BotService {
     const totalExpenses = await this.allPredictedExpenses(chatId);
     await this.bot.sendMessage(chatId, 'Valor total de despesas previstas: ' + totalExpenses);
   }
+  editprice = async (msg, match) => {
+    const [chatId, id] = this.parseChat(msg, match);
+
+    if (!id) {
+      this.bot.sendMessage(
+        chatId,
+        "Esse comando precisa de um argumento. Ex: /editprice {{nome}}"
+      );
+      return;
+    }
+
+    this.bot
+    .sendMessage(chatId, "Defina o preço para o produto "+id+":", {
+      reply_markup: JSON.stringify({
+        force_reply: true,
+      }),
+    })
+    .then(() => {
+      return this.bot.onNextMessage(chatId, async (msg) => {
+        if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
+
+        const price = msg.text;
+        await this.productService.addManualPrice(id, price);
+        await this.bot.sendMessage(
+          chatId,
+          `Preço do Produto foi alterado para "${msg.text.trim()}"`,
+        );
+        })
+      })
+  }
+
+  editgroceryprice = async (msg, match) => {
+    const [chatId, id] = this.parseChat(msg, match);
+
+    if (!id) {
+      this.bot.sendMessage(
+        chatId,
+        "Esse comando precisa de um argumento. Ex: /editgroceryprice {{nome}}"
+      );
+      return;
+    }
+
+    this.bot
+    .sendMessage(chatId, "Defina o preço para o produto de mercado"+id+":", {
+      reply_markup: JSON.stringify({
+        force_reply: true,
+      }),
+    })
+    .then(() => {
+      return this.bot.onNextMessage(chatId, async (msg) => {
+        if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
+
+        const price = msg.text;
+        await this.groceriesService.addManualPrice(id, price);
+        await this.bot.sendMessage(
+          chatId,
+          `Preço do Produto de mercado foi alterado para "${msg.text.trim()}"`,
+        );
+        })
+      })
+  }
 
   private parseGroceryListToHTML(list) {
     let message = list && list?.length ? '' : 'Nenhum produto';

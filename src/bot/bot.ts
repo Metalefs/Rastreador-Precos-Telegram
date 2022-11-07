@@ -31,6 +31,8 @@ export const init = (bot, botService: BotService, chatIdService:ChatIdService) =
   bot.onText(/\/groceryoffers/, botService.groceryoffers);
 
   bot.onText(/\/pricehistory (.+)/, botService.pricehistory);
+  bot.onText(/\/editprice (.+)/, botService.editprice);
+  bot.onText(/\/editgroceryprice (.+)/, botService.editgroceryprice);
 
   bot.on('message', async(msg) => {
     const chatId = msg.chat.id;

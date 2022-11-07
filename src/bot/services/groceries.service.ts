@@ -45,6 +45,10 @@ export class GroceriesService extends BaseService {
     );
   };
 
+  async addManualPrice(name, price){
+    await this.update({name},{manualPrice: price});
+  }
+
   async addToCategory(product, category) {
     await this.update({ name: product }, { category });
   }
@@ -61,7 +65,7 @@ export class GroceriesService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Grocery[];
     let value = 0;
     list.forEach((item: any) => {
-      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.') ?? '0') * (item.quantity || 1);
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').replace(',','.')  ?? item.manualPrice ?? '0') * (item.quantity || 1);
     })
     return value;
   }

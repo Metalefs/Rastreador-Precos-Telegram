@@ -45,6 +45,10 @@ export class ProductsService extends BaseService {
     );
   };
 
+  async addManualPrice(name, price){
+    await this.update({name},{manualPrice: price});
+  }
+
   getWishlist = async (chatId) => {
     return this.dbconnection.collection("wishlist").find({ chatId }).toArray();
   };
@@ -64,7 +68,7 @@ export class ProductsService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Offer[];
     let value = 0;
     list.forEach((item: any) => {
-      value += parseFloat(item.offer?.normalPrice?.replace('R$','').trim().replace(' ','').replace(',','.') ?? '0');
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').trim().replace(' ','').replace(',','.') ?? item.manualPrice ?? '0') * (item.quantity || 1);
     })
     return value;
   }

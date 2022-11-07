@@ -13,6 +13,7 @@ export function createOffersTable(products) {
           <th>Nome</th>
           <th>Promoção</th>
           <th>Preço</th>
+          <th>Preço inserido</th>
           <th>Conteúdo</th>
           <th>Quantidade</th>
         </tr>
@@ -25,6 +26,7 @@ export function createOffersTable(products) {
           <td>${product.name}</td>
           <td>${product.offer?.promoPrice ?? ""}</td>
           <td>${product.offer?.normalPrice ?? ""}</td>
+          <td>${product.manualPrice ?? ""}</td>
           <td>${product.offer?.html ?? ""}</td>
           <td>${product?.quantity ?? '1'}</td>
         </tr>`;
@@ -93,6 +95,7 @@ export function createGroceriesTable(products: Array<any>) {
           <tr>
             <th>Oferta</th>
             <th>Promoção</th>
+            <th>Preço inserido</th>
             <th>Loja</th>
             <th>Data da busca</th>
             <th>Nome</th>
@@ -107,6 +110,7 @@ export function createGroceriesTable(products: Array<any>) {
         <tr>
           <td>${product?.offer?.html ?? ''}</td>
           <td>${product?.offer?.promoPrice ?? ''}</td>
+          <td>${product.manualPrice ?? ""}</td>
           <td>${product?.offer?.store ?? ''}</td>
           <td>${product?.date}</td>
           <td>${product?.name}       <a href="/history/${product?.name}">Ver histórico</a></td>
