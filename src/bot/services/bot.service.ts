@@ -908,7 +908,7 @@ export class BotService {
   private parseWishlistToHTML(list) {
     let message = list && list?.length ? '' : 'Nenhum produto';
     list.forEach(product => {
-      message += `<a href="${product.offer?.link}">${product.offer?.features ?? product.name} - de ${product.offer?.store ?? "(Loja não encontrada)"}</a> (${product.quantity || 1} unidade(s)) <b>${product.offer?.promoPrice ?? grocery.manualPrice ?? 0}</b>
+      message += `<a href="${product.offer?.link}">${product.offer?.features ?? product.name} - de ${product.offer?.store ?? "(Loja não encontrada)"}</a> (${product.quantity || 1} unidade(s)) <b>${product.offer?.promoPrice ?? product.manualPrice ?? 0}</b>
       `
     })
     return message;
