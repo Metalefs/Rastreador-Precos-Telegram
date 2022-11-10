@@ -704,7 +704,7 @@ export class BotService {
         "Aqui está a sua lista. '/groceryoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
 
-    const products = await this.groceriesService.list();
+    const products = await this.groceriesService.findByChatId(chatId);
     await this.bot.sendMessage(chatId, this.parseGroceryListToHTML(products), { parse_mode: "HTML" })
 
     this.bot.sendMessage(chatId, "Total: R$" + await this.getGroceryExpenses(chatId))
@@ -741,7 +741,7 @@ export class BotService {
       caption:
         "Aqui está a sua lista. '/wishlistoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
     });
-    const products = await this.productService.list();
+    const products = await this.productService.findByChatId(chatId);
     await this.bot.sendMessage(chatId, this.parseWishlistToHTML(products), { parse_mode: "HTML" });
     await this.bot.sendMessage(chatId, "Total: R$" + await this.getProductExpenses(chatId))
     this.bot.sendMessage(
@@ -799,7 +799,7 @@ export class BotService {
   wishlistoffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
     await this.bot.sendMessage(chatId, 'Buscando dados..');
-    const products = await this.productService.list();
+    const products = await this.productService.findByChatId(chatId);
     const result = await this.fileService.uploadOffersTableScreenshot(products, chatId);
 
     await this.bot.sendPhoto(msg.chat.id, result[1], {
@@ -813,7 +813,7 @@ export class BotService {
   groceryoffers = async (msg, match) => {
     const [chatId, resp] = this.parseChat(msg, match);
     await this.bot.sendMessage(chatId, 'Buscando dados..');
-    const products = await this.groceriesService.list();
+    const products = await this.groceriesService.findByChatId(chatId);
     const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
 
     await this.bot.sendPhoto(msg.chat.id, result[1], {
