@@ -32,7 +32,7 @@ export class PurgeStaticFilesScheduler {
             // IIFE to give access to async/await
             await this.agenda.start();
 
-            await this.agenda.every("1 day", "purge files");
+            await this.agenda.every("30 min", "purge files");
         })();
     }
 
