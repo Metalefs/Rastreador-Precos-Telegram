@@ -36,7 +36,7 @@ export class PriceFinder {
       bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
     }catch(ex){}
 
-    return config?.isGrocery ? this.getMeanResult(bestOffers) : bestOffer;
+    return config?.isGrocery ? this.getMeanResult(bestOffers) ?? bestOffer: bestOffer;
   };
 
   private filterBestPrice(offer, bestOffer, idx){
@@ -49,7 +49,7 @@ export class PriceFinder {
         console.log({'best offer: ': offer.promoPrice, store:offer.store });
         if(offer.promoPrice === bestOffer.promoPrice) {
           if(!bestOffer.candidates) bestOffer.candidates = [];
-          bestOffer.candidates.push({link:offer.link, store: offer.store});
+          bestOffer.candidates.push({link:offer.link, store: offer.store, price: offer.promoPrice});
         }
         Object.assign(offer, {candidates: bestOffer.candidates});
         return offer;
