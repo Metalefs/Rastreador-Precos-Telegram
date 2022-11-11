@@ -2,6 +2,7 @@ require("dotenv").config();
 
 import { scoutGoogleShopping, ThisOffer } from "./navigator";
 import { Db } from "mongodb";
+import { Offer } from "src/shared/interfaces/offer";
 
 export class PriceFinder {
   constructor(private dbconnection: Db) {}
@@ -12,6 +13,7 @@ export class PriceFinder {
       offers: ThisOffer[];
     };
     let bestOffer:any = {normalPrice:Number.MAX_VALUE, promoPrice:Number.MAX_VALUE};
+    const bestOffers = [];
     for(const offer of googleOffers.offers) {
       const element = offer;
       if(element.merchant.offers){
@@ -19,6 +21,7 @@ export class PriceFinder {
         product_offers.forEach((_offer, idx) => {
           //if(_offer?.features?.toLocaleLowerCase().includes(query.toLocaleLowerCase())){
             bestOffer = this.filterBestPrice(_offer,bestOffer,idx);
+            bestOffers.push(bestOffer);
         })
       }
     }
@@ -32,18 +35,19 @@ export class PriceFinder {
     try{
       bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
     }catch(ex){}
-    return bestOffer;
+
+    return config?.isGrocery ? this.getMeanResult(bestOffers) : bestOffer;
   };
 
   private filterBestPrice(offer, bestOffer, idx){
     if(offer.link && offer.normalPrice != '' || offer.normalPrice != '' && offer.store){
-      const offerPromo = parseFloat((offer.promoPrice).replace('R$','').replace(',','.'));
-      const bestOfferPromo = parseFloat(bestOffer.promoPrice.toString().replace('R$','').replace(',','.'));
+      offer.promoPrice = parseFloat((offer.promoPrice).replace('R$','').replace(',','.'));
+      bestOffer.promoPrice = parseFloat(bestOffer.promoPrice.toString().replace('R$','').replace(',','.'));
       
-      if(offerPromo <= bestOfferPromo){
-        if(idx > 1 && bestOfferPromo - offerPromo >= 500) return bestOffer;
-        console.log({'best offer: ': offerPromo, store:offer.store });
-        if(offerPromo === bestOfferPromo) {
+      if(offer.promoPrice <= bestOffer.promoPrice){
+        if(idx > 1 && bestOffer.promoPrice - offer.promoPrice >= 500) return bestOffer;
+        console.log({'best offer: ': offer.promoPrice, store:offer.store });
+        if(offer.promoPrice === bestOffer.promoPrice) {
           if(!bestOffer.candidates) bestOffer.candidates = [];
           bestOffer.candidates.push({link:offer.link, store: offer.store});
         }
@@ -67,8 +71,18 @@ export class PriceFinder {
     const offers: any = [];
 
     query.forEach(async (q) => {
-      offers.push(await this.getPrices(q, { useMerchants: false }));
+      offers.push(await this.getPrices(q, { isGrocery: true }));
     });
     return offers;
   };
+
+  private getMeanResult(offers:Offer[]){
+    let count = 0;
+    offers.forEach(o=>{
+      count += parseFloat(o.normalPrice);
+    });
+    const meanPrice = count / offers.length;
+    const meanResult = offers.find(o=>parseFloat(o.normalPrice) >= meanPrice);
+    return meanResult;
+  }
 }

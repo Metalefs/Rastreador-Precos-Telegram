@@ -24,7 +24,7 @@ describe('Scrape', () => {
     const [db, connection, client] = await dbconnection();
     const priceFinder = new PriceFinder(db as any);
 
-    const result = await priceFinder.getPrices('iogurte grego 100g', { useMerchants: false });
+    const result = await priceFinder.getPrices('iogurte grego 100g', { isGrocery: true });
 
     fs.writeFileSync(`./src/tests/bot/results/scrape/groceries-result.json`, JSON.stringify(result));
 

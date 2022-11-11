@@ -4,6 +4,7 @@ import { Offer } from "src/shared/interfaces/offer";
 
 import got from 'got';
 import { Db } from "mongodb";
+import { Store } from "src/shared/models/stores";
 
 export interface ThisOffer {
   merchant: {
@@ -13,9 +14,9 @@ export interface ThisOffer {
   }
 }
 
-export async function scoutGoogleShopping(query, searchconfig = { useMerchants: true }, connection?) {  
+export async function scoutGoogleShopping(query, searchconfig = { isGrocery: false }, connection?) {  
   const keepalive = await new Promise(async (resolve, reject) => {
-    searchconfig.useMerchants ?
+    searchconfig.isGrocery ?
     resolve(await getGoogleMerchantsResult(query, connection)):
     resolve(await getGoogleAnyResult(query, connection));
   })
@@ -40,7 +41,7 @@ async function getGoogleAnyResult(query, connection?) {
     query,
     connection
   );
-  offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers }});
+  offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers.filter(mO=>mO.store!==Store["Magazine Luisa"]) }});
   return {
     query,
     offers
