@@ -68,6 +68,11 @@ export class ProductsService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Offer[];
     let value = 0;
     list.forEach((item: any) => {
+      if(item.offer?.normalPrice.includes('.') && item.offer?.normalPrice.includes(','))
+        item.offer.normalPrice = item.offer?.normalPrice.replace('.','').replace(',','.');
+      else if(item.offer?.normalPrice.includes(',') && !item.offer?.normalPrice.includes('.'))
+        item.offer.normalPrice = item.offer?.normalPrice.replace(',','.');
+
       value += parseFloat(item.offer?.normalPrice?.replace('R$','').trim().replace(' ','') ?? item.manualPrice ?? '0') * (item.quantity || 1);
     })
     return value;

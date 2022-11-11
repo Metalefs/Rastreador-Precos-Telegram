@@ -65,7 +65,12 @@ export class GroceriesService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Grocery[];
     let value = 0;
     list.forEach((item: any) => {
-      value += parseFloat(item.offer?.normalPrice?.replace('R$','')  ?? item.manualPrice ?? '0') * (item.quantity || 1);
+      if(item.offer?.normalPrice.includes('.') && item.offer?.normalPrice.includes(','))
+        item.offer.normalPrice = item.offer?.normalPrice.replace('.','').replace(',','.');
+      else if(item.offer?.normalPrice.includes(',') && !item.offer?.normalPrice.includes('.'))
+        item.offer.normalPrice = item.offer?.normalPrice.replace(',','.');
+
+      value += parseFloat(item.offer?.normalPrice?.replace('R$','').trim().replace(' ','') ?? item.manualPrice ?? '0') * (item.quantity || 1);
     })
     return value;
   }
