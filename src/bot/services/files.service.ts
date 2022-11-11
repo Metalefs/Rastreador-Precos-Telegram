@@ -13,7 +13,7 @@ export class FileService{
     const image = await takeScreenshotFromHtml(createOffersTable(products));
     const path = this.saveFile(`offer-table-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`offer-table-${chatId}`)];
-    return [this.serverUrl,'/'+path];
+    return [this.serverUrl,this.serverUrl+'/'+path];
   };
   
   uploadOffersTableHTML = async (products, chatId) => {
@@ -21,14 +21,14 @@ export class FileService{
     const path = this.saveFile(`offer-table-${chatId}`,'html',html);
     //return [this.serverUrl, await upload('./'+path,`offer-table-${chatId}`)];
     //return this.serverUrl+'/'+chatId+'/offers';
-    return [this.serverUrl,'/'+path];
+    return [this.serverUrl,this.serverUrl+'/'+path];
   }
   
   uploadWishlistTableScreenshot = async (products, chatId) => {
     const image = await takeScreenshotFromHtml(createWishlistTable(products));
     const path = this.saveFile(`wishlist-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`wishlist-${chatId}`)];
-    return [this.serverUrl,'/'+path];
+    return [this.serverUrl,this.serverUrl+'/'+path];
   };
   
   uploadWishlistTableHTML = async (products, chatId) => {
@@ -36,7 +36,7 @@ export class FileService{
     const path = this.saveFile(`wishlist-${chatId}`,'html',html);
     //return [this.serverUrl, await upload('./'+path,`wishlist-${chatId}`)];
     //return this.serverUrl+'/'+chatId+'/offers';
-    return [this.serverUrl,'/'+path];
+    return [this.serverUrl,this.serverUrl+'/'+path];
   };
   
   uploadGroceriesTableScreenshot = async (products,chatId) => {
@@ -44,7 +44,7 @@ export class FileService{
     const path = this.saveFile(`groceries-table-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`groceries-table-${chatId}`)];
     //return this.serverUrl+'/'+chatId+'/groceries';
-    return [this.serverUrl,'/'+path];
+    return [this.serverUrl,this.serverUrl+'/'+path];
   };  
   
   private saveFile(name,ext,data){
