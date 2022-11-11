@@ -952,11 +952,13 @@ export class BotService {
   private async getGroceriesScreenshot(chatId) {
     const products = await this.groceriesService.findByChatId(chatId);
     const path = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
+    console.log(path[0],path[1])
     return [path, products];
   }
   private async getWishlistScreenshot(chatId) {
     const products = await this.productService.getWishlist(chatId);
     const path = await this.fileService.uploadWishlistTableScreenshot(products, chatId);
+    console.log(path[0],path[1])
     return [path, products];
   }
 }
