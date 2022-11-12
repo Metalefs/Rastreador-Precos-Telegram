@@ -48,18 +48,20 @@ export class FileService{
     return [this.serverUrl,this.serverUrl+'/'+path];
   };  
   
-  private saveFile(name,ext,data,showFallback=false){
+  private saveFile(name,ext,data,showFallback=true){
     const rand = randomstring.generate();
     const basePath = './public/temp/';
     const fileName = `${name}-${rand}.${ext}`;
     const path = `${basePath}${fileName}`;
     fs.writeFileSync(path, data);
 
+    console.log(path, data)
     const fileStats = fs.statSync(path);
     const fileSizeInMb = fileStats.size / BYTES_PER_MB;
-    console.log('IMAGE SIZE :'+fileSizeInMb)
-    if(fileSizeInMb >= MAX_SIZE_IN_MB || showFallback)
+    if(fileSizeInMb >= MAX_SIZE_IN_MB || showFallback){
+      fs.unlink(path,()=>{/**/});
       return 'public/image_fallback.jpg';
+    }
 
     return `public/temp/${fileName}`;
   }
