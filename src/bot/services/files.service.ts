@@ -11,14 +11,14 @@ export class FileService{
   }
   uploadOffersTableScreenshot = async (products,chatId) => {
     const image = await takeScreenshotFromHtml(createOffersTable(products));
-    const path = this.saveFile(`offer-table-${chatId}`,'png',image);
+    const path = this.saveFile(`o-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`offer-table-${chatId}`)];
     return [this.serverUrl,this.serverUrl+'/'+path];
   };
   
   uploadOffersTableHTML = async (products, chatId) => {
     const html = createOffersTable(products);
-    const path = this.saveFile(`offer-table-${chatId}`,'html',html);
+    const path = this.saveFile(`o-${chatId}`,'html',html);
     //return [this.serverUrl, await upload('./'+path,`offer-table-${chatId}`)];
     //return this.serverUrl+'/'+chatId+'/offers';
     return [this.serverUrl,this.serverUrl+'/'+path];
@@ -26,14 +26,14 @@ export class FileService{
   
   uploadWishlistTableScreenshot = async (products, chatId) => {
     const image = await takeScreenshotFromHtml(createWishlistTable(products));
-    const path = this.saveFile(`wishlist-${chatId}`,'png',image);
+    const path = this.saveFile(`w-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`wishlist-${chatId}`)];
     return [this.serverUrl,this.serverUrl+'/'+path];
   };
   
   uploadWishlistTableHTML = async (products, chatId) => {
     const html = createWishlistTable(products);
-    const path = this.saveFile(`wishlist-${chatId}`,'html',html);
+    const path = this.saveFile(`w-${chatId}`,'html',html);
     //return [this.serverUrl, await upload('./'+path,`wishlist-${chatId}`)];
     //return this.serverUrl+'/'+chatId+'/offers';
     return [this.serverUrl,this.serverUrl+'/'+path];
@@ -41,7 +41,7 @@ export class FileService{
   
   uploadGroceriesTableScreenshot = async (products,chatId) => {
     const image = await takeScreenshotFromHtml(createGroceriesTable(products));
-    const path = this.saveFile(`groceries-table-${chatId}`,'png',image);
+    const path = this.saveFile(`g-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`groceries-table-${chatId}`)];
     return [this.serverUrl,this.serverUrl+'/'+path];
   };  
