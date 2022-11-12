@@ -37,7 +37,7 @@ export class PriceFinder {
       bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
     }catch(ex){}
     const standardDeviation = this.getStandardDeviation(bestOffers.map(o=>o.normalPrice));
-    if(standardDeviation >= config.MAX_PRICE_DEVIATION && _config.isGrocery){
+    if(standardDeviation >= config.MAX_PRICE_DEVIATION){
       return bestOffer[1];
     }
     return _config?.isGrocery ? this.getMeanResult(bestOffers) ?? bestOffer: bestOffer;
