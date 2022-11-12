@@ -43,12 +43,12 @@ export class FileService{
   
   uploadGroceriesTableScreenshot = async (products,chatId) => {
     const image = await takeScreenshotFromHtml(createGroceriesTable(products));
-    const path = this.saveFile(`g-${chatId}`,'png',image);
+    const path = this.saveFile(`g-${chatId}`,'png',image,true);
     //return [this.serverUrl, await upload('./'+path,`groceries-table-${chatId}`)];
     return [this.serverUrl,this.serverUrl+'/'+path];
   };  
   
-  private saveFile(name,ext,data){
+  private saveFile(name,ext,data,showFallback=false){
     const rand = randomstring.generate();
     const basePath = './public/temp/';
     const fileName = `${name}-${rand}.${ext}`;
@@ -58,7 +58,7 @@ export class FileService{
     const fileStats = fs.statSync(path);
     const fileSizeInMb = fileStats.size / BYTES_PER_MB;
     console.log('IMAGE SIZE :'+fileSizeInMb)
-    if(fileSizeInMb >= MAX_SIZE_IN_MB)
+    if(fileSizeInMb >= MAX_SIZE_IN_MB || showFallback)
       return 'public/image_fallback.jpg';
 
     return `public/temp/${fileName}`;
