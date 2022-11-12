@@ -801,6 +801,7 @@ export class BotService {
     await this.bot.sendMessage(chatId, 'Buscando dados..');
     const products = await this.productService.findByChatId(chatId);
     const result = await this.fileService.uploadOffersTableScreenshot(products, chatId);
+    console.log(result)
 
     await this.bot.sendPhoto(msg.chat.id, result[1], {
       caption: `<a href="${result[0]}/${chatId}/offers">Veja a lista no browser</a>`,
@@ -815,7 +816,7 @@ export class BotService {
     await this.bot.sendMessage(chatId, 'Buscando dados..');
     const products = await this.groceriesService.findByChatId(chatId);
     const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
-
+    console.log(result)
     await this.bot.sendPhoto(msg.chat.id, result[1], {
       caption: `<a href="${result[0]}/${chatId}/groceries">Veja a lista no browser</a>`,
       parse_mode: "HTML"
