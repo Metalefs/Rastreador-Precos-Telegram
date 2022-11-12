@@ -3,12 +3,13 @@ require("dotenv").config();
 import { scoutGoogleShopping, ThisOffer } from "./navigator";
 import { Db } from "mongodb";
 import { Offer } from "src/shared/interfaces/offer";
+import { config } from "./config";
 
 export class PriceFinder {
   constructor(private dbconnection: Db) {}
 
-  async getPrices(query, config?) {
-    const googleOffers = await scoutGoogleShopping(query, config, this.dbconnection) as {
+  async getPrices(query, _config?) {
+    const googleOffers = await scoutGoogleShopping(query, _config, this.dbconnection) as {
       query: any;
       offers: ThisOffer[];
     };
@@ -35,8 +36,11 @@ export class PriceFinder {
     try{
       bestOffer.candidates.unshift({link:candidates[0].link, store: candidates[0].store})
     }catch(ex){}
-
-    return config?.isGrocery ? this.getMeanResult(bestOffers) ?? bestOffer: bestOffer;
+    const standardDeviation = this.getStandardDeviation(bestOffers.map(o=>o.normalPrice));
+    if(standardDeviation >= config.MAX_PRICE_DEVIATION && _config.isGrocery){
+      return bestOffer[1];
+    }
+    return _config?.isGrocery ? this.getMeanResult(bestOffers) ?? bestOffer: bestOffer;
   };
 
   private filterBestPrice(offer, bestOffer, idx){
@@ -84,5 +88,19 @@ export class PriceFinder {
     const meanPrice = count / offers.length;
     const meanResult = offers.find(o=>parseFloat(o.normalPrice) >= meanPrice);
     return meanResult;
+  }
+
+  getStandardDeviation(prices:number[]){
+    let mean = 0;
+    for (let i = 0;i < prices.length; i++) {
+        mean += prices[i];
+    }
+    mean = mean/prices.length;
+    let deviation = 0;
+    for (let i = 0;i < prices.length; i++) {
+        deviation += (mean - prices[i]) * (mean - prices[i]);
+    }
+    deviation = deviation/prices.length;
+    return Math.sqrt(deviation);
   }
 }
