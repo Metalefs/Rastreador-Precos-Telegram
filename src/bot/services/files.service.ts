@@ -1,5 +1,7 @@
 import * as fs from "fs";
 
+const BYTES_PER_MB = 1024 ** 2;
+const MAX_SIZE_IN_MB = 5;
 import { takeScreenshotFromHtml } from "../browser";
 import { createGroceriesTable, createOffersTable, createWishlistTable } from "../html-generator";
 import * as randomstring from 'randomstring';
@@ -49,8 +51,17 @@ export class FileService{
   private saveFile(name,ext,data){
     const rand = randomstring.generate();
     const basePath = './public/temp/';
-    const path = `${basePath}${name}-${rand}.${ext}`;
+    const fileName = `${name}-${rand}.${ext}`;
+    const path = `${basePath}${fileName}`;
     fs.writeFileSync(path, data);
-    return `public/temp/${name}-${rand}.${ext}`;
+
+    const fileStats = fs.statSync(path);
+    const fileSizeInMb = fileStats.size / BYTES_PER_MB;
+    console.log('IMAGE SIZE :'+fileSizeInMb)
+    if(fileSizeInMb >= MAX_SIZE_IN_MB)
+      return 'public/image_fallback.jpg';
+
+    return `public/temp/${fileName}`;
   }
+  
 }
