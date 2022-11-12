@@ -901,7 +901,7 @@ export class BotService {
   private parseGroceryListToHTML(list) {
     let message = list && list?.length ? '' : 'Nenhum produto';
     list.forEach(grocery => {
-      message += `<a href="${grocery.offer?.link}">${grocery.offer?.features ?? grocery.name} - de ${grocery.offer?.store ?? "(Loja não encontrada)"}</a> (${grocery.quantity || 1} unidade(s)) <b>${grocery.offer?.promoPrice ?? grocery.manualPrice ?? 0}</b>
+      message += `<a href="${grocery.offer?.link}">${grocery.offer?.features ?? grocery.name} - de ${grocery.offer?.store ?? "(Loja não encontrada)"}</a> (${grocery.quantity || 1} unidade(s)) <b>R$${grocery.offer?.promoPrice ?? grocery.manualPrice ?? 0}</b>
       `
     })
     return message;
@@ -910,7 +910,7 @@ export class BotService {
   private parseWishlistToHTML(list) {
     let message = list && list?.length ? '' : 'Nenhum produto';
     list.forEach(product => {
-      message += `<a href="${product.offer?.link}">${product.offer?.features ?? product.name} - de ${product.offer?.store ?? "(Loja não encontrada)"}</a> (${product.quantity || 1} unidade(s)) <b>${product.offer?.promoPrice ?? product.manualPrice ?? 0}</b>
+      message += `<a href="${product.offer?.link}">${product.offer?.features ?? product.name} - de ${product.offer?.store ?? "(Loja não encontrada)"}</a> (${product.quantity || 1} unidade(s)) <b>R$${product.offer?.promoPrice ?? product.manualPrice ?? 0}</b>
       `
     })
     return message;
