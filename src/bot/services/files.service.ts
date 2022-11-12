@@ -43,7 +43,6 @@ export class FileService{
     const image = await takeScreenshotFromHtml(createGroceriesTable(products));
     const path = this.saveFile(`groceries-table-${chatId}`,'png',image);
     //return [this.serverUrl, await upload('./'+path,`groceries-table-${chatId}`)];
-    //return this.serverUrl+'/'+chatId+'/groceries';
     return [this.serverUrl,this.serverUrl+'/'+path];
   };  
   

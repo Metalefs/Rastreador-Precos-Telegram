@@ -534,7 +534,7 @@ export class BotService {
                 );
 
                 await this.productEnrichmentService.enrich(product as any, chatId);
-                const [path] = await this.getWishlistScreenshot(chatId);
+                const path = await this.getWishlistScreenshot(chatId);
   
                   await this.bot.sendPhoto(chatId, path[1], {
                     caption:
@@ -668,7 +668,7 @@ export class BotService {
 
                       await this.productEnrichmentService.enrichGrocery(product as any, chatId);
 
-                      const [path] = await this.getGroceriesScreenshot(chatId);
+                      const path = await this.getGroceriesScreenshot(chatId);
 
                       await this.bot.sendPhoto(chatId, path[1], {
                         caption:
@@ -698,7 +698,7 @@ export class BotService {
   mygroceries = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
     await this.bot.sendMessage(chatId, 'Buscando dados..');
-    const [path] = await this.getGroceriesScreenshot(chatId);
+    const path = await this.getGroceriesScreenshot(chatId);
     await this.bot.sendPhoto(chatId, path[1], {
       caption:
         "Aqui está a sua lista. '/groceryoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
@@ -728,15 +728,15 @@ export class BotService {
     }
 
     await this.groceriesService.removeByName(id);
-    const [path] = await this.getGroceriesScreenshot(chatId);
+    const path = await this.getGroceriesScreenshot(chatId);
 
-    this.bot.sendPhoto(chatId, path[0], { caption: "Aqui está a sua lista !" });
+    this.bot.sendPhoto(chatId, path[1], { caption: "Aqui está a sua lista !" });
   };
 
   mywishlist = async (msg, match) => {
     const [chatId] = this.parseChat(msg, match);
     await this.bot.sendMessage(chatId, 'Buscando dados..');
-    const [path] = await this.getWishlistScreenshot(chatId);
+    const path = await this.getWishlistScreenshot(chatId);
     this.bot.sendPhoto(chatId, path[1], {
       caption:
         "Aqui está a sua lista. '/wishlistoffers' Para ver as ofertas relacionadas a sua lista de desejos.",
@@ -746,7 +746,7 @@ export class BotService {
     await this.bot.sendMessage(chatId, "Total: R$" + await this.getProductExpenses(chatId))
     this.bot.sendMessage(
       msg.chat.id,
-      `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
+      `<a href="${path[1]}/${chatId}/offers">Veja a lista no browser</a>`,
       { parse_mode: "HTML" }
     );
   };
@@ -763,7 +763,7 @@ export class BotService {
     }
 
     await this.productService.removeByName(id);
-    const [path] = await this.getWishlistScreenshot(chatId);
+    const path = await this.getWishlistScreenshot(chatId);
     
     this.bot.sendPhoto(chatId, path[1], { caption: "Aqui está a sua lista !" });
   };
@@ -817,8 +817,9 @@ export class BotService {
     const products = await this.groceriesService.findByChatId(chatId);
     const result = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
     console.log(result)
+
     await this.bot.sendPhoto(msg.chat.id, result[1], {
-      caption: `<a href="${result[0]}/${chatId}/groceries">Veja a lista no browser</a>`,
+      caption: `<a href="${result[0]}/${chatId}/offers">Veja a lista no browser</a>`,
       parse_mode: "HTML"
     });
     await this.bot.sendMessage(chatId, this.parseGroceryListToHTML(products), { parse_mode: "HTML" })
@@ -953,13 +954,11 @@ export class BotService {
   private async getGroceriesScreenshot(chatId) {
     const products = await this.groceriesService.findByChatId(chatId);
     const path = await this.fileService.uploadGroceriesTableScreenshot(products, chatId);
-    console.log(path[0],path[1])
-    return [path, products];
+    return path;
   }
   private async getWishlistScreenshot(chatId) {
     const products = await this.productService.getWishlist(chatId);
     const path = await this.fileService.uploadWishlistTableScreenshot(products, chatId);
-    console.log(path[0],path[1])
-    return [path, products];
+    return path;
   }
 }

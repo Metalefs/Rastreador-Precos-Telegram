@@ -1,5 +1,6 @@
 import { Db } from "mongodb";
 import { Offer } from "src/shared/interfaces/offer";
+import { priceToFloat } from "src/shared/util/priceParser";
 import { BaseService } from "../../shared/models/base.service";
 
 export class ProductsService extends BaseService {
@@ -68,10 +69,8 @@ export class ProductsService extends BaseService {
     const list = await this.findByChatId(chatId) as unknown as Offer[];
     let value = 0;
     list.forEach((item: any) => {
-      if(item.offer?.normalPrice.includes('.') && item.offer?.normalPrice.includes(','))
-        item.offer.normalPrice = item.offer?.normalPrice.replace('.','').replace(',','.');
-      if(item.offer?.normalPrice.includes(','))
-        item.offer.normalPrice = item.offer?.normalPrice.replace(',','.');
+      if(item.offer)
+        item.offer.normalPrice = priceToFloat(item.offer.normalPrice);
 
       value += parseFloat(item.offer?.normalPrice?.replace('R$','').trim().replace(' ','') ?? item.manualPrice ?? '0') * (item.quantity || 1);
     })
