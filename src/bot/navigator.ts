@@ -17,8 +17,9 @@ export interface ThisOffer {
 export async function scoutGoogleShopping(query, searchconfig = { isGrocery: false }, connection?) {  
   const keepalive = await new Promise(async (resolve, reject) => {
     searchconfig.isGrocery ?
-    resolve(await getGoogleMerchantsResult(query, connection)):
-    resolve(await getGoogleAnyResult(query, connection));
+    resolve(await getGoogleAnyResult(query, connection))
+    :
+    resolve(await getGoogleMerchantsResult(query, connection));
   })
   return keepalive;
 }
