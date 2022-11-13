@@ -108,11 +108,11 @@ async function getOffersData(selectors = [], html, baseUrl, search?, connection?
       let store = storeSpans[0]?.text ?? ''
 
       if (store.startsWith('.') && store.includes('}')) {
-        const text = store.slice(store.lastIndexOf('}'),store.length);
+        const text = store.slice(store.lastIndexOf('}')+1,store.length);
         store = text;
       }
       if (features.startsWith('.') && features.includes('}')) {
-        const text = store.slice(store.lastIndexOf('}'),store.length);
+        const text = store.slice(store.lastIndexOf('}')+1,store.length);
         features = text;
       }
 
