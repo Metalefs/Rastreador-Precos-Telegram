@@ -36,7 +36,7 @@ async function getGoogleAnyResult(query, connection?) {
   const offers: ThisOffer[] = [];
   const baseUrl = response.url;
   const merchantOffers = await getOffersData(
-    ['.i0X6df', '.a8Pemb.OFFNJ', '.a8Pemb.OFFNJ', '.aULzUe.IuHnof', '.Xjkr3b'],
+    ['.i0X6df', '.a8Pemb.OFFNJ', '.a8Pemb.OFFNJ', '.aULzUe.IuHnof', '.tAxDx'],
     getContent(response as any),
     baseUrl,
     query,
@@ -108,7 +108,12 @@ async function getOffersData(selectors = [], html, baseUrl, search?, connection?
       let store = storeSpans[0]?.text ?? ''
 
       if (store.startsWith('.') && store.includes('}')) {
-        store = store.split('}')[1];
+        const keys = store.split('}');
+        store = keys.at(-1);
+      }
+      if (features.startsWith('.') && features.includes('}')) {
+        const keys = features.split('}');
+        features = keys.at(-1);
       }
 
       if (!selectors[1]) {
