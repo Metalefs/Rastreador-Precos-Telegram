@@ -11,7 +11,7 @@ import { GroceriesService } from "./groceries.service";
 import { SupermarketCategoriesService } from "./supermarketCategories.service";
 import { FileService } from "./files.service";
 import { DefaultGroceriesService } from "./defaultGroceries.service";
-
+const MAX_MSG_TXT_LEN = 4096;
 export class BotService {
   finances = {};
   productEnrichmentService: ProductEnrichmentService;
@@ -47,6 +47,9 @@ export class BotService {
       });
       return promise;
     };
+
+    this.bot.sendMessage = this._pageText(this.bot.sendMessage);
+
     this.productEnrichmentService = new ProductEnrichmentService(
       this.priceFinder,
       productService,
@@ -228,7 +231,7 @@ export class BotService {
                                                       { chatId: chatId },
                                                       this.finances[chatId]
                                                     );
-                                                
+
                                                     await this.bot.sendMessage(
                                                       chatId,
                                                       "Valor disponivel para gastar : <b>R$" + JSON.stringify(budget) + "</b>",
@@ -297,7 +300,7 @@ export class BotService {
     this.trySetBudget(chatId);
   };
 
-  addtoincome = async (msg,match) => {
+  addtoincome = async (msg, match) => {
     const chatId = msg.chat.id;
     const extra = match.input.replace("/addtoincome", "");
 
@@ -323,7 +326,7 @@ export class BotService {
     this.trySetBudget(chatId);
   }
 
-  removefromincome = async (msg,match) => {
+  removefromincome = async (msg, match) => {
     const chatId = msg.chat.id;
     const amount = match.input.replace("/removefromincome", "");
 
@@ -535,26 +538,26 @@ export class BotService {
 
                 await this.productEnrichmentService.enrich(product as any, chatId);
                 const path = await this.getWishlistScreenshot(chatId);
-  
-                  await this.bot.sendPhoto(chatId, path[1], {
-                    caption:
-                      "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
-                  });
-                  await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
-                  await this.bot.sendMessage(
-                    msg.chat.id,
-                    `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
-                    {
-                      parse_mode: "HTML",
-                      reply_markup: {
-                        remove_keyboard: true,
-                      },
-                    }
-                  );
-  
-                  const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
-  
-                  await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
+
+                await this.bot.sendPhoto(chatId, path[1], {
+                  caption:
+                    "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
+                });
+                await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
+                await this.bot.sendMessage(
+                  msg.chat.id,
+                  `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
+                  {
+                    parse_mode: "HTML",
+                    reply_markup: {
+                      remove_keyboard: true,
+                    },
+                  }
+                );
+
+                const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
+
+                await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
 
               });
             });
@@ -764,7 +767,7 @@ export class BotService {
 
     await this.productService.removeByName(id);
     const path = await this.getWishlistScreenshot(chatId);
-    
+
     this.bot.sendPhoto(chatId, path[1], { caption: "Aqui está a sua lista !" });
   };
 
@@ -779,8 +782,8 @@ export class BotService {
       return;
     }
 
-    const history = await this.priceHistoryService.find({product:id});
-    
+    const history = await this.priceHistoryService.find({ product: id });
+
     this.bot.sendMessage(chatId, this.parsePriceHistoryToHTML(history), { parse_mode: "HTML" });
   };
 
@@ -848,21 +851,21 @@ export class BotService {
     }
 
     this.bot
-    .sendMessage(chatId, "Defina o preço para o produto "+id+":", {
-      reply_markup: JSON.stringify({
-        force_reply: true,
-      }),
-    })
-    .then(() => {
-      return this.bot.onNextMessage(chatId, async (msg) => {
-        if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
+      .sendMessage(chatId, "Defina o preço para o produto " + id + ":", {
+        reply_markup: JSON.stringify({
+          force_reply: true,
+        }),
+      })
+      .then(() => {
+        return this.bot.onNextMessage(chatId, async (msg) => {
+          if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
 
-        const price = msg.text;
-        await this.productService.addManualPrice(id, price);
-        await this.bot.sendMessage(
-          chatId,
-          `Preço do Produto foi alterado para "${msg.text.trim()}"`,
-        );
+          const price = msg.text;
+          await this.productService.addManualPrice(id, price);
+          await this.bot.sendMessage(
+            chatId,
+            `Preço do Produto foi alterado para "${msg.text.trim()}"`,
+          );
         })
       })
   }
@@ -879,21 +882,21 @@ export class BotService {
     }
 
     this.bot
-    .sendMessage(chatId, "Defina o preço para o produto de mercado "+id+":", {
-      reply_markup: JSON.stringify({
-        force_reply: true,
-      }),
-    })
-    .then(() => {
-      return this.bot.onNextMessage(chatId, async (msg) => {
-        if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
+      .sendMessage(chatId, "Defina o preço para o produto de mercado " + id + ":", {
+        reply_markup: JSON.stringify({
+          force_reply: true,
+        }),
+      })
+      .then(() => {
+        return this.bot.onNextMessage(chatId, async (msg) => {
+          if (msg.text.toLocaleLowerCase() === 'n/a') { msg.text = '' }
 
-        const price = msg.text;
-        await this.groceriesService.addManualPrice(id, price);
-        await this.bot.sendMessage(
-          chatId,
-          `Preço do Produto de mercado foi alterado para "${msg.text.trim()}"`,
-        );
+          const price = msg.text;
+          await this.groceriesService.addManualPrice(id, price);
+          await this.bot.sendMessage(
+            chatId,
+            `Preço do Produto de mercado foi alterado para "${msg.text.trim()}"`,
+          );
         })
       })
   }
@@ -960,5 +963,55 @@ export class BotService {
     const products = await this.productService.getWishlist(chatId);
     const path = await this.fileService.uploadWishlistTableScreenshot(products, chatId);
     return path;
+  }
+
+  /**
+ * Return a function that wraps around 'sendMessage', to
+ * add paging fanciness.
+ *
+ * @private
+ * @param  {Function} sendMessage
+ * @return {Function} sendMessage(chatId, message, form)
+ */
+  _pageText(sendMessage) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+
+    return async function (chatId, message, form = {}) {
+      if (message.length < MAX_MSG_TXT_LEN) {
+        return sendMessage.call(self, chatId, message, form);
+      }
+
+      let index = 0;
+      let parts = [];
+      // we are reserving 8 characters for adding the page number in
+      // the following format: [01/10]
+      const reserveSpace = 8;
+      const shortTextLength = MAX_MSG_TXT_LEN - reserveSpace;
+      let shortText;
+
+      while ((shortText = message.substr(index, shortTextLength))) {
+        parts.push(shortText);
+        index += shortTextLength;
+      }
+
+      // The reserve space limits us to accommodate for not more
+      // than 99 pages. We signal an error to the user.
+      if (parts.length > 99) {
+        console.log("Tgfancy#sendMessage: Paging resulted into more than 99 pages");
+        return new Promise(function (resolve, reject) {
+          const error = new Error("Paging resulted into more than the maximum number of parts allowed");
+          (error as any).parts = parts;
+          return reject(error);
+        });
+      }
+
+      parts = parts.map(function (part, i) {
+        return `[${i + 1}/${parts.length}] ${part}`;
+      });
+      for(const part of parts){
+        await sendMessage.call(self, chatId, part, form);
+      }
+    };
   }
 }
