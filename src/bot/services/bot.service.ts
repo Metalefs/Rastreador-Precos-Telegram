@@ -977,7 +977,7 @@ export class BotService {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this.bot;
 
-    return async function (chatId, message, form = {}) {
+    return async function (chatId, message, form:any = {}) {
       if (message.length < MAX_MSG_TXT_LEN) {
         return sendMessage.call(self, chatId, message, form);
       }
