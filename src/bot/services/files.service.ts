@@ -54,8 +54,6 @@ export class FileService{
     const fileName = `${name}-${rand}.${ext}`;
     const path = `${basePath}${fileName}`;
     fs.writeFileSync(path, data);
-
-    console.log(path, data)
     const fileStats = fs.statSync(path);
     const fileSizeInMb = fileStats.size / BYTES_PER_MB;
     if(fileSizeInMb >= MAX_SIZE_IN_MB || showFallback){
