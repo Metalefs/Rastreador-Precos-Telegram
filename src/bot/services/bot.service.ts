@@ -1010,6 +1010,7 @@ export class BotService {
         return `[${i + 1}/${parts.length}] ${part}`;
       });
       for(const part of parts){
+        if(form?.parse_mode === 'HTML')  form.parse_mode = null;
         await sendMessage.call(self, chatId, part, form);
       }
     };
