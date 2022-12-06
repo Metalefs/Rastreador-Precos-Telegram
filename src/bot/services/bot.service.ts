@@ -524,13 +524,12 @@ export class BotService {
       .then(async () => {
         return this.bot.onNextMessage(chatId, async (msg) => {
           await this.addProductToCategory(productName, msg.text.trim());
-
-          await this.setProductMinMaxValue(chatId, productName);
-
           await this.bot.sendMessage(
             chatId,
             `Produto foi rotulado com a categoria "${msg.text}"`,
           );
+
+          await this.setProductMinMaxValue(chatId, productName);
 
           const product = await this.productService.getWishlistByName(
             productName
@@ -538,7 +537,7 @@ export class BotService {
 
           await this.bot.sendMessage(
             chatId,
-            `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
+            `Obtendo melhores ofertas para o produto "${productName.trim()}" com preços ${product.minPrice??0};${product.maxPrice??0}....`,
           );
 
           await this.productEnrichmentService.enrich(product as any, chatId);
@@ -583,7 +582,12 @@ export class BotService {
           if(prices[1])
             maxPrice = parseFloat(prices[1]);
 
-          await this.productService.addMinMaxPrices(productName, minPrice, maxPrice)
+          await this.productService.addMinMaxPrices(productName, minPrice, maxPrice);
+
+          await this.bot.sendMessage(
+            chatId,
+            `Produto registrado com preço máximo: ${maxPrice} e mínimo: ${minPrice}`,
+          );
         })
       })
   }

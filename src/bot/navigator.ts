@@ -4,7 +4,6 @@ import { Offer } from "src/shared/interfaces/offer";
 
 import got from 'got';
 import { Db } from "mongodb";
-import { Store } from "src/shared/models/stores";
 import { priceToFloat } from "src/shared/util/priceParser";
 
 export interface ThisOffer {
@@ -46,6 +45,7 @@ async function getGoogleAnyResult(query, config, connection?) {
   
   let _offers = merchantOffers;
   console.log({config});
+  
   if(config.minPrice){
     if(config.minPrice !== 0){
       _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.promoPrice?.trim().replace(' ',''))) >= config.minPrice);
