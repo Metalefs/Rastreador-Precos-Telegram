@@ -5,6 +5,7 @@ import { Offer } from "src/shared/interfaces/offer";
 import got from 'got';
 import { Db } from "mongodb";
 import { Store } from "src/shared/models/stores";
+import { priceToFloat } from "src/shared/util/priceParser";
 
 export interface ThisOffer {
   merchant: {
@@ -14,17 +15,17 @@ export interface ThisOffer {
   }
 }
 
-export async function scoutGoogleShopping(query, searchconfig = { isGrocery: false }, connection?) {  
+export async function scoutGoogleShopping(query, searchconfig = { isGrocery: false, minPrice: 0, maxPrice: 0 }, connection?) {  
   const keepalive = await new Promise(async (resolve, reject) => {
     searchconfig.isGrocery ?
-    resolve(await getGoogleAnyResult(query, connection))
+    resolve(await getGoogleAnyResult(query, searchconfig, connection))
     :
     resolve(await getGoogleMerchantsResult(query, connection));
   })
   return keepalive;
 }
 
-async function getGoogleAnyResult(query, connection?) {
+async function getGoogleAnyResult(query, config, connection?) {
   const response = await got(
     config.websites.googleGroceryShopping(query),
     {
@@ -42,7 +43,21 @@ async function getGoogleAnyResult(query, connection?) {
     query,
     connection
   );
-  offers.push({ merchant: { name: 'Any', id: 'Any', offers: merchantOffers.filter(mO=>mO.store!==Store["Magazine Luisa"]) }});
+  
+  let _offers = merchantOffers
+  if(config.minPrice){
+    if(config.minPrice !== 0){
+      _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.normalPrice?.replace('R$','').trim().replace(' ',''))) >= config.minPrice);
+    }
+  }
+  if(config.maxPrice){
+    if(config.maxPrice !== 0){
+      _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.normalPrice?.replace('R$','').trim().replace(' ',''))) <= config.maxPrice);
+    }
+  }
+    
+  offers.push({ merchant: { name: 'Any', id: 'Any', offers: _offers }});
+  
   return {
     query,
     offers

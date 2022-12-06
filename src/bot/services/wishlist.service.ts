@@ -84,4 +84,8 @@ export class ProductsService extends BaseService {
   async addQuantity(product, quantity) {
     await this.update({ name: product }, { quantity });
   }
+
+  async addMinMaxPrices(product, minPrice, maxPrice) {
+    await this.update({ name: product }, { minPrice, maxPrice });
+  }
 }

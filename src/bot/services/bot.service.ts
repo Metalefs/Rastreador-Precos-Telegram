@@ -474,20 +474,17 @@ export class BotService {
           return this.bot.onNextMessage(chatId, async (msg) => {
             productName = msg.text;
             await this.productService.addTowishlist(productName, chatId);
-            await this.setProductCategory(chatId, productName);
+            await this.setProductQuantity(chatId, productName);
           })
         })
       return
     }
 
     await this.productService.addTowishlist(productName, chatId);
-    await this.setProductCategory(chatId, productName);
+    await this.setProductQuantity(chatId, productName);
   };
 
-  private async setProductCategory(chatId, productName) {
-    const categories = await this.categoryService.list();
-
-
+  private async setProductQuantity(chatId, productName) {
     this.bot
       .sendMessage(chatId, "Defina a quantidade:", {
         reply_markup: JSON.stringify({
@@ -503,64 +500,90 @@ export class BotService {
             chatId,
             `Produto foi adicionado com (${msg.text.trim()}) unidade(s)`,
           );
+          await this.setProductCategory(chatId, productName);
+        })
+      })
+  }
 
-          this.bot
-            .sendMessage(chatId, "Defina uma categoria para o produto:", {
-              reply_markup: JSON.stringify({
-                force_reply: true,
-                keyboard: splitIntoChunk(
-                  categories.map((cat) => {
-                    return cat.name;
-                  }),
-                  1
-                ),
-                resize_keyboard: true,
-                one_time_keyboard: true,
-              }),
-            })
-            .then(async () => {
-              return this.bot.onNextMessage(chatId, async (msg) => {
-                await this.addProductToCategory(productName, msg.text.trim());
+  private async setProductCategory(chatId, productName) {
+    const categories = await this.categoryService.list();
+    this.bot
+      .sendMessage(chatId, "Defina uma categoria para o produto:", {
+        reply_markup: JSON.stringify({
+          force_reply: true,
+          keyboard: splitIntoChunk(
+            categories.map((cat) => {
+              return cat.name;
+            }),
+            1
+          ),
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        }),
+      })
+      .then(async () => {
+        return this.bot.onNextMessage(chatId, async (msg) => {
+          await this.addProductToCategory(productName, msg.text.trim());
 
-                await this.bot.sendMessage(
-                  chatId,
-                  `Produto foi rotulado com a categoria "${msg.text}"`,
-                );
+          await this.setProductMinMaxValue(chatId, productName);
 
-                const product = await this.productService.getWishlistByName(
-                  productName
-                );
+          await this.bot.sendMessage(
+            chatId,
+            `Produto foi rotulado com a categoria "${msg.text}"`,
+          );
 
-                await this.bot.sendMessage(
-                  chatId,
-                  `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
-                );
+          const product = await this.productService.getWishlistByName(
+            productName
+          );
 
-                await this.productEnrichmentService.enrich(product as any, chatId);
-                const path = await this.getWishlistScreenshot(chatId);
+          await this.bot.sendMessage(
+            chatId,
+            `Obtendo melhores ofertas para o produto "${productName.trim()}" ....`,
+          );
 
-                await this.bot.sendPhoto(chatId, path[1], {
-                  caption:
-                    "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
-                });
-                await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
-                await this.bot.sendMessage(
-                  msg.chat.id,
-                  `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
-                  {
-                    parse_mode: "HTML",
-                    reply_markup: {
-                      remove_keyboard: true,
-                    },
-                  }
-                );
+          await this.productEnrichmentService.enrich(product as any, chatId);
+          const path = await this.getWishlistScreenshot(chatId);
 
-                const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
+          await this.bot.sendPhoto(chatId, path[1], {
+            caption:
+              "Aqui está a sua lista. Essa imagem ficará disponível por 1 dia. Para ver a sua lista digite '/mywishlist' ou '/wishlistoffers' para ver as ofertas relacionadas a sua lista de desejos.",
+          });
+          await this.bot.sendMessage(chatId, this.parseWishlistToHTML(await this.productService.list()), { parse_mode: "HTML" })
+          await this.bot.sendMessage(
+            msg.chat.id,
+            `<a href="${path[0]}/${chatId}/offers">Veja a lista no browser</a>`,
+            {
+              parse_mode: "HTML",
+              reply_markup: {
+                remove_keyboard: true,
+              },
+            }
+          );
 
-                await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
+          const totalGroceryExpense = await this.productService.totalCostbyChatId(chatId);
 
-              });
-            });
+          await this.bot.sendMessage(chatId, 'Valor total com produtos: ' + totalGroceryExpense);
+        });
+      });
+  }
+
+  private async setProductMinMaxValue(chatId, productName){
+    return this.bot
+      .sendMessage(chatId, "Defina uma valor mínimo e máximo para o item (ex: 100;0) - 0 é nulo", {
+        reply_markup: JSON.stringify({
+          force_reply: true,
+        }),
+      })
+      .then(async () => {
+        return this.bot.onNextMessage(chatId, async (msg) => {
+          const prices = msg.text.trim().split(';')
+          let maxPrice = 0, minPrice = 0;
+          if(prices[0])
+            minPrice = parseFloat(prices[0]);
+          if(prices[1])
+            maxPrice = parseFloat(prices[1]);
+
+          await this.productService.addMinMaxPrices(productName, minPrice, maxPrice)
         })
       })
   }
@@ -977,7 +1000,7 @@ export class BotService {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this.bot;
 
-    return async function (chatId, message, form:any = {}) {
+    return async function (chatId, message, form: any = {}) {
       if (message.length < MAX_MSG_TXT_LEN) {
         return sendMessage.call(self, chatId, message, form);
       }
@@ -1009,8 +1032,8 @@ export class BotService {
       parts = parts.map(function (part, i) {
         return `[${i + 1}/${parts.length}] ${part}`;
       });
-      for(const part of parts){
-        if(form?.parse_mode === 'HTML')  form.parse_mode = null;
+      for (const part of parts) {
+        if (form?.parse_mode === 'HTML') form.parse_mode = null;
         await sendMessage.call(self, chatId, part, form);
       }
     };

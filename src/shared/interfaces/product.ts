@@ -8,4 +8,6 @@ export interface Product extends Offer {
   chatId?: string;
   quantity?: number;
   manualPrice?: number;
+  maxPrice?: number;
+  minPrice?: number;
 }
