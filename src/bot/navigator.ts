@@ -44,16 +44,17 @@ async function getGoogleAnyResult(query, config, connection?) {
     connection
   );
   
-  let _offers = merchantOffers
+  let _offers = merchantOffers;
+  console.log({config});
   if(config.minPrice){
     if(config.minPrice !== 0){
-      _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.normalPrice?.replace('R$','').trim().replace(' ',''))) >= config.minPrice);
+      _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.promoPrice?.trim().replace(' ',''))) >= config.minPrice);
     }
   }
   if(config.maxPrice){
-    if(config.maxPrice !== 0){
-      _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.normalPrice?.replace('R$','').trim().replace(' ',''))) <= config.maxPrice);
-    }
+      if(config.maxPrice !== 0){
+        _offers = merchantOffers.filter(mO=> parseFloat(priceToFloat(mO.promoPrice?.trim().replace(' ',''))) <= config.maxPrice);
+      }
   }
     
   offers.push({ merchant: { name: 'Any', id: 'Any', offers: _offers }});
