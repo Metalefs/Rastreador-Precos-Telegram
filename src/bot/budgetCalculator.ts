@@ -43,7 +43,7 @@ export function getBudgetAsPercentage(amount = (process.env.AVAILABLE_VALUE as a
   Object.entries(expensesWithouChatId).forEach(expense => {
     if (expense[0] != 'budget')
       Object.assign(value, {
-        [expense[0]]: parsePencentage(expense[1])
+        [expense[0]]: parsePencentage(expense[1]) + " - " + expense[1]
       })
   })
 
