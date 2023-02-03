@@ -25,7 +25,7 @@ export function getBudget(amount = 0, expenses = _expenses) {
 
 export function getBudgetAsPercentage(amount = (process.env.AVAILABLE_VALUE as any) || 0, expense = _expenses) {
   function parsePencentage(_expense: any) {
-    return ((_expense / amount) * 100).toFixed(2) + "%"
+    return ((_expense / amount) * 100).toFixed(2) + "%" + " - " + _expense
   }
 
   const { chatId, _id, available, income, ...expensesWithouChatId } = expense
